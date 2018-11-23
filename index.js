@@ -39,11 +39,12 @@ NavigationUtil.registerComponentWithRedux(Const.RNN_MESSAGE_DIALOG_OVER_LAY, Mes
 
 Navigation.events().registerAppLaunchedListener(() => {
 
+    Navigation.setDefaultOptions(AppStyle);
+
     Navigation.setRoot({
         root: LoginIndex
     });
 
-    Navigation.setDefaultOptions(AppStyle);
     //测试不需要热更新
    // CheckCodePushUpdateUtil.checkUpdate();
 });

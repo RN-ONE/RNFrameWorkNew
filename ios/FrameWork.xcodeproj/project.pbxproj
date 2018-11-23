@@ -61,6 +61,7 @@
 		FC6763461F45920600D41B06 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = FC6763441F45920600D41B06 /* LaunchScreen.xib */; };
 		FC6763471F45920600D41B06 /* splash.png in Resources */ = {isa = PBXBuildFile; fileRef = FC6763451F45920600D41B06 /* splash.png */; };
 		FCB1A5F31FFF516200FFC434 /* ImagePickerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FCB1A5F21FFF516200FFC434 /* ImagePickerManager.m */; };
+		FCD4DC9C21A7C15100A1AAC6 /* libReactNativeNavigation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FCD4DC9821A7C13500A1AAC6 /* libReactNativeNavigation.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -295,6 +296,20 @@
 			remoteGlobalIDString = 9F90C2241D619E9400F3E238;
 			remoteInfo = RCTSplashScreen;
 		};
+		FCD4DC9721A7C13500A1AAC6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FCD4DC6A21A7C13500A1AAC6 /* ReactNativeNavigation.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D8AFADBD1BEE6F3F00A4592D;
+			remoteInfo = ReactNativeNavigation;
+		};
+		FCD4DC9921A7C13500A1AAC6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FCD4DC6A21A7C13500A1AAC6 /* ReactNativeNavigation.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7B49FEBB1E95090800DEB3EA;
+			remoteInfo = ReactNativeNavigationTests;
+		};
 		FCDFC04C217D704800A48515 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */;
@@ -422,6 +437,7 @@
 		FC6763451F45920600D41B06 /* splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = splash.png; path = "../node_modules/react-native-smart-splash-screen/ios/SplashScreenResource/splash.png"; sourceTree = "<group>"; };
 		FCB1A5F11FFF516200FFC434 /* ImagePickerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ImagePickerManager.h; path = "../node_modules/react-native-image-picker/ios/ImagePickerManager.h"; sourceTree = "<group>"; };
 		FCB1A5F21FFF516200FFC434 /* ImagePickerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ImagePickerManager.m; path = "../node_modules/react-native-image-picker/ios/ImagePickerManager.m"; sourceTree = "<group>"; };
+		FCD4DC6A21A7C13500A1AAC6 /* ReactNativeNavigation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ReactNativeNavigation.xcodeproj; path = "../node_modules/react-native-navigation/lib/ios/ReactNativeNavigation.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -437,6 +453,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FCD4DC9C21A7C15100A1AAC6 /* libReactNativeNavigation.a in Frameworks */,
 				FC217D0920464EA100283E42 /* libCodePush.a in Frameworks */,
 				FC3CF30A1FFDF6E300E00AD5 /* libRCTRestart.a in Frameworks */,
 				FC3CF3031FFDDC7F00E00AD5 /* libc++.tbd in Frameworks */,
@@ -631,6 +648,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				FCD4DC6A21A7C13500A1AAC6 /* ReactNativeNavigation.xcodeproj */,
 				FC217CE320464E7C00283E42 /* CodePush.xcodeproj */,
 				FC3CF3041FFDF6D200E00AD5 /* RCTRestart.xcodeproj */,
 				FC3CF2D31FFDC5B000E00AD5 /* ReactNativeExceptionHandler.xcodeproj */,
@@ -795,6 +813,15 @@
 			children = (
 			);
 			name = pic;
+			sourceTree = "<group>";
+		};
+		FCD4DC6B21A7C13500A1AAC6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FCD4DC9821A7C13500A1AAC6 /* libReactNativeNavigation.a */,
+				FCD4DC9A21A7C13500A1AAC6 /* ReactNativeNavigationTests.xctest */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -970,6 +997,10 @@
 				{
 					ProductGroup = FC3CF2D41FFDC5B000E00AD5 /* Products */;
 					ProjectRef = FC3CF2D31FFDC5B000E00AD5 /* ReactNativeExceptionHandler.xcodeproj */;
+				},
+				{
+					ProductGroup = FCD4DC6B21A7C13500A1AAC6 /* Products */;
+					ProjectRef = FCD4DC6A21A7C13500A1AAC6 /* ReactNativeNavigation.xcodeproj */;
 				},
 				{
 					ProductGroup = FC5397C71FC3BF5700EB2D5C /* Products */;
@@ -1202,6 +1233,20 @@
 			fileType = archive.ar;
 			path = libRCTSplashScreen.a;
 			remoteRef = FC67631A1F45901200D41B06 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		FCD4DC9821A7C13500A1AAC6 /* libReactNativeNavigation.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libReactNativeNavigation.a;
+			remoteRef = FCD4DC9721A7C13500A1AAC6 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		FCD4DC9A21A7C13500A1AAC6 /* ReactNativeNavigationTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = ReactNativeNavigationTests.xctest;
+			remoteRef = FCD4DC9921A7C13500A1AAC6 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		FCDFC04D217D704800A48515 /* libfishhook.a */ = {

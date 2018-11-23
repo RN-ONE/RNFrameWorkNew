@@ -9,12 +9,16 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {View, Dimensions, Text, StyleSheet} from "react-native";
+import ThemeButton from "../component/ThemeButton";
+import IphoneXView from "../component/IphoneXView";
 
 
 const {width} = Dimensions.get('window');
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        justifyContent: 'flex-end',
+        backgroundColor: 'red'
     },
     row: {
         padding: 10,
@@ -55,9 +59,10 @@ class FlatListScene extends Component {
 
     render() {
         return (
-            <View style={styles.container}>
-
-            </View>
+            <IphoneXView style={styles.container}>
+                <View style={{flex: 1, backgroundColor: 'yellow'}}></View>
+                {/*<ThemeButton text={"这是一个按钮"} textColor={'white'}/>*/}
+            </IphoneXView>
         );
     }
 }
