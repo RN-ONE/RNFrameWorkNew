@@ -10,9 +10,6 @@ import {
     Text,
     View
 } from 'react-native';
-import {
-    Actions,
-} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Ionicons';
 import DialogMessage from "../component/DialogMessage";
 import TouchableButton from "../component/TouchableButton";
@@ -23,57 +20,49 @@ import * as TestAction from "../actions/TestAction";
 import * as AppStyles from '../config/AppStyles';
 import ThemeButton from "../component/ThemeButton";
 import ToastAI from "../component/ToastAI";
+import * as Const from "../config/Const";
 import HttpUtil from "../util/HttpUtil";
+import {Navigation} from "react-native-navigation";
+import NavigationUtil from "../util/NavigationUtil";
+import {AppIndex, LoginIndex} from "../RNNConfig";
 
 class Main extends Component {
     render() {
         return (
-            <View style={{backgroundColor: this.props.colors.COLOR_BG, flex: 1}}>
-                <TitleBar
-                    title="主页3"
-                    showBack={false}
-                    leftText="返回"
-                    rightText="确定"
-                    colors={this.props.colors}
-                    onPress={() => {
-                        this.show();
-                    }}/>
+            <View style={{backgroundColor: AppConfig.COLOR_BG, flex: 1}}>
 
-                <ThemeButton backgroundColor={this.props.colors.COLOR_THEME}
+                <ThemeButton backgroundColor={AppConfig.COLOR_THEME}
                              radius={5}
                              text={this.props.text} onPress={() => {
-                    Actions.reset("login");
+                    Navigation.setRoot({root: LoginIndex});
                 }}/>
 
-                <ThemeButton backgroundColor={this.props.colors.COLOR_THEME}
+                <ThemeButton backgroundColor={AppConfig.COLOR_THEME}
                              radius={5}
                              text={"测试FlatList"} onPress={() => {
-                    Actions.flatListScene();
-                }}/>
-
-                <DialogMessage ref={(dialogbox) => {
-                    this.dialogbox = dialogbox;
+                    Navigation.push(this.props.componentId,
+                        NavigationUtil.getRNNComponent(Const.RNN_FLAT_LIST_SCENE, "测试FlatList"))
                 }}/>
             </View>
         )
     }
 
     show() {
-        this.dialogbox.confirm({
+        NavigationUtil.showMessageDialogOverLay({
             title: '测试',//标题
-            titleColor: this.props.colors.COLOR_THEME,
-            contentColor: this.props.colors.TEXT_COLOR_GRAY,//内容颜色
+            titleColor: AppConfig.COLOR_THEME,
+            contentColor: AppConfig.TEXT_COLOR_GRAY,//内容颜色
             content: ['选择Toast的位置'],//内容
             ok: {
                 text: '居中',
-                color: this.props.colors.COLOR_THEME,
+                color: AppConfig.COLOR_THEME,
                 callback: () => {
                     ToastAI.showShortCenter("居中位置的Toast");
                 },
             },//右边按钮
             cancel: {
                 text: '上面',
-                color: this.props.colors.TEXT_COLOR_GRAY,
+                color: AppConfig.TEXT_COLOR_GRAY,
                 callback: () => {
                     ToastAI.showShortTop("上面位置的Toast");
                 },
@@ -87,7 +76,6 @@ class Main extends Component {
 
 export default connect(state => ({
     text: state.TestReducer.text,
-    colors: state.ColorReducer.colors,
 }), dispatch => ({
     getMoveList: (data) => dispatch(TestAction.testGetMoves(data)),
 }))(Main);

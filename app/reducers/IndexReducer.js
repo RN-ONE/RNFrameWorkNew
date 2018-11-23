@@ -7,9 +7,7 @@
 
 import {combineReducers} from 'redux';
 import TestReducer from './TestReducer';
-import ColorReducer from './ColorReducer';
 
 export default combineReducers({
     TestReducer,
-    ColorReducer,
 });

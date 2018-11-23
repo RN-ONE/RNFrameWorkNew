@@ -41,7 +41,7 @@ class ThemeButton extends Component {
                         style={{
                             alignItems: 'center',
                             justifyContent: 'center',
-                            backgroundColor: this.props.backgroundColor ? this.props.backgroundColor : this.props.colors.COLOR_THEME,
+                            backgroundColor: this.props.backgroundColor ? this.props.backgroundColor : AppConfig.COLOR_THEME,
                             paddingVertical: AppConfig.DISTANCE_SAFE / 2,
                             paddingHorizontal: AppConfig.DISTANCE_SAFE,
                             flex: 1,
@@ -65,5 +65,4 @@ class ThemeButton extends Component {
 }
 
 export default connect(state => ({
-    colors: state.ColorReducer.colors,
 }))(ThemeButton);

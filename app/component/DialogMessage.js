@@ -44,9 +44,6 @@ import {
     Platform,
 } from 'react-native';
 import * as AppConfig from '../config/AppConfig';
-import {Actions} from "react-native-router-flux";
-
-let dontHide = false;
 
 class PopContent extends Component {
 
@@ -124,96 +121,11 @@ class PopContent extends Component {
     }
 
 }
-;
-
-class DisplayPopup extends Component {
-
-    static defaultProps = {
-        isOverlay: true,
-        isOverlayClickClose: true,
-        btns: [{
-            text: 'ok',
-            callback: () => {
-            },
-        }],
-    };
-
-    constructor(props, context) {
-        super(props, context);
-
-        this.state = {
-            isVisible: true,
-        };
-
-    }
-
-    close() {
-        this.setState({
-            isVisible: false,
-        });
-    }
-
-    _renderOverlay() {
-        if (this.props.isOverlay) {
-            return (
-                <TouchableWithoutFeedback onPress={() => {
-                    if (this.props.isOverlayClickClose) {
-                        if (dontHide) {
-                        } else {
-                            this.close();
-                        }
-                    }
-                }}>
-                    <View style={styles.overlay}></View>
-                </TouchableWithoutFeedback>
-            );
-        }
-    }
-
-    render() {
-        let {isVisible, isOverlay,} = this.state;
-        let {title, content, btns,} = this.props;
-        btns = btns.map((item) => {
-            return {
-                text: item.text,
-                callback: () => {
-                    typeof item.callback === 'function' && item.callback();
-                    this.close();
-                },
-            };
-        });
-        if (isVisible) {
-            return (
-                <View style={styles.popupContainer}>
-                    {this._renderOverlay()}
-                    <View style={styles.tipBoxView}>
-                        <PopContent title={title} content={content} btns={btns}/>
-                    </View>
-                </View>
-            );
-        }
-        return <View style={styles.hidden}/>;
-    }
-
-}
-;
 
 export default class DialogMessage extends Component {
-
-    static DisplayPopup = DisplayPopup;
-
-    static defaultProps = {
-        isOverlay: true,
-        isOverlayClickClose: true,
-    };
-
     constructor(props, context) {
         super(props, context);
-
         this.state = {
-            isVisible: false,
-            isOverlay: this.props.isOverlay,
-            isOverlayClickClose: this.props.isOverlayClickClose,
             content: null,
         };
     }
@@ -221,97 +133,45 @@ export default class DialogMessage extends Component {
     _pop(args) {
         this.setState({
             content: (<PopContent {...args}/>),
-            isVisible: true,
-        });
-    }
-
-    alert(...text) {
-        text = text.map((text) => text);
-        this._pop({
-            content: text || '',
-            btns: [{
-                text: 'OK',
-                callback: () => {
-                    this.close();
-                },
-            }],
-        });
-    }
-
-    tip(args) {
-        let {title, content, btn,} = args;
-        dontHide = args.dontHide;
-        this._pop({
-            title: title,
-            content: content,
-            contentColor: args.contentColor,
-            btns: [{
-                text: btn && btn.text || 'OK',
-                callback: () => {
-                    this.close();
-                    btn && typeof btn.callback === 'function' && btn.callback();
-                },
-            }],
         });
     }
 
     confirm(args) {
         let {title, content, ok, cancel} = args;
-        dontHide = false;
+        let btns = [];
+        if (cancel) {
+            btns.push({
+                text: cancel && cancel.text || 'Cancel',
+                color: cancel && cancel.color || AppConfig.COLOR_THEME,
+                callback: () => {
+                    if (this.props.dismissCallBack) {
+                        this.props.dismissCallBack();
+                    }
+                    cancel && typeof cancel.callback === 'function' && cancel.callback();
+                },
+            });
+        }
+        if (ok) {
+            btns.push({
+                text: ok && ok.text || 'OK',
+                color: ok && ok.color || AppConfig.COLOR_THEME,
+                callback: () => {
+                    if (this.props.dismissCallBack) {
+                        this.props.dismissCallBack();
+                    }
+                    ok && typeof ok.callback === 'function' && ok.callback();
+                },
+            });
+        }
         this._pop({
             title: title,
             content: content,
             titleColor: args.titleColor,
             contentColor: args.contentColor,
-            btns: [
-                {
-                    text: cancel && cancel.text || 'Cancel',
-                    color: cancel && cancel.color || AppConfig.COLOR_THEME,
-                    callback: () => {
-                        this.close();
-                        cancel && typeof cancel.callback === 'function' && cancel.callback();
-                    },
-                },
-                {
-                    text: ok && ok.text || 'OK',
-                    color: ok && ok.color || AppConfig.COLOR_THEME,
-                    callback: () => {
-                        this.close();
-                        ok && typeof ok.callback === 'function' && ok.callback();
-                    },
-                },
-            ],
+            btns: btns,
         });
     }
 
-    pop(args) {
-        this._pop(args);
-    }
-
-    close() {
-        this.setState({
-            isVisible: false,
-        });
-    }
-
-    _renderOverlay() {
-        if (this.state.isOverlay) {
-            return (
-                <TouchableWithoutFeedback onPress={() => {
-                    if (this.state.isOverlayClickClose) {
-                        if (!dontHide){
-                            this.close();
-                            if (this.props.dismissCallBack) {
-                                this.props.dismissCallBack();
-                            }
-                        }
-                    }
-                }}>
-                    <View style={styles.overlay}></View>
-                </TouchableWithoutFeedback>
-            );
-        }
-    }
 
     _renderContent() {
         return (
@@ -322,29 +182,11 @@ export default class DialogMessage extends Component {
     }
 
     render() {
-        let {isVisible, isOverlay,} = this.state;
-        if (isVisible) {
-            return (
-                <Modal
-                    animationType={"fade"}
-                    transparent={true}
-                    visible={this.state.isVisible}
-                    onRequestClose={() => {
-                        if (!dontHide) {
-                            this.setState({isVisible: false});
-                            if (this.props.dismissCallBack) {
-                                this.props.dismissCallBack();
-                            }
-                        }
-                    }}>
-                    <View style={styles.popupContainer}>
-                        {this._renderOverlay()}
-                        {this._renderContent()}
-                    </View>
-                </Modal>
-            );
-        }
-        return <View style={styles.hidden}/>;
+        return (
+            <View style={styles.popupContainer}>
+                {this._renderContent()}
+            </View>
+        );
     }
 
 };

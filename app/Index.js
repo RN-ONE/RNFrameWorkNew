@@ -6,19 +6,11 @@
  */
 
 import React, {Component} from 'react';
-import {Provider} from 'react-redux';
 import {NativeModules, Alert, Platform, View} from 'react-native';
-import App from './App';
-import CreateStore from './CreateStore';
 import SplashScreen from 'react-native-smart-splash-screen'
 import {setJSExceptionHandler} from 'react-native-exception-handler';
 import RNRestart from 'react-native-restart';
-import ToastAI from "./component/ToastAI";
-
-
-
-const store = CreateStore();
-// Error: ${(isFatal) ? 'Fatal:' : ''} ${e.name} ${e.message} ${e.stack}
+import Login from "./scene/Login";
 
 const errorHandler = (e, isFatal) => {
     if (isFatal) {
@@ -111,9 +103,7 @@ class Index extends Component {
 
     render() {
         return (
-            <Provider store={store}>
-                <App/>
-            </Provider>
+            <Login {...this.props}/>
         )
     }
 }

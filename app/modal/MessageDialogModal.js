@@ -15,14 +15,14 @@ import {
     Dimensions,
     Platform,
     ProgressViewIOS,
-    ActivityIndicator
+    ActivityIndicator, BackHandler
 } from "react-native";
-import {Actions} from "react-native-router-flux";
 import ProgressView from '../native/ProgressView';
 import * as AppConfig from '../config/AppConfig';
 import * as AppStyles from '../config/AppStyles';
 import DialogMessage from "../component/DialogMessage";
 import {connect} from "react-redux";
+import NavigationUtil from "../util/NavigationUtil";
 
 let {height, width} = Dimensions.get('window');
 var styles = StyleSheet.create({
@@ -41,63 +41,46 @@ var styles = StyleSheet.create({
 class TipMessageModal extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            opacity: new Animated.Value(0),
-        };
+
+        this.backHandler = BackHandler.addEventListener('TipMessageModalHardwareBackPress',
+            () => {
+                //表示消费了这个事件
+                if (props.canCancel) {
+                    NavigationUtil.dismissMessageDialogOverLay();
+                }
+                return true;
+            });
+    }
+
+    componentWillUnmount() {
+        this.backHandler.remove();
     }
 
     componentDidMount() {
-        Animated.timing(this.state.opacity, {
-            duration: 200,
-            toValue: 1
-        }).start();
-
-        this.dialogbox.confirm({
-            title: '检查到新版本',//标题
-            titleColor: this.props.colors.COLOR_THEME,
-            contentColor: this.props.colors.TEXT_COLOR_GRAY,//内容颜色
-            content: [this.props.message],//内容
-            ok: {
-                text: '立即更新',
-                callback: () => {
-                    Actions.pop();
-                    if (this.props.callBack) {
-                        this.props.callBack();
-                    }
-                },
-            },
-            cancel: {
-                text: '在看看',
-                callback: () => {
-                    Actions.pop();
-                },
-            }
-        });
+        this.dialogBox.confirm(this.props.confirm);
     }
 
     render() {
         return (
-            <Animated.View style={[
+            <View style={[
                 styles.container,
                 {
                     backgroundColor: "rgba(0,0,0,0.5)",
-                    opacity: this.state.opacity
                 }]}>
 
                 <DialogMessage
                     dismissCallBack={() => {
-                        Actions.pop();
+                        NavigationUtil.dismissMessageDialogOverLay();
                     }}
-                    ref={(dialogbox) => {
-                        this.dialogbox = dialogbox;
+                    ref={(dialogBox) => {
+                        this.dialogBox = dialogBox;
                     }}/>
 
-            </Animated.View>
+            </View>
         );
     }
 }
 
 export default connect(state => ({
     text: state.TestReducer.text,
-    colors: state.ColorReducer.colors,
 }), dispatch => ({}))(TipMessageModal);

@@ -57,5 +57,4 @@ class IphoneXView extends Component {
 }
 
 export default connect(state => ({
-    colors: state.ColorReducer.colors,
 }), dispatch => ({}))(IphoneXView);

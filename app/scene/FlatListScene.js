@@ -6,13 +6,9 @@
  * @E-Mail:528489389@qq.com
  */
 
-import React, {Component, PropTypes} from 'react';
-import {Actions} from 'react-native-router-flux';
+import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {View, Dimensions, Text, StyleSheet} from "react-native";
-import RefreshableFlatList from '../component/rlFlatList/index';
-import TitleBar from "../component/TitleBar";
-import MyFlatList from "../component/MyFlatList";
 
 
 const {width} = Dimensions.get('window');
@@ -53,50 +49,18 @@ class FlatListScene extends Component {
         this.state = {data: [],};
     }
 
+    static options(passProps) {
+        return {};
+    }
+
     render() {
         return (
             <View style={styles.container}>
-                <TitleBar
-                    title="测试FlatList"
-                    showBack={true}
-                    leftText="返回"
-                    colors={this.props.colors}/>
 
-                <MyFlatList
-                    data={this.state.data}
-                    total={20}
-                    renderItem={({item}) => (
-                        <View key={item.id} style={styles.row}>
-                            <Text style={styles.text}>{item.text}</Text>
-                        </View>
-                    )}
-                    onRefreshing={(resolve) => {
-                        setTimeout(() => {
-                            this.setState({
-                                data: new Array(15).fill(1).map((x, i) =>
-                                    ({id: i, text: `Item No. ${i}`})),
-                            });
-                            resolve();
-                        }, 3000);
-                    }}
-                    onLoadMore={(resolve) => {
-                        setTimeout(() => {
-                            const no = this.state.data.length;
-                            const newArr = new Array(5).fill(1).map((x, i) => ({
-                                id: i + no,
-                                text: `Item No. ${i + no}`
-                            }));
-                            this.setState({data: this.state.data.concat(newArr)});
-                            resolve();
-                        }, 3000);
-                    }}
-                />
             </View>
         );
     }
 }
 
 
-export default connect(state => ({
-    colors: state.ColorReducer.colors,
-}), dispatch => ({}))(FlatListScene);
+export default connect(state => ({}), dispatch => ({}))(FlatListScene);

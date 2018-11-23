@@ -16,15 +16,15 @@ import {
     NativeModules,
     Modal,
     Image,
-    ActivityIndicator
+    ActivityIndicator, BackHandler
 } from "react-native";
 import {connect} from "react-redux";
-import {Actions} from 'react-native-router-flux';
 import * as AppConfig from '../config/AppConfig';
 import TouchableButton from "../component/TouchableButton";
 import ToastAI from "../component/ToastAI";
 import IphoneXUtil from "../util/IphoneXUtil";
 import Gallery from '../component/swipe/Gallery';
+import NavigationUtil from "../util/NavigationUtil";
 
 let {width, height} = Dimensions.get('window');
 
@@ -55,15 +55,12 @@ class ImageShowModal extends React.Component {
             index: 0,
             images: uris.length,
         };
-
-        console.log({props});
-    }
-
-    componentWillMount() {
-        if (Platform.OS === "android") {
-            //修改原生的
-            NativeModules.BarColorModule.setColor('#000000');
-        }
+        this.backHandler = BackHandler.addEventListener('ImageShowModalHardwareBackPress',
+            () => {
+                //表示消费了这个事件
+                NavigationUtil.dismissImageShowOverLay();
+                return true;
+            });
     }
 
     componentDidMount() {
@@ -74,43 +71,35 @@ class ImageShowModal extends React.Component {
     }
 
 
+    componentWillUnmount() {
+        this.backHandler.remove();
+    }
+
     render() {
         return (
-            <Modal
-                animationType={"slide"}
-                transparent={true}
-                visible={true}
-                onRequestClose={() => {
-                    if (Platform.OS === "android") {
-                        //修改原生的，默认的颜色就可以了
-                        NativeModules.BarColorModule.setColor('#33000000');
-                    }
-                    Actions.pop();
-                }}>
-                <View style={[
-                    styles.container,
-                    {
-                        backgroundColor: "rgba(0,0,0,1)"
-                    }]}>
-                    <View style={{alignItems: 'center'}}>
-                        <View style={{
-                            width: width,
-                            height: height,
-                        }}>
-                            <Gallery
-                                onPageSelected={(page) => {
-                                    this.setState({index: page});
-                                }}
-                                initialPage={this.state.index}
-                                style={{flex: 1, backgroundColor: 'black'}}
-                                images={this.state.uris}
-                            />
+            <View style={[
+                styles.container,
+                {
+                    backgroundColor: "rgba(0,0,0,1)"
+                }]}>
+                <View style={{alignItems: 'center'}}>
+                    <View style={{
+                        width: width,
+                        height: height,
+                    }}>
+                        <Gallery
+                            onPageSelected={(page) => {
+                                this.setState({index: page});
+                            }}
+                            initialPage={this.state.index}
+                            style={{flex: 1, backgroundColor: 'black'}}
+                            images={this.state.uris}
+                        />
 
-                            {this.galleryCount}
-                        </View>
+                        {this.galleryCount}
                     </View>
                 </View>
-            </Modal>
+            </View>
         );
     }
 
@@ -136,11 +125,7 @@ class ImageShowModal extends React.Component {
                 alignItems: 'center'
             }}>
                 <TouchableButton onPress={() => {
-                    if (Platform.OS === "android") {
-                        //修改原生的
-                        NativeModules.BarColorModule.setColor('#33000000');
-                    }
-                    Actions.pop();
+                   NavigationUtil.dismissImageShowOverLay();
                 }}>
                     <Image
                         style={{
@@ -176,6 +161,4 @@ class ImageShowModal extends React.Component {
 }
 
 
-export default connect(state => ({
-    colors: state.ColorReducer.colors,
-}), dispatch => ({}))(ImageShowModal);
+export default connect(state => ({}), dispatch => ({}))(ImageShowModal);

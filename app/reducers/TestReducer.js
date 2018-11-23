@@ -2,8 +2,9 @@
  * Created by naiyu_wang on 16/10/14.
  */
 import {handleActions} from 'redux-actions';
-import {Actions} from 'react-native-router-flux';
 import * as ActionTypes from '../actions/ActionTypes';
+import {Navigation} from "react-native-navigation";
+import NavigationUtil from "../util/NavigationUtil";
 
 
 const userState = {
@@ -12,7 +13,7 @@ const userState = {
 
 export default handleActions({
     [ActionTypes.ACTION_TEST]: (state, action) => {
-        Actions.pop();
+       NavigationUtil.dismissLoadingOverLay();
         let response = action.payload.data;
         if (response.success) {
             var movie = response.response.data.movies[0];

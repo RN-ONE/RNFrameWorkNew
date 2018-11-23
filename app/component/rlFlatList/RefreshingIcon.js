@@ -6,7 +6,6 @@
  */
 
 import React, {Component, PropTypes} from 'react';
-import {Actions} from 'react-native-router-flux';
 import {connect} from "react-redux";
 import {View, Dimensions, Text, StyleSheet, Platform, ActivityIndicator} from "react-native";
 import * as AppConfig from "../../config/AppConfig";
@@ -39,5 +38,4 @@ class RefreshingIcon extends Component {
 
 
 export default connect(state => ({
-    colors: state.ColorReducer.colors,
 }), dispatch => ({}))(RefreshingIcon);

@@ -6,13 +6,15 @@ import {
     Animated,
     Dimensions,
     Platform,
+    BackHandler,
     ProgressViewIOS,
-    ActivityIndicator
+    ActivityIndicator,
+    DeviceEventEmitter
 } from "react-native";
-import {Actions} from "react-native-router-flux";
 import ProgressView from '../native/ProgressView';
 import * as AppConfig from '../config/AppConfig';
 import * as AppStyles from '../config/AppStyles';
+import NavigationUtil from "../util/NavigationUtil";
 
 var styles = StyleSheet.create({
     container: {
@@ -28,33 +30,39 @@ var styles = StyleSheet.create({
 });
 
 export default class LoadingModal extends React.Component {
+    static LOADING_REFRESH = "LOADING_REFRESH";
+
     constructor(props) {
         super(props);
 
         this.state = {
-            opacity: new Animated.Value(0),
             message: props.message,
         };
+
+        this.backHandler = BackHandler.addEventListener('LoadingModalHardwareBackPress',
+            () => {
+                //表示消费了这个事件
+                return true;
+            });
+
+
+        this.deviceEventEmitter = DeviceEventEmitter.addListener(LoadingModal.LOADING_REFRESH,
+            (message) => {
+                this.setState({message})
+            });
     }
 
-    componentWillReceiveProps(nextProps) {
-        this.setState({message: nextProps.refresh.message});
-    }
-
-    componentDidMount() {
-        Animated.timing(this.state.opacity, {
-            duration: 200,
-            toValue: 1
-        }).start();
+    componentWillUnmount() {
+        this.backHandler.remove();
+        this.deviceEventEmitter.remove();
     }
 
     render() {
         return (
-            <Animated.View style={[
+            <View style={[
                 styles.container,
                 {
                     backgroundColor: "rgba(0,0,0,0.5)",
-                    opacity: this.state.opacity
                 }]}>
                 <View style={{
                     justifyContent: "center",
@@ -88,7 +96,7 @@ export default class LoadingModal extends React.Component {
                         </Text>
                     </View>
                 </View>
-            </Animated.View>
+            </View>
         );
     }
 }

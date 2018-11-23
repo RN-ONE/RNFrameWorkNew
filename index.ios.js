@@ -3,7 +3,7 @@
  * https://github.com/facebook/react-native
  * @flow
  */
-
+import {Navigation} from "react-native-navigation";
 import React, {Component} from 'react';
 import {
     AppRegistry,
@@ -18,6 +18,15 @@ export default class FrameWork extends Component {
     }
 }
 
-
-AppRegistry.registerComponent('FrameWork', () => FrameWork);
+Navigation.registerComponent(`FrameWork`, () => FrameWork);
+Navigation.events().registerAppLaunchedListener(() => {
+    Navigation.setRoot({
+        root: {
+            component: {
+                name: "FrameWork"
+            }
+        }
+    });
+});
+//AppRegistry.registerComponent('FrameWork', () => FrameWork);
 console.disableYellowBox = true;

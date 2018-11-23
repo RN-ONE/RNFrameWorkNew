@@ -57,15 +57,7 @@ class Main extends Component {
 
     render() {
         return (
-            <View style={{backgroundColor: this.props.colors.COLOR_BG, flex: 1}}>
-                <TitleBar
-                    title="主页2"
-                    showBack={false}
-                    leftText="返回"
-                    rightText="确定"
-                    colors={this.props.colors}
-                    onPress={() => {
-                    }}/>
+            <View style={{backgroundColor: AppConfig.COLOR_BG, flex: 1}}>
                 <View
                     style={{paddingTop: AppConfig.DISTANCE_SAFE}}>
                     <StepIndicator
@@ -97,7 +89,6 @@ class Main extends Component {
 
 export default connect(state => ({
     text: state.TestReducer.text,
-    colors: state.ColorReducer.colors,
 }), dispatch => ({
     getMoveList: (data) => dispatch(TestAction.testGetMoves(data)),
 }))(Main);

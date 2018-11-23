@@ -15,9 +15,6 @@ import {
     PixelRatio,
     NativeModules,
 } from 'react-native';
-import {
-    Actions,
-} from 'react-native-router-flux';
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import * as AppConfig from '../config/AppConfig';
@@ -25,6 +22,8 @@ import * as AppStyles from "../config/AppStyles";
 import TouchableButton from "./TouchableButton";
 import IphoneXUtil from "../util/IphoneXUtil";
 import {COLOR_BLACK} from "../config/AppConfig";
+import NavigationUtil from "../util/NavigationUtil";
+import {Navigation} from "react-native-navigation";
 
 let {height, width} = Dimensions.get('window');
 
@@ -84,7 +83,7 @@ export default class TitleBar extends Component {
                             this.state.showBack ?
                                 <TouchableButton onPress={() => {
                                     this.props.onPressBack ? this.props.onPressBack() :
-                                        Actions.pop();
+                                      Navigation.pop(this.props.componentId);
                                 }}>
                                     <View style={{
                                         flexDirection: 'row',

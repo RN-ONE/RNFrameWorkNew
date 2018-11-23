@@ -27,11 +27,13 @@ import * as AppStyles from '../../config/AppStyles';
 import {connect} from "react-redux";
 import ToastAI from "../ToastAI";
 
-import {Actions} from 'react-native-router-flux';
 import GridView from 'react-native-gridview';
 import ImagePickerModal from "../../modal/ImagePickerModal";
 import ImageShowModal from "../../modal/ImageShowModal";
 import MyImage from "../MyImage";
+import NavigationUtil from "../../util/NavigationUtil";
+import {Navigation} from "react-native-navigation";
+import * as Const from "../../config/Const";
 
 let {height, width} = Dimensions.get('window');
 
@@ -137,7 +139,32 @@ class BasePhotoGallery extends Component {
                                     item.type === BasePhotoGallery.TYPE_ADD ?
                                         <TouchableButton onPress={() => {
                                             if (this.state.data.length <= this.props.maxImageNum) {
-                                                this.imagePickerModal.showPicker();
+                                                this.showImagePickerOverLay((data) => {
+                                                    let newData = [];
+                                                    for (let i = 0; i < this.state.data.length; i++) {
+                                                        let dataItem = this.state.data[i];
+                                                        if (dataItem.type !== BasePhotoGallery.TYPE_ADD) {
+                                                            newData.push(dataItem);
+                                                        }
+                                                    }
+                                                    newData.push({
+                                                        type: BasePhotoGallery.TYPE_PIC,
+                                                        path: data.path,
+                                                        uri: data.uri,
+                                                        fileSize: data.fileSize,
+                                                        fileName: data.fileName,
+                                                        width: data.width,
+                                                        height: data.height,
+                                                    });
+
+                                                    //加入添加
+                                                    if (newData.length < this.props.maxImageNum) {
+                                                        newData.push(addItem);
+                                                    }
+
+
+                                                    this.setState({data: newData});
+                                                });
                                             } else {
                                                 ToastAI.showShortBottom("最多选择" + this.props.maxImageNum + "张图片");
                                             }
@@ -169,12 +196,10 @@ class BasePhotoGallery extends Component {
                                                     }
                                                 }
 
-
-                                                Actions.imageShowModal({
+                                                NavigationUtil.showImageShowOverLay({
                                                     items: items,
                                                     index: index,
                                                 });
-                                                //this.setState({modalVisible: true, item: item});
                                             }}
                                             widthSeparator={this.props.widthSeparator}/>
                                 }
@@ -183,47 +208,28 @@ class BasePhotoGallery extends Component {
                         );
                     }}
                 />
-
-                <ImagePickerModal
-                    ref={(ref) => {
-                        this.imagePickerModal = ref;
-                    }}
-                    titleColor={this.props.colors.COLOR_THEME}
-                    callback={(data) => {
-                        let newData = [];
-                        for (let i = 0; i < this.state.data.length; i++) {
-                            let dataItem = this.state.data[i];
-                            if (dataItem.type !== BasePhotoGallery.TYPE_ADD) {
-                                newData.push(dataItem);
-                            }
-                        }
-
-                        console.log({data});
-
-                        // NativeModules.NativeUtilsModule.compress(data.path, false, (success, newPath) => {
-                        //     console.log({success, newPath})
-                        // });
-                        newData.push({
-                            type: BasePhotoGallery.TYPE_PIC,
-                            path: data.path,
-                            uri: data.uri,
-                            fileSize: data.fileSize,
-                            fileName: data.fileName,
-                            width: data.width,
-                            height: data.height,
-                        });
-
-                        //加入添加
-                        if (newData.length < this.props.maxImageNum) {
-                            newData.push(addItem);
-                        }
-
-
-                        this.setState({data: newData});
-                    }}/>
-
             </View>
         );
+    }
+
+
+    /**
+     *显示选择获取图片方式对话框
+     *
+     * @param callback 回调
+     * @see SelectModal
+     *
+     * @Author: JACK-GU
+     * @Date: 2018-11-23 08:52
+     * @E-Mail: 528489389@qq.com
+     */
+    showImagePickerOverLay(callback) {
+        Navigation.showOverlay(NavigationUtil.getRNNOverlay(Const.RNN_IMAGE_PICKER_OVER_LAY, {callback}))
+            .then((result) => {
+                console.log({result});
+            }).catch((error) => {
+            console.log({error});
+        });
     }
 
 
@@ -246,7 +252,7 @@ class BasePhotoGallery extends Component {
     }
 }
 
-class PicItem extends Component{
+class PicItem extends Component {
     render() {
 
         return (
@@ -289,6 +295,4 @@ class PicItem extends Component{
 }
 
 
-export default connect(state => ({
-    colors: state.ColorReducer.colors,
-}), dispatch => ({}))(BasePhotoGallery);
+export default connect(state => ({}), dispatch => ({}))(BasePhotoGallery);

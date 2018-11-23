@@ -10,9 +10,6 @@ import {
     Dimensions,
     FlatList,
 } from 'react-native';
-import {
-    Switch,
-} from 'react-native-router-flux';
 import * as AppConfig from "../config/AppConfig";
 import TitleBar from "../component/TitleBar";
 import {connect} from "react-redux";
@@ -79,12 +76,7 @@ class Main2 extends Component {
 
     render() {
         return (
-            <IphoneXView style={{backgroundColor: this.props.colors.COLOR_BG, flex: 1}}>
-                <TitleBar
-                    title="换肤"
-                    showBack={true}
-                    leftText="返回"
-                    colors={this.props.colors}/>
+            <IphoneXView style={{backgroundColor: AppConfig.COLOR_BG, flex: 1}}>
 
                 <FlatList
                     data={data}
@@ -118,7 +110,6 @@ class Main2 extends Component {
 }
 
 export default connect(state => ({
-    colors: state.ColorReducer.colors,
 }), dispatch => ({
     changeColor: (data) => dispatch(ChangeColorAction.changeColor(data)),
 }))(Main2);

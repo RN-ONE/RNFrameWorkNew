@@ -10,25 +10,16 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.facebook.react.ReactActivity;
 import com.fastaccess.permission.base.PermissionHelper;
 import com.fastaccess.permission.base.callback.OnPermissionCallback;
 import com.framework.util.SystemBarTintManager;
 import com.reactnativecomponent.splashscreen.RCTSplashScreen;
+import com.reactnativenavigation.NavigationActivity;
 
-public class MainActivity extends ReactActivity implements OnPermissionCallback {
+public class MainActivity extends NavigationActivity implements OnPermissionCallback {
     public static SystemBarTintManager tintManager;
     public static int height = 0;
     public PermissionHelper permissionHelper;
-
-    /**
-     * Returns the name of the main component registered from JavaScript.
-     * This is used to schedule rendering of the component.
-     */
-    @Override
-    protected String getMainComponentName() {
-        return "FrameWork";
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

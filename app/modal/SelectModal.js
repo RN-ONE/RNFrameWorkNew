@@ -18,13 +18,14 @@ import {
     Modal,
     Image,
     TouchableWithoutFeedback,
-    ActivityIndicator
+    ActivityIndicator,
+    BackHandler
 } from "react-native";
 import {connect} from "react-redux";
-import {Actions} from 'react-native-router-flux';
 import * as AppConfig from '../config/AppConfig';
 import TouchableButton from "../component/TouchableButton";
 import ToastAI from "../component/ToastAI";
+import NavigationUtil from "../util/NavigationUtil";
 
 let {width, height} = Dimensions.get('window');
 let DISTANCE = 20;
@@ -62,94 +63,94 @@ class SelectModal extends React.Component {
 
     constructor(props) {
         super(props);
-
-
         this.state = {visible: true};
+        this.backHandler = BackHandler.addEventListener('SelectModalHardwareBackPress',
+            () => {
+                NavigationUtil.dismissSelectOverLay();
+                //表示消费了这个事件
+                return true;
+            });
+    }
 
+    componentWillUnmount() {
+        this.backHandler.remove();
     }
 
     render() {
         return (
-            <Modal
-                animationType={"fade"}
-                transparent={true}
-                visible={this.state.visible}
-                onRequestClose={() => {
-                    Actions.pop();
-                }}>
-                <TouchableWithoutFeedback onPress={() => {
-                    Actions.pop();
-                }}>
-                    <View style={[
-                        styles.container,
-                        {
-                            width: width,
-                            height: height,
-                            backgroundColor: "rgba(0,0,0,0.8)"
-                        }]}>
-                        <View style={{alignItems: 'center'}}>
-                            <TouchableWithoutFeedback onPress={() => {
+            <TouchableWithoutFeedback onPress={() => {
+                NavigationUtil.dismissSelectOverLay();
+            }}>
+                <View style={[
+                    styles.container,
+                    {
+                        width: width,
+                        height: height,
+                        backgroundColor: "rgba(0,0,0,0.8)"
+                    }]}>
+                    <View style={{alignItems: 'center'}}>
+                        <TouchableWithoutFeedback onPress={() => {
+                        }}>
+                            <View style={{
+                                width: width - 2 * DISTANCE,
+                                backgroundColor: 'white',
+                                borderColor: 'white',
+                                borderWidth: 1,
+                                borderRadius: 5,
                             }}>
-                                <View style={{
-                                    width: width - 2 * DISTANCE,
-                                    backgroundColor: 'white',
-                                    borderColor: 'white',
-                                    borderWidth: 1,
-                                    borderRadius: 5,
-                                }}>
 
-                                    <Text style={{
-                                        padding: AppConfig.DISTANCE_SAFE,
-                                        color: this.props.colors.COLOR_THEME,
-                                        fontSize: AppConfig.TEXT_SIZE_BIG,
-                                        fontWeight: 'bold',
-                                    }}>{this.props.title}</Text>
+                                <Text style={{
+                                    padding: AppConfig.DISTANCE_SAFE,
+                                    color: AppConfig.COLOR_THEME,
+                                    fontSize: AppConfig.TEXT_SIZE_BIG,
+                                    fontWeight: 'bold',
+                                }}>{this.props.title}</Text>
 
-                                    {
-                                        this.props.tips ?
-                                            <Text style={{
-                                                marginBottom: AppConfig.DISTANCE_SAFE,
-                                                paddingHorizontal: AppConfig.DISTANCE_SAFE,
-                                                color: this.props.tipsColor ? this.props.tipsColor : 'red',
-                                                fontSize: AppConfig.TEXT_SIZE_SMALL
-                                            }}>{this.props.tips}</Text>
-                                            : null
-                                    }
+                                {
+                                    this.props.tips ?
+                                        <Text style={{
+                                            marginBottom: AppConfig.DISTANCE_SAFE,
+                                            paddingHorizontal: AppConfig.DISTANCE_SAFE,
+                                            color: this.props.tipsColor ? this.props.tipsColor : 'red',
+                                            fontSize: AppConfig.TEXT_SIZE_SMALL
+                                        }}>{this.props.tips}</Text>
+                                        : null
+                                }
 
 
-                                    {(() => {
-                                        let btnContent = [];
-                                        this.props.items.forEach((btn, index,) => {
+                                {(() => {
+                                    let btnContent = [];
+                                    this.props.items.forEach((btn, index,) => {
 
-                                            btnContent.push(
-                                                <View style={{
-                                                    width: width - 2 * DISTANCE,
-                                                    height: AppConfig.LINE_HEIGHT,
-                                                    backgroundColor: AppConfig.COLOR_LINE
-                                                }}/>
-                                            );
-                                            btnContent.push(
-                                                <Item
-                                                    onPress={() => {
-                                                        this.props.onPress ? this.props.onPress(index) : null
-                                                    }}
-                                                    color={this.props.colors.COLOR_BLACK}
-                                                    item={btn}/>
-                                            );
-                                        });
-                                        return btnContent;
-                                    })()}
+                                        btnContent.push(
+                                            <View style={{
+                                                width: width - 2 * DISTANCE,
+                                                height: AppConfig.LINE_HEIGHT,
+                                                backgroundColor: AppConfig.COLOR_LINE
+                                            }}/>
+                                        );
+                                        btnContent.push(
+                                            <Item
+                                                onPress={() => {
+                                                    this.props.onPress ? this.props.onPress(index) : null
+                                                }}
+                                                color={AppConfig.COLOR_BLACK}
+                                                item={btn}/>
+                                        );
+                                    });
+                                    return btnContent;
+                                })()}
 
-                                </View>
-                            </TouchableWithoutFeedback>
-                        </View>
+                            </View>
+                        </TouchableWithoutFeedback>
                     </View>
-                </TouchableWithoutFeedback>
-            </Modal>
+                </View>
+            </TouchableWithoutFeedback>
         );
     }
 }
-class Item extends Component{
+
+class Item extends Component {
 
     render() {
         return (
@@ -189,7 +190,4 @@ class Item extends Component{
 }
 
 
-
-export default connect(state => ({
-    colors: state.ColorReducer.colors,
-}), dispatch => ({}))(SelectModal);
+export default connect(state => ({}), dispatch => ({}))(SelectModal);
