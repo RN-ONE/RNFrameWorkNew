@@ -44,7 +44,6 @@ Navigation.events().registerAppLaunchedListener(() => {
     });
 
     Navigation.setDefaultOptions(AppStyle);
-
     //测试不需要热更新
    // CheckCodePushUpdateUtil.checkUpdate();
 });

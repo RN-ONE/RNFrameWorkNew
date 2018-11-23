@@ -9,6 +9,7 @@
  */
 import * as AppConfig from './config/AppConfig';
 import * as Const from "./config/Const";
+import {Navigation} from "react-native-navigation";
 
 //定义第一个tab
 const firstTab = {
