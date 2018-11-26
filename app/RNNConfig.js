@@ -76,6 +76,12 @@ const secondTab = {
                         bottomTab: {
                             text: 'Tab 2',
                             icon: require('./img/settings.png'),
+                        },
+                        topTabs: {
+                            visible: true,
+                            selectedTabColor: AppConfig.COLOR_THEME,
+                            unselectedTabColor: AppConfig.TEXT_COLOR_GRAY,
+                            height: 70,
                         }
                     }
                 }
