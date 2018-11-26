@@ -16,6 +16,9 @@ export const RNN_CHANG_THEME = "RNN_CHANG_THEME";
 export const RNN_FLAT_LIST_SCENE = "RNN_FLAT_LIST_SCENE";
 
 
+export const RNN_TABLE1 = "RNN_TABLE1";
+export const RNN_TABLE2 = "RNN_TABLE2";
+export const RNN_TABLE3 = "RNN_TABLE3";
 
 
 export const RNN_LOADING_OVER_LAY = "RNN_LOADING_OVER_LAY";

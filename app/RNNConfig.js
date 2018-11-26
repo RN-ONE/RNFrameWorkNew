@@ -40,9 +40,38 @@ const secondTab = {
     stack: {
         children: [
             {
-                component: {
-                    id: Const.RNN_MAIN2,
-                    name: Const.RNN_MAIN2,
+                topTabs: {
+                    children: [
+                        {
+                            component: {
+                                name: Const.RNN_TABLE1,
+                                options: {
+                                    topTab: {
+                                        title: "TopTab 1"
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            component: {
+                                name: Const.RNN_TABLE2,
+                                options: {
+                                    topTab: {
+                                        title: "TopTab 2"
+                                    }
+                                }
+                            }
+                        }, {
+                            component: {
+                                name: Const.RNN_TABLE3,
+                                options: {
+                                    topTab: {
+                                        title: "TopTab 3"
+                                    }
+                                }
+                            }
+                        }
+                    ],
                     options: {
                         bottomTab: {
                             text: 'Tab 2',
