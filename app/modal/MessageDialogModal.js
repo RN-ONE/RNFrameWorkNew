@@ -15,7 +15,7 @@ import {
     Dimensions,
     Platform,
     ProgressViewIOS,
-    ActivityIndicator, BackHandler
+    ActivityIndicator, BackHandler, TouchableWithoutFeedback
 } from "react-native";
 import ProgressView from '../native/ProgressView';
 import * as AppConfig from '../config/AppConfig';
@@ -62,21 +62,27 @@ class TipMessageModal extends React.Component {
 
     render() {
         return (
-            <View style={[
-                styles.container,
-                {
-                    backgroundColor: "rgba(0,0,0,0.5)",
-                }]}>
+            <TouchableWithoutFeedback onPress={() => {
+                if (this.props.canCancel) {
+                    NavigationUtil.dismissMessageDialogOverLay();
+                }
+            }}>
+                <View style={[
+                    styles.container,
+                    {
+                        backgroundColor: "rgba(0,0,0,0.5)",
+                    }]}>
 
-                <DialogMessage
-                    dismissCallBack={() => {
-                        NavigationUtil.dismissMessageDialogOverLay();
-                    }}
-                    ref={(dialogBox) => {
-                        this.dialogBox = dialogBox;
-                    }}/>
+                    <DialogMessage
+                        dismissCallBack={() => {
+                            NavigationUtil.dismissMessageDialogOverLay();
+                        }}
+                        ref={(dialogBox) => {
+                            this.dialogBox = dialogBox;
+                        }}/>
 
-            </View>
+                </View>
+            </TouchableWithoutFeedback>
         );
     }
 }

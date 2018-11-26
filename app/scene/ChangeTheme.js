@@ -13,9 +13,11 @@ import {
 import * as AppConfig from "../config/AppConfig";
 import TitleBar from "../component/TitleBar";
 import {connect} from "react-redux";
-import * as ChangeColorAction from "../actions/ChangeColorAction";
 import TouchableButton from "../component/TouchableButton";
 import IphoneXView from "../component/IphoneXView";
+import {Navigation} from "react-native-navigation";
+import NavigationUtil from "../util/NavigationUtil";
+
 let {height, width} = Dimensions.get('window');
 
 
@@ -61,10 +63,24 @@ let data = [
             COLOR_BG: AppConfig.COLOR_BG,
             COLOR_THEME: "#000000"
         }
+    },
+    {
+        color: '#000000',
+        params: {
+            COLOR_BG: AppConfig.COLOR_BG,
+            COLOR_THEME: "#000000"
+        }
+    },
+    {
+        color: '#000000',
+        params: {
+            COLOR_BG: AppConfig.COLOR_BG,
+            COLOR_THEME: "#000000"
+        }
     }
 ];
 let itemSeparator = AppConfig.DISTANCE_SAFE;
-let itemWidth = (width - itemSeparator * 3 ) / 2;
+let itemWidth = (width - itemSeparator * 3) / 2;
 
 class Main2 extends Component {
 
@@ -72,6 +88,16 @@ class Main2 extends Component {
     constructor(props) {
         super(props);
         // 初始状态
+    }
+
+
+    componentDidMount(): void {
+        Navigation.mergeOptions(this.props.componentId, {
+            topBar: {
+                rightButtons: [NavigationUtil.createTopBarButton("test",
+                    require('../img/ic_more_vert_white_48pt.png'))],
+            }
+        });
     }
 
     render() {
@@ -109,7 +135,5 @@ class Main2 extends Component {
     }
 }
 
-export default connect(state => ({
-}), dispatch => ({
-    changeColor: (data) => dispatch(ChangeColorAction.changeColor(data)),
+export default connect(state => ({}), dispatch => ({
 }))(Main2);

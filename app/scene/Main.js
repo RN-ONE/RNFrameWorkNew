@@ -51,7 +51,7 @@ class Main extends Component {
                     onPress={() => {
                         ToastAI.showShortBottom("自定义的Toast，支持Android和iOS！");
                         Navigation.push(this.props.componentId,
-                            NavigationUtil.getRNNComponent(Const.RNN_CHANG_THEME, "主题修改"));
+                            NavigationUtil.getRNNComponent(Const.RNN_CHANG_THEME, "修改主题"));
                     }}/>
 
                 <ThemeButton

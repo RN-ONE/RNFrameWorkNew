@@ -15,6 +15,7 @@ import com.fastaccess.permission.base.callback.OnPermissionCallback;
 import com.framework.util.SystemBarTintManager;
 import com.reactnativecomponent.splashscreen.RCTSplashScreen;
 import com.reactnativenavigation.NavigationActivity;
+import com.reactnativenavigation.parse.Alignment;
 
 public class MainActivity extends NavigationActivity implements OnPermissionCallback {
     public static SystemBarTintManager tintManager;
@@ -25,6 +26,7 @@ public class MainActivity extends NavigationActivity implements OnPermissionCall
     protected void onCreate(Bundle savedInstanceState) {
         RCTSplashScreen.openSplashScreen(this);   //open splashscreen
         super.onCreate(savedInstanceState);
+        navigator.getDefaultOptions().topBar.title.alignment = Alignment.Center;
         //设置状态栏
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             setTranslucentStatus(true);

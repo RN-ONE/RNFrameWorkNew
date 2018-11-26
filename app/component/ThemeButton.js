@@ -31,9 +31,15 @@ class ThemeButton extends Component {
      * */
 
     render() {
+        this.canClick = true;
         return (
             <TouchableButton
-                onPress={this.props.onPress ? this.props.onPress : () => {
+                onPress={() => {
+                    if (this.canClick) {
+                        this.props.onPress ? this.props.onPress() : null;
+                        this.canClick = false;
+                        setTimeout(() => this.canClick = true, 500);
+                    }
                 }}>
                 <View
                     style={{flexDirection: 'row'}}>
@@ -64,5 +70,4 @@ class ThemeButton extends Component {
     }
 }
 
-export default connect(state => ({
-}))(ThemeButton);
+export default connect(state => ({}))(ThemeButton);

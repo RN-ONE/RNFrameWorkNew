@@ -28,3 +28,21 @@ allprojects {
         maven { url 'https://jitpack.io' }
     }
 }
+
+subprojects { subproject ->
+    afterEvaluate {
+        if ((subproject.plugins.hasPlugin('android')
+                || subproject.plugins.hasPlugin('android-library'))) {
+            android {
+                variantFilter { variant ->
+                    if (variant.flavors) {
+                        def names = variant.flavors*.name
+                        if (!names.contains("reactNative55")) {
+                            setIgnore(true)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

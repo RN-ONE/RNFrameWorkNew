@@ -55,12 +55,12 @@ class Login extends Component {
                     onPress={() => {
                         Navigation.setRoot({root: AppIndex});
                     }}
-                        text={'登录'}
-                        textColor={'black'}/>
+                    text={'登录'}
+                    textColor={'black'}/>
 
-                        </IphoneXView>
-                        );
-                    }
-                }
+            </IphoneXView>
+        );
+    }
+}
 
-                export default connect(state => ({}), dispatch => ({}))(Login);
+export default connect(state => ({}), dispatch => ({}))(Login);

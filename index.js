@@ -21,6 +21,7 @@ import ImagePickerModal from "./app/modal/ImagePickerModal";
 import ImageShowModal from "./app/modal/ImageShowModal";
 import CheckCodePushUpdateUtil from "./app/util/CheckCodePushUpdateUtil";
 import MessageDialogModal from "./app/modal/MessageDialogModal";
+import TitleBar from "./app/component/TitleBar";
 
 /*************************************************************************/
 NavigationUtil.registerComponentWithRedux(Const.RNN_INDEX, Index);
@@ -39,14 +40,16 @@ NavigationUtil.registerComponentWithRedux(Const.RNN_MESSAGE_DIALOG_OVER_LAY, Mes
 
 Navigation.events().registerAppLaunchedListener(() => {
 
-    Navigation.setDefaultOptions(AppStyle);
+    Navigation.setDefaultOptions(AppStyle(false));
 
     Navigation.setRoot({
         root: LoginIndex
     });
 
+    //再次设置，后续的setRoot方法调用的时候就有动画了，android如果白屏，请看readme文件
+    Navigation.setDefaultOptions(AppStyle(true));
     //测试不需要热更新
-   // CheckCodePushUpdateUtil.checkUpdate();
+    //CheckCodePushUpdateUtil.checkUpdate();
 });
 
 

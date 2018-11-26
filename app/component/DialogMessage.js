@@ -44,6 +44,7 @@ import {
     Platform,
 } from 'react-native';
 import * as AppConfig from '../config/AppConfig';
+let {height, width} = Dimensions.get('window');
 
 class PopContent extends Component {
 
@@ -183,9 +184,12 @@ export default class DialogMessage extends Component {
 
     render() {
         return (
-            <View style={styles.popupContainer}>
-                {this._renderContent()}
-            </View>
+            <TouchableWithoutFeedback onPress={() => {
+            }}>
+                <View style={{width: width - MH}}>
+                    {this._renderContent()}
+                </View>
+            </TouchableWithoutFeedback>
         );
     }
 

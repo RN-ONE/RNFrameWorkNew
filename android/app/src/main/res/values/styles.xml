@@ -7,6 +7,15 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:fitsSystemWindows">true</item>
+        <item name="android:imeOptions">flagNoExtractUi</item>
+        <item name="android:textCursorDrawable">@drawable/color_cursor</item>
+        <item name="android:windowAnimationStyle">@style/activityAnimation</item>
     </style>
 
+    <style name="activityAnimation" parent="@android:style/Animation">
+        <item name="android:activityOpenEnterAnimation">@anim/fragment_slide_right_in</item>
+        <item name="android:activityOpenExitAnimation">@anim/fragment_slide_left_out</item>
+        <item name="android:activityCloseEnterAnimation">@anim/fragment_slide_left_in</item>
+        <item name="android:activityCloseExitAnimation">@anim/fragment_slide_right_out</item>
+    </style>
 </resources>

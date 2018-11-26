@@ -10,6 +10,10 @@
 import * as AppConfig from './config/AppConfig';
 import * as Const from "./config/Const";
 import {Navigation} from "react-native-navigation";
+import {Dimensions, PixelRatio} from "react-native";
+import ToastAI from "./component/ToastAI";
+
+let {width} = Dimensions.get("window");
 
 //定义第一个tab
 const firstTab = {
@@ -73,49 +77,62 @@ const thirdTab = {
 
 
 //定义APP的样式的样式
-export const AppStyle = {
-    topBar: {
-        animate: false,
-        hideOnScroll: false,
-        buttonColor: 'black',
-        drawBehind: false,
-        title: {
-            text: 'title',
-            fontSize: AppConfig.TEXT_SIZE_BIG,
-            color: AppConfig.COLOR_WHITE,
-            alignment: 'center'
+export const AppStyle = (needRootAnimation) => {
+    console.log({width: width * PixelRatio.get()});
+    return {
+        topBar: {
+            animate: true,
+            hideOnScroll: false,
+            buttonColor: 'black',
+            drawBehind: false,
+            title: {
+                text: 'title',
+                fontSize: AppConfig.TEXT_SIZE_BIG,
+                color: AppConfig.COLOR_WHITE,
+                //alignment: 'center',
+            },
+            subtitle: {
+                fontSize: AppConfig.TEXT_SIZE_SMALL,
+                color: AppConfig.TEXT_COLOR_GRAY,
+            },
+            background: {
+                color: AppConfig.COLOR_THEME,
+            },
+            backButton: {
+                color: AppConfig.COLOR_WHITE,
+            }
         },
-        subtitle: {
+        layout: {
+            backgroundColor: AppConfig.COLOR_BG,
+            orientation: ['portrait'],
+        },
+        bottomTabs: {
+            backgroundColor: AppConfig.COLOR_WHITE,
+            titleDisplayMode: 'alwaysShow',
+            drawBehind: true,
+        },
+        bottomTab: {
             fontSize: AppConfig.TEXT_SIZE_SMALL,
-            color: AppConfig.TEXT_COLOR_GRAY,
-            alignment: 'center'
+            iconColor: AppConfig.TEXT_COLOR_GRAY,
+            selectedIconColor: AppConfig.COLOR_THEME,
+            textColor: AppConfig.TEXT_COLOR_GRAY,
+            selectedTextColor: AppConfig.COLOR_THEME,
+            selectedFontSize: AppConfig.TEXT_SIZE_SMALL,
         },
-        background: {
-            color: AppConfig.COLOR_THEME,
+        overlay: {
+            interceptTouchOutside: true
         },
-        backButton: {
-            color: AppConfig.COLOR_WHITE,
-        }
-    },
-    layout: {
-        backgroundColor: AppConfig.COLOR_BG,
-        orientation: ['portrait'],
-    },
-    bottomTabs: {
-        backgroundColor: AppConfig.COLOR_WHITE,
-        titleDisplayMode: 'alwaysShow',
-    },
-    bottomTab: {
-        fontSize: AppConfig.TEXT_SIZE_SMALL,
-        iconColor: AppConfig.TEXT_COLOR_GRAY,
-        selectedIconColor: AppConfig.COLOR_THEME,
-        textColor: AppConfig.TEXT_COLOR_GRAY,
-        selectedTextColor: AppConfig.COLOR_THEME,
-        selectedFontSize: AppConfig.TEXT_SIZE_SMALL,
-    },
-    overlay: {
-        interceptTouchOutside: true
-    },
+        animations: needRootAnimation ? {
+            setRoot: {
+                x: {
+                    from: width * PixelRatio.get(),
+                    to: 0,
+                    duration: 300,
+                    interpolation: 'accelerate'
+                }
+            }
+        } : {}
+    };
 };
 
 export const LoginIndex = {

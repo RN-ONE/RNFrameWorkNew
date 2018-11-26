@@ -12,6 +12,8 @@ import {Provider} from 'react-redux';
 import CreateStore from '../CreateStore';
 import {Navigation} from "react-native-navigation";
 import * as Const from "../config/Const";
+import {AppIndex} from "../RNNConfig";
+import {ImageRequireSource} from 'react-native';
 
 const store = CreateStore();
 
@@ -117,7 +119,7 @@ export default class NavigationUtil {
      * @E-Mail: 528489389@qq.com
      */
     static showLoadingOverLay(message) {
-        Navigation.showOverlay(NavigationUtil.getRNNOverlay(Const.RNN_LOADING_OVER_LAY,{message}))
+        Navigation.showOverlay(NavigationUtil.getRNNOverlay(Const.RNN_LOADING_OVER_LAY, {message}))
             .then((result) => {
                 console.log({result});
             }).catch((error) => {
@@ -249,5 +251,19 @@ export default class NavigationUtil {
             }).catch((error) => {
             console.log({error});
         });
+    }
+
+    /**
+     *创建一个顶部title使用的按钮
+     *
+     * @param id 按钮的ID
+     * @param icon 注意icon需要是require的
+     *
+     * @Author: JACK-GU
+     * @Date: 2018-11-26 14:05
+     * @E-Mail: 528489389@qq.com
+     */
+    static createTopBarButton(id: string, icon: ImageRequireSource): any {
+        return {id: id, icon: icon};
     }
 }
