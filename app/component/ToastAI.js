@@ -6,6 +6,7 @@
  */
 import Toast from 'react-native-root-toast';
 import * as AppConfig from '../config/AppConfig';
+import IphoneXUtil from "../util/IphoneXUtil";
 
 const BC = "#242424";
 export default class ToastAI {
@@ -42,14 +43,13 @@ export default class ToastAI {
                 fontSize: AppConfig.TEXT_SIZE_SMALL
             },
             containerStyle: {
-                marginBottom: 50,
+                marginBottom: IphoneXUtil.isIphoneX() ? 50 + IphoneXUtil.iphoneXBottom() : 50,
                 paddingVertical: AppConfig.DISTANCE_SAFE / 2,
                 paddingHorizontal: AppConfig.DISTANCE_SAFE,
             },
             delay: 0,
         });
     }
-
 
 
     static showShortCenter(message) {
@@ -71,7 +71,7 @@ export default class ToastAI {
         });
     }
 
-    static showLongtTop(message) {
+    static showLongTop(message) {
         let toast = Toast.show(message, {
             duration: Toast.durations.LONG,
             position: Toast.positions.TOP,
@@ -106,7 +106,7 @@ export default class ToastAI {
             containerStyle: {
                 paddingVertical: AppConfig.DISTANCE_SAFE / 2,
                 paddingHorizontal: AppConfig.DISTANCE_SAFE,
-                marginBottom: 50,
+                marginBottom: IphoneXUtil.isIphoneX() ? 50 + IphoneXUtil.iphoneXBottom() : 50,
             }
         });
     }
