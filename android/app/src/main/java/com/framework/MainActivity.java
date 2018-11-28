@@ -26,7 +26,7 @@ public class MainActivity extends NavigationActivity implements OnPermissionCall
         super.onCreate(savedInstanceState);
         //设置状态栏
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            setTranslucentStatus(true);
+           setTranslucentStatus(true);
 
             tintManager = new SystemBarTintManager(this);
             tintManager.setStatusBarAlpha(0.5f);

@@ -95,6 +95,7 @@ class Main2 extends Component {
         Navigation.mergeOptions(this.props.componentId, {
             topBar: {
                 rightButtons: [NavigationUtil.createTopBarButton("test",
+                    require('../img/ic_more_vert_white_48pt.png')),NavigationUtil.createTopBarButton("test",
                     require('../img/ic_more_vert_white_48pt.png'))],
             }
         });

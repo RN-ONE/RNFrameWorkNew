@@ -44,7 +44,7 @@ NavigationUtil.registerComponentWithRedux(Const.RNN_TABLE3, Table3);
 
 Navigation.events().registerAppLaunchedListener(() => {
 
-    Navigation.setDefaultOptions(AppStyle(false));
+    Navigation.setDefaultOptions(AppStyle(true));
 
     Navigation.setRoot({
         root: LoginIndex
@@ -52,7 +52,7 @@ Navigation.events().registerAppLaunchedListener(() => {
 
 
     //再次设置，后续的setRoot方法调用的时候就有动画了，android如果白屏，请看readme文件
-    Navigation.setDefaultOptions(AppStyle(true));
+    Navigation.setDefaultOptions(AppStyle(false));
     //测试不需要热更新
     //CheckCodePushUpdateUtil.checkUpdate();
 });

@@ -105,8 +105,8 @@ const thirdTab = {
 };
 
 
-//定义APP的样式的样式
-export const AppStyle = (needRootAnimation) => {
+//定义APP的样式的样式，动画效果只对android有效果，firstSetRoot是整对android是不是启动动画而言的
+export const AppStyle = (firstSetRoot) => {
     console.log({width: width * PixelRatio.get()});
     return {
         topBar: {
@@ -116,8 +116,9 @@ export const AppStyle = (needRootAnimation) => {
             drawBehind: false,
             title: {
                 text: 'title',
-                fontSize: AppConfig.TEXT_SIZE_BIG,
+                fontSize: 20,
                 color: AppConfig.COLOR_WHITE,
+                alignment: 'center',
             },
             subtitle: {
                 fontSize: AppConfig.TEXT_SIZE_SMALL,
@@ -155,16 +156,17 @@ export const AppStyle = (needRootAnimation) => {
             unselectedTabColor: AppConfig.TEXT_COLOR_GRAY,
             height: 70,
         },
-        animations: needRootAnimation ? {
-            setRoot: {
-                x: {
-                    from: width * PixelRatio.get(),
-                    to: 0,
-                    duration: 300,
-                    interpolation: 'accelerate'
+        animations: firstSetRoot ?
+            null : {
+                setRoot: {
+                    x: {
+                        from: width * PixelRatio.get(),
+                        to: 0,
+                        duration: 300,
+                        interpolation: 'accelerate'
+                    }
                 }
             }
-        } : {}
     };
 };
 
