@@ -14,7 +14,6 @@ import com.imagepicker.ImagePickerPackage;
 import com.masteratul.exceptionhandler.ReactNativeExceptionHandlerPackage;
 import com.microsoft.codepush.react.CodePush;
 import com.oblador.vectoricons.VectorIconsPackage;
-import com.reactnativecomponent.splashscreen.RCTSplashScreenPackage;
 import com.reactnativenavigation.NavigationApplication;
 import com.reactnativenavigation.react.NavigationReactNativeHost;
 import com.reactnativenavigation.react.ReactGateway;
@@ -53,7 +52,6 @@ public class MainApplication extends NavigationApplication {
         return Arrays.<ReactPackage>asList(
                 new MainReactPackage(),
                 new VectorIconsPackage(),
-                new RCTSplashScreenPackage(),
                 new ProgressViewPackage(),
                 new BarHeightPackage(),
                 new BarColorPackage(),

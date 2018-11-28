@@ -2,13 +2,13 @@
 
 buildscript {
     repositories {
-        jcenter()
         google()
+        jcenter()
         mavenLocal()
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.2'
+        classpath 'com.android.tools.build:gradle:3.2.0'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -17,8 +17,8 @@ buildscript {
 
 allprojects {
     repositories {
-        jcenter()
         google()
+        jcenter()
         mavenLocal()
         mavenCentral()
         maven {
@@ -37,7 +37,7 @@ subprojects { subproject ->
                 variantFilter { variant ->
                     if (variant.flavors) {
                         def names = variant.flavors*.name
-                        if (!names.contains("reactNative55")) {
+                        if (!names.contains("reactNative57")) {
                             setIgnore(true)
                         }
                     }
@@ -45,4 +45,12 @@ subprojects { subproject ->
             }
         }
     }
+}
+
+
+ext {
+    compileSdkVersion = 27
+    targetSdkVersion = 26
+    buildToolsVersion = "27.0.3"
+    supportLibVersion = "27.+"
 }

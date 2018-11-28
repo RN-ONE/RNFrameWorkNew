@@ -13,21 +13,20 @@ import {
     StyleSheet
 } from 'react-native';
 import {connect} from "react-redux";
-import TitleBar from "../component/TitleBar";
 import * as TestAction from "../actions/TestAction";
-import TouchableButton from "../component/TouchableButton";
-import ThemeButton from "../component/ThemeButton";
 import * as AppConfig from '../config/AppConfig';
+import {Navigation} from "react-native-navigation";
 
 
 
-class Main extends Component {
+class Main2 extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
             currentPosition: 0
         }
+
     }
 
     render() {
@@ -43,4 +42,4 @@ export default connect(state => ({
     text: state.TestReducer.text,
 }), dispatch => ({
     getMoveList: (data) => dispatch(TestAction.testGetMoves(data)),
-}))(Main);
+}))(Main2);

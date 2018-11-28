@@ -8,12 +8,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.fastaccess.permission.base.PermissionHelper;
 import com.fastaccess.permission.base.callback.OnPermissionCallback;
 import com.framework.util.SystemBarTintManager;
-import com.reactnativecomponent.splashscreen.RCTSplashScreen;
 import com.reactnativenavigation.NavigationActivity;
 
 public class MainActivity extends NavigationActivity implements OnPermissionCallback {
@@ -23,7 +23,6 @@ public class MainActivity extends NavigationActivity implements OnPermissionCall
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        RCTSplashScreen.openSplashScreen(this);   //open splashscreen
         super.onCreate(savedInstanceState);
         //设置状态栏
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -90,4 +89,19 @@ public class MainActivity extends NavigationActivity implements OnPermissionCall
     public void onNoPermissionNeeded() {
     }
 
+
+    /**
+     * 设置开屏页
+     *
+     * @Author: JACK-GU
+     * @E-Mail: 528489389@qq.com
+     */
+    @Override
+    protected void addDefaultSplashLayout() {
+        ImageView imageView = new ImageView(this);
+        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+        imageView.setImageResource(R.drawable.splash);
+
+        setContentView(imageView);
+    }
 }

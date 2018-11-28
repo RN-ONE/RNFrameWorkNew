@@ -71,22 +71,16 @@ const secondTab = {
                                 }
                             }
                         }
-                    ],
-                    options: {
-                        bottomTab: {
-                            text: 'Tab 2',
-                            icon: require('./img/settings.png'),
-                        },
-                        topTabs: {
-                            visible: true,
-                            selectedTabColor: AppConfig.COLOR_THEME,
-                            unselectedTabColor: AppConfig.TEXT_COLOR_GRAY,
-                            height: 70,
-                        }
-                    }
+                    ]
                 }
             }
-        ]
+        ],
+        options: {
+            bottomTab: {
+                text: 'Tab 2',
+                icon: require('./img/settings.png'),
+            },
+        }
     }
 };
 
@@ -124,7 +118,6 @@ export const AppStyle = (needRootAnimation) => {
                 text: 'title',
                 fontSize: AppConfig.TEXT_SIZE_BIG,
                 color: AppConfig.COLOR_WHITE,
-                //alignment: 'center',
             },
             subtitle: {
                 fontSize: AppConfig.TEXT_SIZE_SMALL,
@@ -156,6 +149,11 @@ export const AppStyle = (needRootAnimation) => {
         },
         overlay: {
             interceptTouchOutside: true
+        },
+        topTabs: {
+            selectedTabColor: AppConfig.COLOR_THEME,
+            unselectedTabColor: AppConfig.TEXT_COLOR_GRAY,
+            height: 70,
         },
         animations: needRootAnimation ? {
             setRoot: {

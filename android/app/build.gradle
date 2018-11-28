@@ -102,14 +102,14 @@ android {
             storePassword '123456'
         }
     }
-    compileSdkVersion 26
+    compileSdkVersion 27
     buildToolsVersion "27.0.3"
     defaultConfig {
         applicationId "com.framework"
         minSdkVersion 19
         targetSdkVersion 26
         versionCode 1
-        missingDimensionStrategy "RNN.reactNativeVersion", "reactNative55"
+        missingDimensionStrategy "RNN.reactNativeVersion", "reactNative57"
         versionName "1.0"
         ndk {
             abiFilters "armeabi-v7a", "x86"
@@ -153,16 +153,12 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.facebook.react:react-native:+'
-    // From node_modules
-    // From node_modules
     implementation project(':react-native-vector-icons')
-    implementation project(':react-native-smart-splashscreen')
     implementation project(':react-native-exception-handler')
     implementation 'com.github.k0shk0sh:PermissionHelper:1.1.0'
     implementation project(':react-native-restart')
     implementation project(':react-native-code-push')
     implementation 'com.tencent.bugly:crashreport:latest.release'
-    //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.2.0
     implementation project(':imagepicker')
     implementation project(':react-native-navigation')
 }
@@ -172,4 +168,14 @@ dependencies {
 task copyDownloadableDepsToLibs(type: Copy) {
     from configurations.compile
     into 'libs'
+}
+
+
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        def requested = details.requested
+        if (requested.group == 'com.android.support') {
+                details.useVersion '27.+'
+        }
+    }
 }

@@ -114,6 +114,15 @@ class Main extends Component {
                             dataS: this.photoGallery.getDataS()
                         });
                     }}/>
+
+                <ThemeButton
+                    textColor={AppConfig.COLOR_BLACK}
+                    backgroundColor={AppConfig.TEXT_COLOR_GRAY}
+                    radius={5}
+                    text="报错测试"
+                    onPress={() => {
+                        Actions.sjow();
+                    }}/>
             </View>
         )
     }

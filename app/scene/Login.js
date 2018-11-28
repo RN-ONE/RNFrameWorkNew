@@ -19,7 +19,6 @@ import ThemeButton from "../component/ThemeButton";
 import IphoneXUtil from "../util/IphoneXUtil";
 import IphoneXView from "../component/IphoneXView";
 import ToastAI from "../component/ToastAI";
-import SplashScreen from "react-native-smart-splash-screen";
 import {AppIndex, LoginIndex} from "../RNNConfig";
 
 class Login extends Component {
@@ -32,11 +31,7 @@ class Login extends Component {
 
 
     componentDidMount() {
-        SplashScreen.close({
-            animationType: SplashScreen.animationType.scale,
-            duration: 2000,
-            delay: 500,
-        })
+
     }
 
     render() {

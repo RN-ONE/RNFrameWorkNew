@@ -7,7 +7,6 @@
 
 import React, {Component} from 'react';
 import {NativeModules, Alert, Platform, View} from 'react-native';
-import SplashScreen from 'react-native-smart-splash-screen'
 import {setJSExceptionHandler} from 'react-native-exception-handler';
 import RNRestart from 'react-native-restart';
 import Login from "./scene/Login";
@@ -94,11 +93,7 @@ class Index extends Component {
     }
 
     componentDidMount() {
-        SplashScreen.close({
-            animationType: SplashScreen.animationType.scale,
-            duration: 2000,
-            delay: 500,
-        })
+
     }
 
     render() {
