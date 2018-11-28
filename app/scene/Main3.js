@@ -47,6 +47,7 @@ class Main extends Component {
         )
     }
 
+
     show() {
         NavigationUtil.showMessageDialogOverLay({
             title: '测试',//标题
