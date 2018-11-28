@@ -144,7 +144,7 @@ private void createLayout() {
 </code>
 </pre>
 
-#UiUtils 
+# UiUtils 
 修改方法getTopBarHeight：
 
 <pre>
@@ -166,7 +166,7 @@ private void createLayout() {
 </code>
 </pre>
 
-#TopBarButtons
+# TopBarButtons
 在parse方法返回之前增加下面代码
 <pre>
 <code>
@@ -183,5 +183,5 @@ private void createLayout() {
 </code>
 </pre>
 
-#TitleBar
+# TitleBar
 这个类涉及的修改很多：新加textView作为标题，然后把以前设置的方法全部替换成自己的textView就可以了，可以参考修改的文件[TitleBar.txt]
