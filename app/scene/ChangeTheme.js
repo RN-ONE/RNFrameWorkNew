@@ -95,8 +95,7 @@ class Main2 extends Component {
         Navigation.mergeOptions(this.props.componentId, {
             topBar: {
                 rightButtons: [NavigationUtil.createTopBarButton("test",
-                    require('../img/ic_more_vert_white_48pt.png')),NavigationUtil.createTopBarButton("test",
-                    require('../img/ic_more_vert_white_48pt.png'))],
+                    require('../img/title_add.png'))],
             }
         });
     }
@@ -113,7 +112,6 @@ class Main2 extends Component {
                         return (
                             <View>
                                 <TouchableButton onPress={() => {
-                                    this.props.changeColor(item.params);
                                 }}>
                                     <View style={{
                                         marginLeft: itemSeparator,

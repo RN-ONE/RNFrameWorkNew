@@ -25,8 +25,8 @@ const firstTab = {
                     name: Const.RNN_MAIN,
                     options: {
                         bottomTab: {
-                            text: 'Tab 1',
-                            icon: require('./img/settings.png'),
+                            text: '主页',
+                            icon: require('./img/tab_one.png'),
                         }
                     }
                 }
@@ -36,51 +36,69 @@ const firstTab = {
 };
 
 //第二个tab
+// const secondTab = {
+//     stack: {
+//         children: [
+//             {
+//                 topTabs: {
+//                     children: [
+//                         {
+//                             component: {
+//                                 name: Const.RNN_TABLE1,
+//                                 options: {
+//                                     topTab: {
+//                                         title: "TopTab 1"
+//                                     }
+//                                 }
+//                             }
+//                         },
+//                         {
+//                             component: {
+//                                 name: Const.RNN_TABLE2,
+//                                 options: {
+//                                     topTab: {
+//                                         title: "TopTab 2"
+//                                     }
+//                                 }
+//                             }
+//                         }, {
+//                             component: {
+//                                 name: Const.RNN_TABLE3,
+//                                 options: {
+//                                     topTab: {
+//                                         title: "TopTab 3"
+//                                     }
+//                                 }
+//                             }
+//                         }
+//                     ]
+//                 }
+//             }
+//         ],
+//         options: {
+//             bottomTab: {
+//                 text: 'Tab 2',
+//                 icon: require('./img/settings.png'),
+//             },
+//         }
+//     }
+// };
 const secondTab = {
     stack: {
         children: [
             {
-                topTabs: {
-                    children: [
-                        {
-                            component: {
-                                name: Const.RNN_TABLE1,
-                                options: {
-                                    topTab: {
-                                        title: "TopTab 1"
-                                    }
-                                }
-                            }
-                        },
-                        {
-                            component: {
-                                name: Const.RNN_TABLE2,
-                                options: {
-                                    topTab: {
-                                        title: "TopTab 2"
-                                    }
-                                }
-                            }
-                        }, {
-                            component: {
-                                name: Const.RNN_TABLE3,
-                                options: {
-                                    topTab: {
-                                        title: "TopTab 3"
-                                    }
-                                }
-                            }
+                component: {
+                    id: Const.RNN_MAIN2,
+                    name: Const.RNN_MAIN2,
+                    options: {
+                        bottomTab: {
+                            text: '通讯录',
+                            icon: require('./img/tab_two.png'),
                         }
-                    ]
+                    }
                 }
             }
-        ],
-        options: {
-            bottomTab: {
-                text: 'Tab 2',
-                icon: require('./img/settings.png'),
-            },
-        }
+        ]
     }
 };
 
@@ -94,8 +112,8 @@ const thirdTab = {
                     name: Const.RNN_MAIN3,
                     options: {
                         bottomTab: {
-                            text: 'Tab 3',
-                            icon: require('./img/settings.png'),
+                            text: '设置',
+                            icon: require('./img/tab_three.png'),
                         }
                     }
                 }

@@ -27,6 +27,14 @@ class Main2 extends Component {
             currentPosition: 0
         }
 
+
+        Navigation.mergeOptions(this.props.componentId, {
+            topBar: {
+                title: {
+                    text: "通讯录"
+                }
+            }
+        });
     }
 
     render() {

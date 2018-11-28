@@ -29,6 +29,14 @@ let {height, width} = Dimensions.get('window');
 class Main extends Component {
     constructor(props, context) {
         super(props, context);
+
+        Navigation.mergeOptions(this.props.componentId, {
+            topBar: {
+                title: {
+                    text: "主页"
+                }
+            }
+        });
     }
 
     render() {
