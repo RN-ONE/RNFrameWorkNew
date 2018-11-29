@@ -8,28 +8,22 @@
 1 增加下面的方法
 <pre>
 <code>
-
     protected void closeSplash(View view) {
         AnimationSet animationSet = new AnimationSet(true);
         AlphaAnimation fadeOut = new AlphaAnimation(1, 0);
         fadeOut.setDuration(500);
         animationSet.addAnimation(fadeOut);
-
         ScaleAnimation scale = new ScaleAnimation(1, 1.5f, 1, 1.5f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.65f);
         scale.setDuration(500);
         animationSet.addAnimation(scale);
         view.startAnimation(animationSet);
-
-
         animationSet.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
             }
-
             @Override
             public void onAnimationRepeat(Animation animation) {
             }
-
             @Override
             public void onAnimationEnd(Animation animation) {
                 view.post(() -> {
@@ -40,19 +34,12 @@
     }
 </code>
 </pre>
-
 2 修改setRoot方法的代码如下：
 <pre>
 <code>
 public void setRoot(final ViewController viewController, CommandListener commandListener) {
         final ViewController rootOld = root;
-        /**
-         * setRoot，我们将view放在第一个位置，并且移除掉后续的view，
-         * 所以要修改rootPresenter的setRoot方法添加一个参数
-         *
-         * */
-
-        root = viewController;
+         root = viewController;
 
         View viewImage = contentLayout.getChildAt(0);
         if (viewImage instanceof ImageView) {
@@ -185,3 +172,11 @@ private void createLayout() {
 
 # TitleBar
 这个类涉及的修改很多：新加textView作为标题，然后把以前设置的方法全部替换成自己的textView就可以了，可以参考修改的文件[TitleBar.txt]
+
+
+#### ********************************************************
+# 苹果在xcode10上需要做以下修改
+#### 1. Check "Copy only when installing"
+![Image text](https://user-images.githubusercontent.com/180773/43156813-23ab6266-8f49-11e8-811a-2642003b68bc.png)
+#### 2. Go to Product > Scheme > Edit Scheme and modified it to look like this, move ReactNativeNavigation above React.
+![Image text](https://user-images.githubusercontent.com/180773/43156762-ffa6f61e-8f48-11e8-83f9-2022f805653f.png)
