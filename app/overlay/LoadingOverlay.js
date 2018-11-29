@@ -29,7 +29,7 @@ var styles = StyleSheet.create({
     },
 });
 
-export default class LoadingModal extends React.Component {
+export default class LoadingOverlay extends React.Component {
     static LOADING_REFRESH = "LOADING_REFRESH";
 
     constructor(props) {
@@ -46,7 +46,7 @@ export default class LoadingModal extends React.Component {
             });
 
 
-        this.deviceEventEmitter = DeviceEventEmitter.addListener(LoadingModal.LOADING_REFRESH,
+        this.deviceEventEmitter = DeviceEventEmitter.addListener(LoadingOverlay.LOADING_REFRESH,
             (message) => {
                 this.setState({message})
             });

@@ -90,7 +90,6 @@ class Main2 extends Component {
         // 初始状态
     }
 
-
     componentDidMount(): void {
         Navigation.mergeOptions(this.props.componentId, {
             topBar: {

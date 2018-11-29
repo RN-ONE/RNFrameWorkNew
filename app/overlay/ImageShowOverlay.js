@@ -41,7 +41,7 @@ var styles = StyleSheet.create({
     },
 });
 
-class ImageShowModal extends React.Component {
+class ImageShowOverlay extends React.Component {
     constructor(props) {
         super(props);
 
@@ -161,4 +161,4 @@ class ImageShowModal extends React.Component {
 }
 
 
-export default connect(state => ({}), dispatch => ({}))(ImageShowModal);
+export default connect(state => ({}), dispatch => ({}))(ImageShowOverlay);

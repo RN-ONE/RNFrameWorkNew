@@ -38,7 +38,7 @@ var styles = StyleSheet.create({
     },
 });
 
-class TipMessageModal extends React.Component {
+class MessageDialogOverlay extends React.Component {
     constructor(props) {
         super(props);
 
@@ -89,4 +89,4 @@ class TipMessageModal extends React.Component {
 
 export default connect(state => ({
     text: state.TestReducer.text,
-}), dispatch => ({}))(TipMessageModal);
+}), dispatch => ({}))(MessageDialogOverlay);

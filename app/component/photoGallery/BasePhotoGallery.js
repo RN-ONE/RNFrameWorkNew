@@ -28,8 +28,8 @@ import {connect} from "react-redux";
 import ToastAI from "../ToastAI";
 
 import GridView from 'react-native-gridview';
-import ImagePickerModal from "../../modal/ImagePickerModal";
-import ImageShowModal from "../../modal/ImageShowModal";
+import ImagePickerOverlay from "../../overlay/ImagePickerOverlay";
+import ImageShowModal from "../../overlay/ImageShowOverlay";
 import MyImage from "../MyImage";
 import NavigationUtil from "../../util/NavigationUtil";
 import {Navigation} from "react-native-navigation";

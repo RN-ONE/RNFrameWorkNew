@@ -52,7 +52,7 @@ var styles = StyleSheet.create({
   res: require('../img/dog1.jpg'),//按钮的图标
  }
  * */
-class SelectModal extends React.Component {
+class SelectOverlay extends React.Component {
     static propTypes = {
         items: PropTypes.array,
         tipsColor: PropTypes.color,
@@ -190,4 +190,4 @@ class Item extends Component {
 }
 
 
-export default connect(state => ({}), dispatch => ({}))(SelectModal);
+export default connect(state => ({}), dispatch => ({}))(SelectOverlay);

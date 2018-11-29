@@ -13,7 +13,7 @@ import * as AppConfig from "../config/AppConfig";
 import {
     DeviceEventEmitter
 } from "react-native";
-import LoadingModal from "../modal/LoadingModal";
+import LoadingOverlay from "../overlay/LoadingOverlay";
 
 export default class CheckCodePushUpdateUtil {
     /**
@@ -96,6 +96,6 @@ export default class CheckCodePushUpdateUtil {
 
     static down(downloadProgress) {
         let n = (downloadProgress.receivedBytes / downloadProgress.totalBytes) * 100;
-        DeviceEventEmitter.emit(LoadingModal.LOADING_REFRESH, n.toFixed(2) + "%");
+        DeviceEventEmitter.emit(LoadingOverlay.LOADING_REFRESH, n.toFixed(2) + "%");
     }
 }

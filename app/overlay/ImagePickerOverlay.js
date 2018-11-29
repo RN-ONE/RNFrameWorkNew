@@ -57,7 +57,7 @@ var styles = StyleSheet.create({
         }
  * */
 
-export default class ImagePickerModal extends React.Component {
+export default class ImagePickerOverlay extends React.Component {
     static propTypes = {
         callback: PropTypes.function,
         titleColor: PropTypes.color
