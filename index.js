@@ -49,10 +49,6 @@ Navigation.events().registerAppLaunchedListener(() => {
     Navigation.setRoot({
         root: LoginIndex
     });
-
-
-    //再次设置，后续的setRoot方法调用的时候就有动画了，android如果白屏，请看readme文件
-    Navigation.setDefaultOptions(AppStyle);
     //测试不需要热更新
     //CheckCodePushUpdateUtil.checkUpdate();
 });

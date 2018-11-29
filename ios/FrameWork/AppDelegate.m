@@ -23,6 +23,8 @@
 
   jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
   [ReactNativeNavigation bootstrap:jsCodeLocation launchOptions:launchOptions];
+  
+  [NSThread sleepForTimeInterval:2.0];//设置启动页面时间
 
   return YES;
 }
