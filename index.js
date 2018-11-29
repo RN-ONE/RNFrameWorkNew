@@ -24,6 +24,7 @@ import Table1 from "./app/scene/Table1";
 import Table2 from "./app/scene/Table2";
 import Table3 from "./app/scene/Table3";
 
+
 /*************************************************************************/
 NavigationUtil.registerComponentWithRedux(Const.RNN_INDEX, Index);
 NavigationUtil.registerComponentWithRedux(Const.RNN_MAIN, Main);
