@@ -82,7 +82,7 @@ let data = [
 let itemSeparator = AppConfig.DISTANCE_SAFE;
 let itemWidth = (width - itemSeparator * 3) / 2;
 
-class Main2 extends Component {
+class ChangeTheme extends Component {
 
     // 构造
     constructor(props) {
@@ -134,4 +134,4 @@ class Main2 extends Component {
 }
 
 export default connect(state => ({}), dispatch => ({
-}))(Main2);
+}))(ChangeTheme);
