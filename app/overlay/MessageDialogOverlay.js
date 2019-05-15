@@ -23,6 +23,7 @@ import * as AppStyles from '../config/AppStyles';
 import DialogMessage from "../component/DialogMessage";
 import {connect} from "react-redux";
 import NavigationUtil from "../util/NavigationUtil";
+import ToastAI from "../component/ToastAI";
 
 let {height, width} = Dimensions.get('window');
 var styles = StyleSheet.create({

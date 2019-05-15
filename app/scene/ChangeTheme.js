@@ -17,6 +17,7 @@ import TouchableButton from "../component/TouchableButton";
 import IphoneXView from "../component/IphoneXView";
 import {Navigation} from "react-native-navigation";
 import NavigationUtil from "../util/NavigationUtil";
+import BaseComponent from "../component/BaseComponent";
 
 let {height, width} = Dimensions.get('window');
 
@@ -82,7 +83,7 @@ let data = [
 let itemSeparator = AppConfig.DISTANCE_SAFE;
 let itemWidth = (width - itemSeparator * 3) / 2;
 
-class ChangeTheme extends Component {
+class ChangeTheme extends BaseComponent {
 
     // 构造
     constructor(props) {
@@ -91,6 +92,8 @@ class ChangeTheme extends Component {
     }
 
     componentDidMount(): void {
+        super.componentDidMount();
+
         Navigation.mergeOptions(this.props.componentId, {
             topBar: {
                 rightButtons: [NavigationUtil.createTopBarButton("test",
@@ -133,5 +136,4 @@ class ChangeTheme extends Component {
     }
 }
 
-export default connect(state => ({}), dispatch => ({
-}))(ChangeTheme);
+export default connect(state => ({}), dispatch => ({}))(ChangeTheme);

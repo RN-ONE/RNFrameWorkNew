@@ -10,7 +10,7 @@ import {
     Text,
     View,
     Dimensions,
-    NativeModules
+    NativeModules, BackHandler
 } from 'react-native';
 import DialogMessage from "../component/DialogMessage";
 import * as AppConfig from "../config/AppConfig";
@@ -22,11 +22,14 @@ import PhotoGallery from "../component/photoGallery/PhotoGallery";
 import {Navigation} from "react-native-navigation";
 import NavigationUtil from "../util/NavigationUtil";
 import * as Const from "../config/Const";
+import BaseComponent from "../component/BaseComponent";
 
 let {height, width} = Dimensions.get('window');
 
 
-class Main extends Component {
+class Main extends BaseComponent {
+    mExitTime = 0;
+
     constructor(props, context) {
         super(props, context);
 
@@ -37,6 +40,33 @@ class Main extends Component {
                 }
             }
         });
+    }
+
+    componentDidMount(): void {
+        super.componentDidMount();
+    }
+
+    componentWillUnmount(): void {
+        super.componentWillUnmount();
+    }
+
+    componentDidAppear() {
+        super.componentDidAppear();
+        this.backHandler = BackHandler.addEventListener('MainHardwareBackPress', () => {
+            if ((new Date()).getTime() - this.mExitTime > 2000) {
+                ToastAI.showShortBottom("再按一次退出本软件");
+                this.mExitTime = (new Date()).getTime();
+            } else {
+                BackHandler.exitApp();
+            }
+            //表示消费了这个事件
+            return true;
+        });
+    }
+
+    componentDidDisappear() {
+        super.componentDidDisappear();
+        this.backHandler.remove();
     }
 
     render() {
@@ -57,9 +87,7 @@ class Main extends Component {
                     radius={5}
                     text="跳转页面"
                     onPress={() => {
-                        ToastAI.showShortBottom("自定义的Toast，支持Android和iOS！");
-                        Navigation.push(this.props.componentId,
-                            NavigationUtil.getRNNComponent(Const.RNN_CHANG_THEME, "修改主题"));
+                        NavigationUtil.push(this.props.componentId, Const.RNN_CHANG_THEME, "修改主题");
                     }}/>
 
                 <ThemeButton

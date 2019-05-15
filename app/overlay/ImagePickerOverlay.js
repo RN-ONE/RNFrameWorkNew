@@ -28,6 +28,9 @@ import NavigationUtil from "../util/NavigationUtil";
 import {Navigation} from "react-native-navigation";
 import * as Const from "../config/Const";
 
+import {PermissionsAndroid} from 'react-native';
+import CommonUtil from "../util/CommonUtil";
+
 let {width, height} = Dimensions.get('window');
 
 
@@ -161,24 +164,42 @@ export default class ImagePickerOverlay extends React.Component {
                                         }}/>
 
                                         <Item text={'相机'} onPress={() => {
-                                            this.setState({show: true});
-                                            //启动相机拍照
-                                            ImagePicker.launchCamera({}, (response) => {
-                                                console.log({response});
+                                            //Android才行，ios的overlay会覆盖在选择的相册上面，所以直接消失
+                                            if (CommonUtil.isAndroid()) {
+                                                this.setState({show: true});
+                                            } else {
                                                 this.dismissImagePickerOverLay();
-                                                if (!response.error && response.uri && this.props.callback) {
-                                                    this.props.callback({
-                                                        uri: response.uri,
-                                                        path: response.path,
-                                                        fileSize: response.fileSize,
-                                                        fileName: response.fileName,
-                                                        width: response.width,
-                                                        height: response.height,
+                                            }
+
+                                            CommonUtil.checkAndRequestPermissions([PermissionsAndroid.PERMISSIONS.CAMERA,
+                                                    PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE],
+                                                () => {
+                                                    //启动相机拍照
+                                                    ImagePicker.launchCamera(AppConfig.IMAGE_PICKER_OPTIONS, (response) => {
+                                                        console.log({response});
+                                                        //Android才行，ios的overlay会覆盖在选择的相册上面，所以直接消失
+                                                        if (CommonUtil.isAndroid()) {
+                                                            this.dismissImagePickerOverLay();
+                                                        }
+                                                        if (!response.error && response.uri && this.props.callback) {
+                                                            this.props.callback({
+                                                                uri: response.uri,
+                                                                path: response.path,
+                                                                fileSize: response.fileSize,
+                                                                fileName: response.fileName,
+                                                                width: response.width,
+                                                                height: response.height,
+                                                            });
+                                                        } else {
+                                                            ToastAI.showShortBottom("不能打开照相机！");
+                                                        }
                                                     });
-                                                } else {
-                                                    ToastAI.showShortBottom("不能打开照相机！");
-                                                }
-                                            });
+                                                }, () => {
+                                                    //Android才行，ios的overlay会覆盖在选择的相册上面，所以直接消失
+                                                    if (CommonUtil.isAndroid()) {
+                                                        this.dismissImagePickerOverLay();
+                                                    }
+                                                });
                                         }}/>
 
                                         <View style={{
@@ -188,21 +209,40 @@ export default class ImagePickerOverlay extends React.Component {
                                         }}/>
 
                                         <Item text={'图库'} onPress={() => {
-                                            this.setState({show: true});
-                                            //打开系统相册
-                                            ImagePicker.launchImageLibrary({}, (response) => {
+                                            //Android才行，ios的overlay会覆盖在选择的相册上面，所以直接消失
+                                            if (CommonUtil.isAndroid()) {
+                                                this.setState({show: true});
+                                            } else {
                                                 this.dismissImagePickerOverLay();
-                                                //响应结果处理参考上面样例
-                                                console.log(response);
-                                                if (!response.error && response.uri && this.props.callback) {
-                                                    this.props.callback({
-                                                        uri: response.uri,
-                                                        path: response.path,
-                                                        fileSize: response.fileSize,
-                                                        fileName: response.fileName,
-                                                        width: response.width,
-                                                        height: response.height,
-                                                    });
+                                            }
+
+                                            CommonUtil.checkAndRequestPermissions([PermissionsAndroid.PERMISSIONS.CAMERA,
+                                                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE], () => {
+                                                //打开系统相册
+                                                ImagePicker.launchImageLibrary(AppConfig.IMAGE_PICKER_OPTIONS, (response) => {
+                                                    //Android才行，ios的overlay会覆盖在选择的相册上面，所以直接消失
+                                                    if (CommonUtil.isAndroid()) {
+                                                        this.dismissImagePickerOverLay();
+                                                    }
+                                                    //响应结果处理参考上面样例
+                                                    console.log(response);
+                                                    if (!response.error && response.uri && this.props.callback) {
+                                                        this.props.callback({
+                                                            uri: response.uri,
+                                                            path: response.path,
+                                                            fileSize: response.fileSize,
+                                                            fileName: response.fileName,
+                                                            width: response.width,
+                                                            height: response.height,
+                                                        });
+                                                    } else {
+                                                        ToastAI.showShortBottom("打开图库失败");
+                                                    }
+                                                });
+                                            }, () => {
+                                                //Android才行，ios的overlay会覆盖在选择的相册上面，所以直接消失
+                                                if (CommonUtil.isAndroid()) {
+                                                    this.dismissImagePickerOverLay();
                                                 }
                                             });
                                         }}/>

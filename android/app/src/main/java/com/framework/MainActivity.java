@@ -1,32 +1,34 @@
 package com.framework;
 
-import android.Manifest;
 import android.annotation.TargetApi;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.Toast;
 
-import com.fastaccess.permission.base.PermissionHelper;
-import com.fastaccess.permission.base.callback.OnPermissionCallback;
+import com.facebook.react.modules.core.PermissionListener;
 import com.framework.util.SystemBarTintManager;
+import com.imagepicker.permissions.OnImagePickerPermissionsCallback;
 import com.reactnativenavigation.NavigationActivity;
 
-public class MainActivity extends NavigationActivity implements OnPermissionCallback {
+public class MainActivity extends NavigationActivity implements OnImagePickerPermissionsCallback {
     public static SystemBarTintManager tintManager;
     public static int height = 0;
-    public PermissionHelper permissionHelper;
+    private PermissionListener permissionListener; //这个是图片选择做了权限的监听
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         //设置状态栏
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-           setTranslucentStatus(true);
+            setTranslucentStatus(true);
 
             tintManager = new SystemBarTintManager(this);
             tintManager.setStatusBarAlpha(0.5f);
@@ -34,11 +36,25 @@ public class MainActivity extends NavigationActivity implements OnPermissionCall
             tintManager.setStatusBarTintColor(Color.parseColor("#22000000"));
             height = tintManager.getConfig().getStatusBarHeight();
         }
+    }
 
-        permissionHelper = PermissionHelper.getInstance(this);
-        permissionHelper.setForceAccepting(true).request(new String[]{Manifest.permission
-                .WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION, Manifest
-                .permission.ACCESS_COARSE_LOCATION, Manifest.permission.CAMERA});
+    @Override
+    public void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        //下面是设置沉浸式状态栏的
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            ViewGroup viewGroup = findViewById(android.R.id.content);
+            viewGroup.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+
+            FrameLayout frameLayout = navigator.getRootLayout();
+            ViewGroup.LayoutParams layoutParams = frameLayout.getLayoutParams();
+
+            if (layoutParams instanceof FrameLayout.LayoutParams) {
+                FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) layoutParams;
+                params.topMargin = height;
+                frameLayout.setLayoutParams(params);
+            }
+        }
     }
 
     @TargetApi(19)
@@ -52,41 +68,6 @@ public class MainActivity extends NavigationActivity implements OnPermissionCall
             winParams.flags &= ~bits;
         }
         win.setAttributes(winParams);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        permissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
-
-    @Override
-    public void onPermissionGranted(@NonNull String[] permissionName) {
-    }
-
-    @Override
-    public void onPermissionDeclined(@NonNull String[] permissionName) {
-        Toast.makeText(this, "您已拒绝权限，可能导致部分功能无法正常使用", Toast.LENGTH_LONG);
-    }
-
-    @Override
-    public void onPermissionPreGranted(@NonNull String permissionsName) {
-
-    }
-
-    @Override
-    public void onPermissionNeedExplanation(@NonNull String permissionName) {
-
-    }
-
-    @Override
-    public void onPermissionReallyDeclined(@NonNull String permissionName) {
-
-    }
-
-    @Override
-    public void onNoPermissionNeeded() {
     }
 
 
@@ -103,5 +84,18 @@ public class MainActivity extends NavigationActivity implements OnPermissionCall
         imageView.setImageResource(R.drawable.splash);
 
         setContentView(imageView);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (permissionListener != null) {
+            permissionListener.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    @Override
+    public void setPermissionListener(@NonNull PermissionListener listener) {
+        this.permissionListener = listener;
     }
 }

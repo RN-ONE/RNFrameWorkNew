@@ -27,13 +27,11 @@ import com.reactnativenavigation.anim.TopBarCollapseBehavior;
 import com.reactnativenavigation.interfaces.ScrollEventListener;
 import com.reactnativenavigation.parse.Alignment;
 import com.reactnativenavigation.parse.AnimationOptions;
-import com.reactnativenavigation.parse.Component;
 import com.reactnativenavigation.parse.params.Colour;
 import com.reactnativenavigation.parse.params.Number;
 import com.reactnativenavigation.utils.CompatUtils;
 import com.reactnativenavigation.utils.UiUtils;
 import com.reactnativenavigation.viewcontrollers.TitleBarButtonController;
-import com.reactnativenavigation.viewcontrollers.topbar.TopBarBackgroundViewController;
 import com.reactnativenavigation.views.StackLayout;
 import com.reactnativenavigation.views.titlebar.TitleBar;
 import com.reactnativenavigation.views.toptabs.TopTabs;
@@ -50,15 +48,14 @@ public class TopBar extends AppBarLayout implements ScrollEventListener.ScrollAw
     private TopBarAnimator animator;
     private TopTabs topTabs;
     private FrameLayout root;
-    private TopBarBackgroundViewController topBarBackgroundViewController;
     private View border;
-    private View statusView;
+    private View component;
+    private float elevation = -1;
 
-    public TopBar(final Context context, TopBarBackgroundViewController topBarBackgroundViewController, StackLayout parentView) {
+    public TopBar(final Context context, StackLayout parentView) {
         super(context);
         context.setTheme(R.style.TopBar);
         collapsingBehavior = new TopBarCollapseBehavior(this);
-        this.topBarBackgroundViewController = topBarBackgroundViewController;
         topTabs = new TopTabs(getContext());
         animator = new TopBarAnimator(this, parentView.getStackId());
         createLayout();
@@ -73,14 +70,7 @@ public class TopBar extends AppBarLayout implements ScrollEventListener.ScrollAw
 
         root = new FrameLayout(getContext());
         root.setId(CompatUtils.generateViewId());
-
-        //创建一个view，和状态栏一样高的那种
-        statusView = new View(getContext());
-        content.addView(statusView, MATCH_PARENT,
-                UiUtils.getStatusBarHeight(getContext()));
-
-        content.addView(titleBar);
-
+        content.addView(titleBar, MATCH_PARENT, UiUtils.getTopBarHeight(getContext()));
         content.addView(topTabs);
         root.addView(content);
         root.addView(border);
@@ -128,8 +118,7 @@ public class TopBar extends AppBarLayout implements ScrollEventListener.ScrollAw
     }
 
     public void setTitleHeight(int height) {
-        //不用设置了这里
-        // titleBar.setHeight(height);
+        titleBar.setHeight(height);
     }
 
     public void setTitle(String title) {
@@ -146,12 +135,6 @@ public class TopBar extends AppBarLayout implements ScrollEventListener.ScrollAw
 
     public void setSubtitleColor(@ColorInt int color) {
         titleBar.setSubtitleTextColor(color);
-    }
-
-    @Override
-    public void setBackgroundColor(int color) {
-        super.setBackgroundColor(color);
-        statusView.setBackgroundColor(color);
     }
 
     public void setSubtitleFontFamily(Typeface fontFamily) {
@@ -190,12 +173,9 @@ public class TopBar extends AppBarLayout implements ScrollEventListener.ScrollAw
         titleBar.setComponent(component);
     }
 
-    public void setBackgroundComponent(Component component) {
-        if (component.hasValue()) {
-            topBarBackgroundViewController.setComponent(component);
-            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT);
-            root.addView(topBarBackgroundViewController.getView(), 0, lp);
-        }
+    public void setBackgroundComponent(View component) {
+        this.component = component;
+        root.addView(component, 0);
     }
 
     public void setTopTabFontFamily(int tabIndex, Typeface fontFamily) {
@@ -216,7 +196,7 @@ public class TopBar extends AppBarLayout implements ScrollEventListener.ScrollAw
 
     public void setTopTabsHeight(int height) {
         if (topTabs.getLayoutParams().height == height) return;
-        topTabs.getLayoutParams().height = height > 0 ? (int) UiUtils.dpToPx(getContext(), height) : height;
+        topTabs.getLayoutParams().height = height > 0 ? UiUtils.dpToPx(getContext(), height) : height;
         topTabs.setLayoutParams(topTabs.getLayoutParams());
     }
 
@@ -233,14 +213,15 @@ public class TopBar extends AppBarLayout implements ScrollEventListener.ScrollAw
     }
 
     public void setElevation(Double elevation) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
-                getElevation() != elevation.floatValue()) {
-            setElevation(UiUtils.dpToPx(getContext(), elevation.floatValue()));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && getElevation() != elevation.floatValue()) {
+            this.elevation = UiUtils.dpToPx(getContext(), elevation.floatValue());
+            setElevation(this.elevation);
         }
     }
 
-    public View getStatusView() {
-        return statusView;
+    @Override
+    public void setElevation(float elevation) {
+        if (elevation == this.elevation) super.setElevation(elevation);
     }
 
     public Toolbar getTitleBar() {
@@ -282,8 +263,7 @@ public class TopBar extends AppBarLayout implements ScrollEventListener.ScrollAw
     }
 
     public void hideAnimate(AnimationOptions options) {
-        hideAnimate(options, () -> {
-        });
+        hideAnimate(options, () -> {});
     }
 
     public void hideAnimate(AnimationOptions options, Runnable onAnimationEnd) {
@@ -292,8 +272,10 @@ public class TopBar extends AppBarLayout implements ScrollEventListener.ScrollAw
     }
 
     public void clear() {
-        topBarBackgroundViewController.destroy();
-        topBarBackgroundViewController = new TopBarBackgroundViewController(topBarBackgroundViewController);
+        if (component != null) {
+            root.removeView(component);
+            component = null;
+        }
         titleBar.clear();
     }
 

@@ -10,6 +10,7 @@ import {NativeModules, Alert, Platform, View} from 'react-native';
 import {setJSExceptionHandler} from 'react-native-exception-handler';
 import RNRestart from 'react-native-restart';
 import Login from "./scene/Login";
+import InitUtil from "./util/InitUtil";
 
 const errorHandler = (e, isFatal) => {
     if (isFatal) {
@@ -44,14 +45,6 @@ const errorHandler = (e, isFatal) => {
 class Index extends Component {
     constructor(props) {
         super(props);
-        global.BARANDROIDHEIGHT = Platform.OS === "android" ? -1 : 0;
-
-        if (Platform.OS === "android") {
-            NativeModules.BarHeightModule.getHeight((height) => {
-                global.BARANDROIDHEIGHT = height;
-            });
-        }
-
 
         //保证性能
         if (Platform.OS === 'android') {
@@ -93,7 +86,6 @@ class Index extends Component {
     }
 
     componentDidMount() {
-
     }
 
     render() {

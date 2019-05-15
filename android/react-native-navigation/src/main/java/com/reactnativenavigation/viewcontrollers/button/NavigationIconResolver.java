@@ -5,13 +5,14 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.View;
 
 import com.reactnativenavigation.R;
 import com.reactnativenavigation.parse.params.Button;
 import com.reactnativenavigation.react.Constants;
+import com.reactnativenavigation.utils.Functions.Func1;
 import com.reactnativenavigation.utils.ImageLoader;
 import com.reactnativenavigation.utils.ImageLoadingListenerAdapter;
-import com.reactnativenavigation.utils.Task;
 
 public class NavigationIconResolver {
 
@@ -23,7 +24,7 @@ public class NavigationIconResolver {
         this.imageLoader = imageLoader;
     }
 
-    public void resolve(Button button, Task<Drawable> onSuccess) {
+    public void resolve(Button button, Integer direction, Func1<Drawable> onSuccess) {
         if (button.icon.hasValue()) {
             imageLoader.loadIcon(context, button.icon.get(), new ImageLoadingListenerAdapter() {
                 @Override
@@ -37,7 +38,8 @@ public class NavigationIconResolver {
                 }
             });
         } else if (Constants.BACK_BUTTON_ID.equals(button.id)) {
-            onSuccess.run(ContextCompat.getDrawable(context, R.drawable.ic_arrow_back_black_24dp));
+            Boolean isRTL = direction == View.LAYOUT_DIRECTION_RTL;
+            onSuccess.run(ContextCompat.getDrawable(context, isRTL ? R.drawable.ic_arrow_back_black_rtl_24dp : R.drawable.ic_arrow_back_black_24dp));
         } else {
             Log.w("RNN", "Left button needs to have an icon");
         }

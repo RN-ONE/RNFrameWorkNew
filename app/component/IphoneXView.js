@@ -25,10 +25,8 @@ class IphoneXView extends Component {
 
     render() {
         return (
-            <View style={[this.props.style, {
-                justifyContent: 'flex-end',
-                flex: 1,
-            }]}>
+            <View style={[{backgroundColor: AppConfig.COLOR_BG},
+                this.props.style, {justifyContent: 'flex-end', flex: 1,}]}>
                 <View style={{justifyContent: 'flex-start', flex: 1}}>
                     {this.props.children}
                 </View>
@@ -56,5 +54,4 @@ class IphoneXView extends Component {
     }
 }
 
-export default connect(state => ({
-}), dispatch => ({}))(IphoneXView);
+export default connect(state => ({}), dispatch => ({}))(IphoneXView);

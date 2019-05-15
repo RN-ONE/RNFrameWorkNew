@@ -49,7 +49,7 @@ public class MainApplication extends NavigationApplication {
     protected List<ReactPackage> getPackages() {
 
         // No need to add RnnPackage and MainReactPackage
-        return Arrays.<ReactPackage>asList(
+        return Arrays.asList(
                 new MainReactPackage(),
                 new VectorIconsPackage(),
                 new ProgressViewPackage(),

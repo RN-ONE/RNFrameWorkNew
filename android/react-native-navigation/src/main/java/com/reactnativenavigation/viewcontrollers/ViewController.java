@@ -16,20 +16,24 @@ import com.reactnativenavigation.parse.params.Bool;
 import com.reactnativenavigation.parse.params.NullBool;
 import com.reactnativenavigation.presentation.FabPresenter;
 import com.reactnativenavigation.utils.CommandListener;
+import com.reactnativenavigation.utils.Functions.Func1;
 import com.reactnativenavigation.utils.StringUtils;
-import com.reactnativenavigation.utils.Task;
 import com.reactnativenavigation.utils.UiThread;
 import com.reactnativenavigation.utils.UiUtils;
 import com.reactnativenavigation.viewcontrollers.stack.StackController;
 import com.reactnativenavigation.views.Component;
+import com.reactnativenavigation.views.Renderable;
 import com.reactnativenavigation.views.element.Element;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.reactnativenavigation.utils.CollectionUtils.forEach;
+
 public abstract class ViewController<T extends ViewGroup> implements ViewTreeObserver.OnGlobalLayoutListener, ViewGroup.OnHierarchyChangeListener {
 
-    private Runnable onAppearedListener;
+    private final List<Runnable> onAppearedListeners = new ArrayList();
     private boolean appearEventPosted;
     private boolean isFirstLayout = true;
     private Bool waitForRender = new NullBool();
@@ -46,7 +50,7 @@ public abstract class ViewController<T extends ViewGroup> implements ViewTreeObs
         boolean onViewDisappear(View view);
     }
 
-    protected Options initialOptions;
+    public Options initialOptions;
     public Options options;
 
     private final Activity activity;
@@ -76,8 +80,12 @@ public abstract class ViewController<T extends ViewGroup> implements ViewTreeObs
         this.waitForRender = waitForRender;
     }
 
-    public void setOnAppearedListener(Runnable onAppearedListener) {
-        this.onAppearedListener = onAppearedListener;
+    public void addOnAppearedListener(Runnable onAppearedListener) {
+        onAppearedListeners.add(onAppearedListener);
+    }
+
+    public void removeOnAppearedListener(Runnable onAppearedListener) {
+        onAppearedListeners.remove(onAppearedListener);
     }
 
     protected abstract T createView();
@@ -109,8 +117,10 @@ public abstract class ViewController<T extends ViewGroup> implements ViewTreeObs
     public void mergeOptions(Options options) {
         this.initialOptions = this.initialOptions.mergeWith(options);
         this.options = this.options.mergeWith(options);
-        this.options.clearOneTimeOptions();
-        initialOptions.clearOneTimeOptions();
+        if (getParentController() != null) {
+            this.options.clearOneTimeOptions();
+            initialOptions.clearOneTimeOptions();
+        }
     }
 
     @CallSuper
@@ -126,7 +136,7 @@ public abstract class ViewController<T extends ViewGroup> implements ViewTreeObs
         return activity;
     }
 
-    protected void performOnParentController(Task<ParentController> task) {
+    protected void performOnParentController(Func1<ParentController> task) {
         if (parentController != null) task.run(parentController);
     }
 
@@ -139,11 +149,13 @@ public abstract class ViewController<T extends ViewGroup> implements ViewTreeObs
         this.parentController = parentController;
     }
 
-    public void performOnParentStack(Task<StackController> task) {
+    public void performOnParentStack(Func1<StackController> task) {
         if (parentController instanceof StackController) {
             task.run((StackController) parentController);
         } else if (this instanceof StackController) {
             task.run((StackController) this);
+        } else if (parentController != null){
+            parentController.performOnParentStack(task);
         }
     }
 
@@ -198,11 +210,11 @@ public abstract class ViewController<T extends ViewGroup> implements ViewTreeObs
             parentController.clearOptions();
             if (getView() instanceof Component) parentController.applyChildOptions(options, (Component) getView());
         });
-        if (onAppearedListener != null && !appearEventPosted) {
+        if (!onAppearedListeners.isEmpty() && !appearEventPosted) {
             appearEventPosted = true;
             UiThread.post(() -> {
-                onAppearedListener.run();
-                onAppearedListener = null;
+                forEach(onAppearedListeners, Runnable::run);
+                onAppearedListeners.clear();
             });
         }
     }
@@ -270,7 +282,7 @@ public abstract class ViewController<T extends ViewGroup> implements ViewTreeObs
 
     }
 
-    void runOnPreDraw(Task<T> task) {
+    void runOnPreDraw(Func1<T> task) {
         UiUtils.runOnPreDrawOnce(getView(), () -> task.run(getView()));
     }
 
@@ -286,12 +298,12 @@ public abstract class ViewController<T extends ViewGroup> implements ViewTreeObs
     public boolean isRendered() {
         return view != null && (
                 waitForRender.isFalseOrUndefined() ||
-                !(view instanceof Component) ||
-                ((Component) view).isRendered()
+                !(view instanceof Renderable) ||
+                ((Renderable) view).isRendered()
         );
     }
 
-    void applyOnController(ViewController controller, Task<ViewController> task) {
+    void applyOnController(ViewController controller, Func1<ViewController> task) {
         if (controller != null) task.run(controller);
     }
 

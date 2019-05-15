@@ -5,6 +5,8 @@
  * @Describe: 常量
  */
 
+export const CODE = {success: 200};
+
 export const COLOR_LOCAL = "colorLocal";
 
 

@@ -10,23 +10,18 @@ import {
     Text,
     View
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import DialogMessage from "../component/DialogMessage";
-import TouchableButton from "../component/TouchableButton";
 import * as AppConfig from "../config/AppConfig";
-import TitleBar from "../component/TitleBar";
 import {connect} from "react-redux";
 import * as TestAction from "../actions/TestAction";
-import * as AppStyles from '../config/AppStyles';
 import ThemeButton from "../component/ThemeButton";
 import ToastAI from "../component/ToastAI";
 import * as Const from "../config/Const";
-import HttpUtil from "../util/HttpUtil";
 import {Navigation} from "react-native-navigation";
 import NavigationUtil from "../util/NavigationUtil";
-import {AppIndex, LoginIndex} from "../RNNConfig";
+import {AppIndex, LoginComponent} from "../RNNConfig";
+import BaseComponent from "../component/BaseComponent";
 
-class Main extends Component {
+class Main3 extends BaseComponent {
     constructor(props, context) {
         super(props, context);
         Navigation.mergeOptions(this.props.componentId, {
@@ -34,6 +29,8 @@ class Main extends Component {
                 title: {
                     text: "设置"
                 }
+            }, bottomTab: {
+                badge: '10'
             }
         });
     }
@@ -45,15 +42,42 @@ class Main extends Component {
 
                 <ThemeButton backgroundColor={AppConfig.COLOR_THEME}
                              radius={5}
-                             text={this.props.text} onPress={() => {
-                    Navigation.setRoot({root: LoginIndex});
+                             text={"退出登录"} onPress={() => {
+                    Navigation.setRoot({root: LoginComponent()}).then();
                 }}/>
 
                 <ThemeButton backgroundColor={AppConfig.COLOR_THEME}
                              radius={5}
                              text={"测试FlatList"} onPress={() => {
                     Navigation.push(this.props.componentId,
-                        NavigationUtil.getRNNComponent(Const.RNN_FLAT_LIST_SCENE, "测试FlatList"))
+                        NavigationUtil.getRNNComponent(Const.RNN_FLAT_LIST_SCENE, "测试FlatList")).then()
+                }}/>
+
+                <ThemeButton backgroundColor={AppConfig.COLOR_THEME}
+                             radius={5}
+                             text={"抹掉badge"} onPress={() => {
+                    Navigation.mergeOptions(this.props.componentId, {
+                        bottomTab: {
+                            badge: ''
+                        }
+                    });
+                }}/>
+
+                <ThemeButton backgroundColor={AppConfig.COLOR_THEME}
+                             radius={5}
+                             text={"badge变化"} onPress={() => {
+                    Navigation.mergeOptions(this.props.componentId, {
+                        bottomTab: {
+                            badge: Math.ceil(Math.random() * 100).toString()
+                        }
+                    });
+                }}/>
+
+
+                <ThemeButton backgroundColor={AppConfig.COLOR_THEME}
+                             radius={5}
+                             text={"显示MessageDialog"} onPress={() => {
+                    this.show();
                 }}/>
             </View>
         )
@@ -91,4 +115,4 @@ export default connect(state => ({
     text: state.TestReducer.text,
 }), dispatch => ({
     getMoveList: (data) => dispatch(TestAction.testGetMoves(data)),
-}))(Main);
+}))(Main3);

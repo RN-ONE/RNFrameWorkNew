@@ -4,9 +4,6 @@
  * @E-Mail:528489389@qq.com
  * @Describe: style,全局
  */
-import {
-    StyleSheet,
-} from 'react-native';
 import * as AppConfig from '../config/AppConfig';
 
 export const textBigGray = {

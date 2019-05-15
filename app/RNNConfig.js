@@ -9,122 +9,14 @@
  */
 import * as AppConfig from './config/AppConfig';
 import * as Const from "./config/Const";
+import {Dimensions, PixelRatio, StatusBar, Platform} from "react-native";
+import NavigationUtil from "./util/NavigationUtil";
 import {Navigation} from "react-native-navigation";
-import {Dimensions, PixelRatio} from "react-native";
-import ToastAI from "./component/ToastAI";
 
 let {width} = Dimensions.get("window");
 
-//定义第一个tab
-const firstTab = {
-    stack: {
-        children: [
-            {
-                component: {
-                    id: Const.RNN_MAIN,
-                    name: Const.RNN_MAIN,
-                    options: {
-                        bottomTab: {
-                            text: '主页',
-                            icon: require('./img/tab_one.png'),
-                        }
-                    }
-                }
-            }
-        ]
-    }
-};
-
-//第二个tab
-// const secondTab = {
-//     stack: {
-//         children: [
-//             {
-//                 topTabs: {
-//                     children: [
-//                         {
-//                             component: {
-//                                 name: Const.RNN_TABLE1,
-//                                 options: {
-//                                     topTab: {
-//                                         title: "TopTab 1"
-//                                     }
-//                                 }
-//                             }
-//                         },
-//                         {
-//                             component: {
-//                                 name: Const.RNN_TABLE2,
-//                                 options: {
-//                                     topTab: {
-//                                         title: "TopTab 2"
-//                                     }
-//                                 }
-//                             }
-//                         }, {
-//                             component: {
-//                                 name: Const.RNN_TABLE3,
-//                                 options: {
-//                                     topTab: {
-//                                         title: "TopTab 3"
-//                                     }
-//                                 }
-//                             }
-//                         }
-//                     ]
-//                 }
-//             }
-//         ],
-//         options: {
-//             bottomTab: {
-//                 text: 'Tab 2',
-//                 icon: require('./img/settings.png'),
-//             },
-//         }
-//     }
-// };
-const secondTab = {
-    stack: {
-        children: [
-            {
-                component: {
-                    id: Const.RNN_MAIN2,
-                    name: Const.RNN_MAIN2,
-                    options: {
-                        bottomTab: {
-                            text: '通讯录',
-                            icon: require('./img/tab_two.png'),
-                        }
-                    }
-                }
-            }
-        ]
-    }
-};
-
-//第二个tab
-const thirdTab = {
-    stack: {
-        children: [
-            {
-                component: {
-                    id: Const.RNN_MAIN3,
-                    name: Const.RNN_MAIN3,
-                    options: {
-                        bottomTab: {
-                            text: '设置',
-                            icon: require('./img/tab_three.png'),
-                        }
-                    }
-                }
-            }
-        ]
-    }
-};
-
-
 //定义APP的样式的样式，动画效果只对android有效果，firstSetRoot是整对android是不是启动动画而言的
-export const AppStyle = {
+export const AppDefaultOptions = {
     topBar: {
         animate: true,
         hideOnScroll: false,
@@ -145,7 +37,7 @@ export const AppStyle = {
         },
         backButton: {
             color: AppConfig.COLOR_WHITE,
-        }
+        },
     },
     layout: {
         backgroundColor: AppConfig.COLOR_BG,
@@ -178,34 +70,30 @@ export const AppStyle = {
                 from: width * PixelRatio.get(),
                 to: 0,
                 duration: 300,
-                interpolation: 'accelerate'
+                interpolation: 'default'
             }
         }
     }
 };
 
-export const LoginIndex = {
-    stack: {
-        children: [
-            {
-                component: {
-                    id: Const.RNN_INDEX,
-                    name: Const.RNN_INDEX,
-                }
-            }
-        ]
-    }
+/**
+ *登录的组件
+ *
+ * @Author: JACK-GU
+ * @Date: 2019-05-10 14:02
+ * @E-Mail: 528489389@qq.com
+ */
+export const LoginComponent = () => {
+    return NavigationUtil.getStackScene(Const.RNN_INDEX, "登录");
 };
 
 
 //这个APP的配置，我们建议先登录在充值为这个
-export const AppIndex = {
-    bottomTabs: {
-        children: [
-            firstTab,
-            secondTab,
-            thirdTab,
-        ]
-    }
+export const AppTableHome = () => {
+    return NavigationUtil.getBottomTabsComponent([
+        NavigationUtil.getBottomTabComponent(Const.RNN_MAIN, "首页", require('./img/tab_one.png')),
+        NavigationUtil.getBottomTabComponent(Const.RNN_MAIN2, "通讯录", require('./img/tab_two.png')),
+        NavigationUtil.getBottomTabComponent(Const.RNN_MAIN3, "设置", require('./img/tab_three.png')),
+    ]);
 };
 

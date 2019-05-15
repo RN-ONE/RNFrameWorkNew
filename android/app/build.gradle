@@ -153,14 +153,13 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.facebook.react:react-native:+'
+    implementation 'com.tencent.bugly:crashreport:latest.release'
+    implementation project(':react-native-navigation')
+    implementation project(':react-native-image-picker')
     implementation project(':react-native-vector-icons')
     implementation project(':react-native-exception-handler')
-    implementation 'com.github.k0shk0sh:PermissionHelper:1.1.0'
     implementation project(':react-native-restart')
     implementation project(':react-native-code-push')
-    implementation 'com.tencent.bugly:crashreport:latest.release'
-    implementation project(':imagepicker')
-    implementation project(':react-native-navigation')
 }
 
 // Run this once to be able to run the application with BUCK
@@ -175,7 +174,7 @@ configurations.all {
     resolutionStrategy.eachDependency { DependencyResolveDetails details ->
         def requested = details.requested
         if (requested.group == 'com.android.support') {
-                details.useVersion '27.+'
+            details.useVersion '27.+'
         }
     }
 }

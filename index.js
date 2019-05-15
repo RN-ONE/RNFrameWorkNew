@@ -5,56 +5,25 @@
  */
 import {Navigation} from "react-native-navigation";
 import React from 'react';
-import NavigationUtil from "./app/util/NavigationUtil";
-import Index from "./app/Index";
-import Main from "./app/scene/Main";
-import Main2 from "./app/scene/Main2";
-import {LoginIndex, AppStyle, AppIndex} from "./app/RNNConfig";
-import Main3 from "./app/scene/Main3";
-import * as Const from './app/config/Const';
-import ChangeTheme from "./app/scene/ChangeTheme";
-import FlatListScene from "./app/scene/FlatListScene";
-import LoadingOverlay from "./app/overlay/LoadingOverlay";
-import SelectModal from "./app/overlay/SelectOverlay";
-import ImagePickerOverlay from "./app/overlay/ImagePickerOverlay";
-import ImageShowModal from "./app/overlay/ImageShowOverlay";
-import CheckCodePushUpdateUtil from "./app/util/CheckCodePushUpdateUtil";
-import MessageDialogModal from "./app/overlay/MessageDialogOverlay";
-import Table1 from "./app/scene/Table1";
-import Table2 from "./app/scene/Table2";
-import Table3 from "./app/scene/Table3";
+import {LoginComponent, AppDefaultOptions} from "./app/RNNConfig";
+import InitUtil from "./app/util/InitUtil";
+import CommonUtil from "./app/util/CommonUtil";
 
-
-/*************************************************************************/
-NavigationUtil.registerComponentWithRedux(Const.RNN_INDEX, Index);
-NavigationUtil.registerComponentWithRedux(Const.RNN_MAIN, Main);
-NavigationUtil.registerComponentWithRedux(Const.RNN_MAIN2, Main2);
-NavigationUtil.registerComponentWithRedux(Const.RNN_MAIN3, Main3);
-NavigationUtil.registerComponentWithRedux(Const.RNN_CHANG_THEME, ChangeTheme);
-NavigationUtil.registerComponentWithRedux(Const.RNN_FLAT_LIST_SCENE, FlatListScene);
-NavigationUtil.registerComponentWithRedux(Const.RNN_LOADING_OVER_LAY, LoadingOverlay);
-NavigationUtil.registerComponentWithRedux(Const.RNN_SELECT_OVER_LAY, SelectModal);
-NavigationUtil.registerComponentWithRedux(Const.RNN_IMAGE_PICKER_OVER_LAY, ImagePickerOverlay);
-NavigationUtil.registerComponentWithRedux(Const.RNN_IMAGE_SHOW_OVER_LAY, ImageShowModal);
-NavigationUtil.registerComponentWithRedux(Const.RNN_MESSAGE_DIALOG_OVER_LAY, MessageDialogModal);
-NavigationUtil.registerComponentWithRedux(Const.RNN_TABLE1, Table1);
-NavigationUtil.registerComponentWithRedux(Const.RNN_TABLE2, Table2);
-NavigationUtil.registerComponentWithRedux(Const.RNN_TABLE3, Table3);
-/*************************************************************************/
-
+//初始化
+InitUtil.init();
 
 Navigation.events().registerAppLaunchedListener(() => {
-
-    Navigation.setDefaultOptions(AppStyle);
+    Navigation.setDefaultOptions(AppDefaultOptions);
 
     Navigation.setRoot({
-        root: LoginIndex
+        root: LoginComponent()
+    }).then(() => {
+        CommonUtil.getConstFromNavigation().then();//IOS在获取一下，不然拿不到值有的
     });
     //测试不需要热更新
     //CheckCodePushUpdateUtil.checkUpdate();
+
 });
-
-
 
 console.disableYellowBox = true;
 

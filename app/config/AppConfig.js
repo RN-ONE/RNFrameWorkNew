@@ -33,5 +33,13 @@ export const LINE_HEIGHT = 0.5;
 //一般的安全距离
 export const DISTANCE_SAFE = 10;
 //分割线的高度
-export const SEPARATOR_HEIGHT =5;
+export const SEPARATOR_HEIGHT = 5;
+
+//默认的配置，用于拍照或者图库选择照片，noData不返回base64值，storageOptions永久的保存图片
+export const IMAGE_PICKER_OPTIONS = {
+    noData: true, storageOptions: {
+        skipBackup: true, //不存储到iCloud，
+        path: 'images', //存放图片的路径
+    },
+};
 

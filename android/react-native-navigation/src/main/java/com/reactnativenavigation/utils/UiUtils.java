@@ -46,13 +46,13 @@ public class UiUtils {
         }
     }
 
-    public static void runOnMainThread(Runnable runnable) {
-        new Handler(Looper.getMainLooper()).post(runnable);
-    }
+	public static void runOnMainThread(Runnable runnable) {
+		new Handler(Looper.getMainLooper()).post(runnable);
+	}
 
-    public static float getWindowHeight(Context context) {
+	public static float getWindowHeight(Context context) {
         return getDisplayMetrics(context).heightPixels;
-    }
+	}
 
     public static float getWindowWidth(Context context) {
         return getDisplayMetrics(context).widthPixels;
@@ -93,20 +93,19 @@ public class UiUtils {
         topBarHeight = resourceId > 0 ?
                 resources.getDimensionPixelSize(resourceId) :
                 dpToPx(context, DEFAULT_TOOLBAR_HEIGHT);
-        topBarHeight = topBarHeight + UiUtils.getStatusBarHeight(context);
         return topBarHeight;
     }
 
     public static float dpToPx(Context context, float dp) {
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
-        return dp * ((float) metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+        return dp * ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
 
     public static int dpToPx(Context context, int dp) {
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
-        return (int) (dp * ((float) metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT));
+        return (int) (dp * ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 
     public static float pxToDp(Context context, float px) {

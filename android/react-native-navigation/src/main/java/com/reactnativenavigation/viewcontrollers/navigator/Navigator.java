@@ -18,16 +18,20 @@ import com.reactnativenavigation.presentation.OverlayManager;
 import com.reactnativenavigation.presentation.Presenter;
 import com.reactnativenavigation.react.EventEmitter;
 import com.reactnativenavigation.utils.CommandListener;
+import com.reactnativenavigation.utils.CommandListenerAdapter;
 import com.reactnativenavigation.utils.CompatUtils;
-import com.reactnativenavigation.utils.Task;
+import com.reactnativenavigation.utils.Functions.Func1;
 import com.reactnativenavigation.viewcontrollers.ChildControllersRegistry;
 import com.reactnativenavigation.viewcontrollers.ParentController;
 import com.reactnativenavigation.viewcontrollers.ViewController;
 import com.reactnativenavigation.viewcontrollers.modal.ModalStack;
 import com.reactnativenavigation.viewcontrollers.stack.StackController;
 
+import com.facebook.react.ReactInstanceManager;
+
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 public class Navigator extends ParentController {
 
@@ -67,7 +71,8 @@ public class Navigator extends ParentController {
         contentLayout.addView(overlaysLayout);
     }
 
-    public Navigator(final Activity activity, ChildControllersRegistry childRegistry, ModalStack modalStack, OverlayManager overlayManager, RootPresenter rootPresenter) {
+    public Navigator(final Activity activity, ChildControllersRegistry childRegistry, ModalStack modalStack, OverlayManager overlayManager,
+                     RootPresenter rootPresenter) {
         super(activity, childRegistry, "navigator" + CompatUtils.generateViewId(), new Presenter(activity, new Options()), new Options());
         this.modalStack = modalStack;
         this.overlayManager = overlayManager;
@@ -129,14 +134,10 @@ public class Navigator extends ParentController {
 
     }
 
-    public void setRoot(final ViewController viewController, CommandListener commandListener) {
-        final ViewController rootOld = root;
-        /**
-         * setRoot，我们将view放在第一个位置，并且移除掉后续的view，
-         * 所以要修改rootPresenter的setRoot方法添加一个参数
-         *
-         * */
+    public void setRoot(final ViewController viewController, CommandListener commandListener, ReactInstanceManager reactInstanceManager) {
+        if (isRootNotCreated()) getView();
 
+        final ViewController rootOld = root;
         root = viewController;
 
         View viewImage = contentLayout.getChildAt(0);
@@ -145,11 +146,10 @@ public class Navigator extends ParentController {
             contentLayout.bringChildToFront(viewImage);
         }
 
-        //然后添加view
-        rootPresenter.setRoot(root, defaultOptions, new CommandListener() {
+        rootPresenter.setRoot(root, defaultOptions, new CommandListenerAdapter(commandListener) {
             @Override
             public void onSuccess(String childId) {
-                commandListener.onSuccess(childId);
+                super.onSuccess(childId);
 
                 if (viewImage instanceof ImageView) {
                     //移除开始那个页面
@@ -160,12 +160,7 @@ public class Navigator extends ParentController {
                         rootOld.destroy();
                 }
             }
-
-            @Override
-            public void onError(String message) {
-                commandListener.onError(message);
-            }
-        });
+        }, reactInstanceManager);
     }
 
     private void removePreviousContentView() {
@@ -183,8 +178,8 @@ public class Navigator extends ParentController {
         applyOnStack(id, listener, stack -> stack.push(viewController, listener));
     }
 
-    public void setStackRoot(String id, ViewController viewController, CommandListener listener) {
-        applyOnStack(id, listener, stack -> stack.setRoot(viewController, listener));
+    public void setStackRoot(String id, List<ViewController> children, CommandListener listener) {
+        applyOnStack(id, listener, stack -> stack.setRoot(children, listener));
     }
 
     public void pop(String id, Options mergeOptions, CommandListener listener) {
@@ -241,7 +236,7 @@ public class Navigator extends ParentController {
         return controllerById;
     }
 
-    private void applyOnStack(String fromId, CommandListener listener, Task<StackController> task) {
+    private void applyOnStack(String fromId, CommandListener listener, Func1<StackController> task) {
         ViewController from = findController(fromId);
         if (from != null) {
             if (from instanceof StackController) {
@@ -263,18 +258,16 @@ public class Navigator extends ParentController {
         return modalsLayout;
     }
 
+
     protected void closeSplash(View view) {
         AnimationSet animationSet = new AnimationSet(true);
         AlphaAnimation fadeOut = new AlphaAnimation(1, 0);
         fadeOut.setDuration(500);
         animationSet.addAnimation(fadeOut);
-
         ScaleAnimation scale = new ScaleAnimation(1, 1.5f, 1, 1.5f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.65f);
         scale.setDuration(500);
         animationSet.addAnimation(scale);
         view.startAnimation(animationSet);
-
-
         animationSet.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {

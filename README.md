@@ -37,22 +37,19 @@
 2 修改setRoot方法的代码如下：
 <pre>
 <code>
-public void setRoot(final ViewController viewController, CommandListener commandListener) {
+  public void setRoot(final ViewController viewController, CommandListener commandListener, ReactInstanceManager reactInstanceManager) {
+        if (isRootNotCreated()) getView();
         final ViewController rootOld = root;
-         root = viewController;
-
+        root = viewController;
         View viewImage = contentLayout.getChildAt(0);
         if (viewImage instanceof ImageView) {
             //如果是开屏页，就放到前面来
             contentLayout.bringChildToFront(viewImage);
         }
-
-        //然后添加view
-        rootPresenter.setRoot(root, defaultOptions, new CommandListener() {
+        rootPresenter.setRoot(root, defaultOptions, new CommandListenerAdapter(commandListener) {
             @Override
             public void onSuccess(String childId) {
-                commandListener.onSuccess(childId);
-
+                super.onSuccess(childId);
                 if (viewImage instanceof ImageView) {
                     //移除开始那个页面
                     closeSplash(viewImage);
@@ -62,17 +59,11 @@ public void setRoot(final ViewController viewController, CommandListener command
                         rootOld.destroy();
                 }
             }
-
-            @Override
-            public void onError(String message) {
-                commandListener.onError(message);
-            }
-        });
+        }, reactInstanceManager);
     }
-
 </code>
 </pre>
-
+#一下说明被废弃，老版本才需要
 # TopBar
 1 在TopBar重写方法如下：
 <pre>

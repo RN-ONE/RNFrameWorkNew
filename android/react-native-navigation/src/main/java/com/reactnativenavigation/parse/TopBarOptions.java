@@ -48,7 +48,6 @@ public class TopBarOptions {
         options.leftButtonColor = ColorParser.parse(json, "leftButtonColor");
 
         options.validate();
-
         return options;
     }
 

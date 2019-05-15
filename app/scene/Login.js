@@ -11,7 +11,7 @@ import {
     View,
     PixelRatio,
     Platform,
-    NativeModules
+    NativeModules, BackHandler
 } from 'react-native';
 import * as AppConfig from "../config/AppConfig";
 import {connect} from "react-redux";
@@ -19,9 +19,12 @@ import ThemeButton from "../component/ThemeButton";
 import IphoneXUtil from "../util/IphoneXUtil";
 import IphoneXView from "../component/IphoneXView";
 import ToastAI from "../component/ToastAI";
-import {AppIndex, LoginIndex} from "../RNNConfig";
+import {AppTableHome} from "../RNNConfig";
+import CommonUtil from "../util/CommonUtil";
+import BaseComponent from "../component/BaseComponent";
 
-class Login extends Component {
+class Login extends BaseComponent {
+    mExitTime = 0;
 
     // 构造
     constructor(props) {
@@ -29,18 +32,43 @@ class Login extends Component {
         // 初始状态
         this.state = {};
 
-        Navigation.mergeOptions(this.props.componentId, {
-            topBar: {
-                title: {
-                    text: "登录"
-                }
-            }
-        });
+        // Navigation.mergeOptions(this.props.componentId, {
+        //     topBar: {
+        //         title: {
+        //             text: "登录"
+        //         }
+        //     }
+        // });
     }
 
 
-    componentDidMount() {
+    componentDidMount(): void {
+        super.componentDidMount();
+    }
 
+
+    componentWillUnmount(): void {
+        super.componentWillUnmount();
+    }
+
+
+    componentDidAppear() {
+        super.componentDidAppear();
+        this.backHandler = BackHandler.addEventListener('LoginHardwareBackPress', () => {
+            if ((new Date()).getTime() - this.mExitTime > 2000) {
+                ToastAI.showShortBottom("再按一次退出本软件");
+                this.mExitTime = (new Date()).getTime();
+            } else {
+                BackHandler.exitApp();
+            }
+            //表示消费了这个事件
+            return true;
+        });
+    }
+
+    componentDidDisappear() {
+        super.componentDidDisappear();
+        this.backHandler.remove();
     }
 
     render() {
@@ -49,15 +77,13 @@ class Login extends Component {
                 bottomColor={AppConfig.COLOR_THEME}
                 style={{
                     flex: 1,
-                    paddingTop: Platform.OS === 'android' ? global.BARANDROIDHEIGHT / PixelRatio.get() :
-                        IphoneXUtil.isIphoneX() ? 44 : 20,
                 }}>
 
 
                 <ThemeButton
                     backgroundColor={'white'}
                     onPress={() => {
-                        Navigation.setRoot({root: AppIndex});
+                        Navigation.setRoot({root: AppTableHome()}).then();
                     }}
                     text={'登录'}
                     textColor={'black'}/>

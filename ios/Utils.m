@@ -7,6 +7,7 @@
 //
 
 #import "Utils.h"
+#import "RNNConstant.h"
 /**
  用于完成一些JS需要的原生的参数的传递
  */
@@ -19,5 +20,9 @@ RCT_EXPORT_METHOD(addEventIsDebug:(RCTResponseSenderBlock)callback)
   #else
     callback(@[@NO]);
   #endif
+}
+RCT_EXPORT_METHOD(addEventRNNConst:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+  resolve([RNNConstant getConstants]);
 }
 @end

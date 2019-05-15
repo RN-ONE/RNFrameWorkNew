@@ -3,6 +3,7 @@ package com.reactnativenavigation.viewcontrollers.button;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.view.View;
 
 import com.reactnativenavigation.BaseTest;
 import com.reactnativenavigation.mocks.ImageLoaderMock;
@@ -10,8 +11,8 @@ import com.reactnativenavigation.parse.params.Button;
 import com.reactnativenavigation.parse.params.Colour;
 import com.reactnativenavigation.parse.params.Text;
 import com.reactnativenavigation.react.Constants;
+import com.reactnativenavigation.utils.Functions.Func1;
 import com.reactnativenavigation.utils.ImageLoader;
-import com.reactnativenavigation.utils.Task;
 
 import org.junit.Test;
 
@@ -36,26 +37,26 @@ public class NavigationIconResolverTest extends BaseTest {
 
     @Test
     public void create_iconButton() {
-        @SuppressWarnings("Convert2Lambda") Task<Drawable> onSuccess = spy(new Task<Drawable>() {
+        @SuppressWarnings("Convert2Lambda") Func1<Drawable> onSuccess = spy(new Func1<Drawable>() {
             @Override
             public void run(Drawable icon) {
 
             }
         });
-        uut.resolve(iconButton(), onSuccess);
+        uut.resolve(iconButton(), View.LAYOUT_DIRECTION_LTR, onSuccess);
         verify(imageLoader).loadIcon(eq(context), eq(ICON_URI), any());
         verify(onSuccess).run(any(Drawable.class));
     }
 
     @Test
     public void create_backButton() {
-        @SuppressWarnings("Convert2Lambda") Task<Drawable> onSuccess = spy(new Task<Drawable>() {
+        @SuppressWarnings("Convert2Lambda") Func1<Drawable> onSuccess = spy(new Func1<Drawable>() {
             @Override
             public void run(Drawable param) {
 
             }
         });
-        uut.resolve(backButton(), onSuccess);
+        uut.resolve(backButton(), View.LAYOUT_DIRECTION_LTR, onSuccess);
         verifyZeroInteractions(imageLoader);
         verify(onSuccess).run(any());
     }

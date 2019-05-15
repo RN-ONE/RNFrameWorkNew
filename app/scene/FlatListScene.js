@@ -8,17 +8,16 @@
 
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {View, Dimensions, Text, StyleSheet} from "react-native";
-import ThemeButton from "../component/ThemeButton";
+import {View, Dimensions, Text, StyleSheet, FlatList} from "react-native";
 import IphoneXView from "../component/IphoneXView";
+import MyFlatList from "../component/MyFlatList";
+import BaseComponent from "../component/BaseComponent";
 
 
 const {width} = Dimensions.get('window');
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'flex-end',
-        backgroundColor: 'red'
     },
     row: {
         padding: 10,
@@ -45,26 +44,62 @@ const styles = StyleSheet.create({
     }
 });
 
-class FlatListScene extends Component {
+class FlatListScene extends BaseComponent {
     // 构造
     constructor(props) {
         super(props);
         // 初始状态
-        this.state = {data: [],};
+
+        let data = [];
+        for (let i = 0; i < 12; i++) {
+            data.push("" + i)
+        }
+
+        this.state = {data: data, total: 0};
     }
 
-    static options(passProps) {
-        return {};
-    }
 
     render() {
         return (
             <IphoneXView style={styles.container}>
-                <View style={{flex: 1, backgroundColor: 'yellow'}}></View>
-                {/*<ThemeButton text={"这是一个按钮"} textColor={'white'}/>*/}
+                <MyFlatList
+                    ref={"flatList"}
+                    data={this.state.data}
+                    removeClippedSubviews={false}
+                    ItemSeparatorComponent={() => {
+                        return <View style={{height: 3}}/>
+                    }}
+                    total={13}
+                    keyExtractor={(item, index) => index.toString()}
+                    onLoadMore={() => {
+                        console.log("onEndReached");
+                    }}
+                    renderItem={this._renderItem}
+                />
             </IphoneXView>
         );
     }
+
+
+    _renderItem = ({item}) => {
+        return <View style={{height: 62, backgroundColor: 'yellow'}}>
+            <Text>{item}</Text>
+        </View>
+    };
+
+
+    _onRefresh = () => {
+        setTimeout(() => {
+            this._scrollView.endRefresh();
+        }, 3000);
+    };
+
+    _onLoading = () => {
+        setTimeout(() => {
+            this._scrollView.endLoading();
+        }, 3000);
+    };
+
 }
 
 

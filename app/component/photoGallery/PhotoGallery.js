@@ -39,6 +39,12 @@ export default class PhotoGallery extends Component {
     /**
      *
      * 获取图片的数据
+     * uri: response.uri,
+     * path: response.path,
+     * fileSize: response.fileSize,
+     * fileName: response.fileName,
+     * width: response.width,
+     * height: response.height,
      *
      *@Author: JACK-GU
      *@Date: 2018/2/28 15:37

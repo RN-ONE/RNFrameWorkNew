@@ -13,11 +13,12 @@ import {
 } from 'react-native';
 import {connect} from "react-redux";
 import {Navigation} from "react-native-navigation";
+import BaseComponent from "../component/BaseComponent";
 
 let {height, width} = Dimensions.get('window');
 
 
-class NavigationTemplate extends Component {
+class NavigationTemplate extends BaseComponent {
     /**
      *@param passProps 传递过来的参数
      *
@@ -37,19 +38,26 @@ class NavigationTemplate extends Component {
         Navigation.events().bindComponent(this);
     }
 
-    //页面显示的时候会调用这个方法
+    componentDidMount(): void {
+        super.componentDidMount();
+    }
+
+    componentWillUnmount(): void {
+        super.componentWillUnmount();
+    }
+
+
     componentDidAppear() {
-        console.log("NavigationTest显示出来了")
+        super.componentDidAppear();
     }
 
-    //页面隐藏不可以见的时候调用这个方法
+
     componentDidDisappear() {
-        console.log("NavigationTest被隐藏了")
+        super.componentDidDisappear();
     }
 
-    //添加在页面顶部的按钮被点击了会调用
     navigationButtonPressed({buttonId}) {
-        console.log(`点击了id为${buttonId}的按钮`);
+        super.navigationButtonPressed({buttonId});
     }
 
 

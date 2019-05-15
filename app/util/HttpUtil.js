@@ -12,8 +12,6 @@ import * as Const from "../config/Const";
 const TIMEOUT = 60 * 1000;
 const responseType = "json";
 
-//自定分块下载文件一次的大小
-const FILE_SIZE = 1024 * 1000;
 /**
  * 添加对应的状态码和消息就可以了，0比较特殊，表示网络没连接
  * */
@@ -161,7 +159,7 @@ export default class HttpUtil {
      * @Date: ${DATE}
      * @E-Mail: 528489389@qq.com
      * @Describe: 上传文件到服务器
-     * @param map 是一个数组，里面存放对象{path:"",key:""}
+     * @param map 是一个数组，里面存放对象{path:"",fileName:"",key:""}
      * @param params 参数
      * @param url 请求的地址
      */
@@ -169,7 +167,7 @@ export default class HttpUtil {
         // 创建一个formData（虚拟表单）
         var formData = new FormData();
         map.forEach((item) => {
-            formData = HttpUtil.appendToFormData(formData, item.path, item.key);
+            formData = HttpUtil.appendToFormData(formData, item.path, item.fileName, item.key);
         });
 
         // 请求头文件
@@ -190,7 +188,7 @@ export default class HttpUtil {
      *
      * 上传文件到服务器,文件是一个数组
      *
-     * @param map 是一个数组，里面存放对象{path:["",""],key:""}
+     * @param map 是一个数组，里面存放对象{files:[path:"",fileName:""],key:""}
      * @param params 参数
      * @param url 请求的地址
      * @param callBack 回调
@@ -200,7 +198,6 @@ export default class HttpUtil {
      * @E-Mail: 528489389@qq.com
      */
     static uploadFileArrayPost(url, map, params, callBack) {
-        console.log({params});
         params.network = 0;
         params.timestamp = Date.parse(new Date());
         params.timeZone = "Asia/Shanghai";
@@ -211,8 +208,7 @@ export default class HttpUtil {
         }
 
         let postData = JSON.stringify(params);
-        let mapParams = {};
-        mapParams = {
+        let mapParams = {
             "actionName": params.actionName,
             "postData": postData,
             "limit": params.limit ? params.limit : 15,
@@ -223,7 +219,7 @@ export default class HttpUtil {
         // 创建一个formData（虚拟表单）
         var formData = new FormData();
         map.forEach((item) => {
-            formData = HttpUtil.appendArrayToFromData(formData, item.path, item.key);
+            formData = HttpUtil.appendArrayToFromData(formData, item.files, item.key);
         });
 
         // 请求头文件
@@ -264,7 +260,6 @@ export default class HttpUtil {
                             //框架的错误，直接提示
                             ToastAI.showShortBottom(response.data.error);
                         } else {
-
                             if (response.data.code === Const.CODE.success) {
                                 callBack({success: true, response: response.data});
                             } else {
@@ -300,13 +295,21 @@ export default class HttpUtil {
      * @Describe: 将文件拼接成formData
      * @param formData 需要的
      * @param fileUri 文件的路径
+     * @param fileName 文件的名字
      * @param key 关键字
      * @return formData 返回拼接后的
      */
-    static appendToFormData(formData, fileUri, key) {
+    static appendToFormData(formData, fileUri, fileName, key) {
         // 需要上传的文件
-        var strS = fileUri.split("/");
-        const file = {uri: fileUri, type: 'multipart/form-data', name: strS[strS.length - 1]};   // 这里的key(uri和type和name)不能改变,
+        let name;
+        if (fileName && fileName.length > 0) {
+            name = fileName;
+        } else {
+            let strS = fileUri.split("/");
+            name = strS[strS.length - 1];
+        }
+
+        const file = {uri: fileUri, type: 'multipart/form-data', name};   // 这里的key(uri和type和name)不能改变,
         formData.append(key, file);   // 这里的files就是后台需要的key
 
         return formData;
@@ -316,7 +319,7 @@ export default class HttpUtil {
      *
      * 放入一个数组
      * @param formData 需要的
-     * @param fileUriS 文件的路径的数组
+     * @param files 文件的路径的数组[path:"",fileName:""]
      * @param key 关键字
      * @return formData 返回拼接后的
      *
@@ -324,10 +327,16 @@ export default class HttpUtil {
      * @Date: 2018/3/21 10:50
      * @E-Mail: 528489389@qq.com
      */
-    static appendArrayToFromData(formData, fileUriS, key) {
-        for (let fileUri of fileUriS) {
-            var strS = fileUri.split("/");
-            const file = {uri: fileUri, type: 'multipart/form-data', name: strS[strS.length - 1]};   // 这里的key(uri和type和name)不能改变,
+    static appendArrayToFromData(formData, files, key) {
+        for (const file of files) {
+            let name;
+            if (file.fileName && file.fileName.length > 0) {
+                name = file.fileName;
+            } else {
+                let strS = file.path.split("/");
+                name = strS[strS.length - 1];
+            }
+            const file = {uri: file.path, type: 'multipart/form-data', name: file.fileName};   // 这里的key(uri和type和name)不能改变,
 
             //数组：key如果是files，那么可以就应该是files[]
             formData.append(key, file);
@@ -336,123 +345,6 @@ export default class HttpUtil {
         return formData;
     }
 
-
-    /**
-     * @Author: JACK-GU
-     * @Date: ${DATE}
-     * @E-Mail: 528489389@qq.com
-     * @Describe: 暂时不可以用
-     */
-    static downloadFile(url) {
-        HttpUtil.getFileLength(url, (length) => {
-            if (length > 0) {
-                //长度大于0才可以进行继续操作
-                HttpUtil.downLoadFileRange(url);
-                let fromBytes = 0;
-                let toBytes = 0;
-
-                HttpUtil.downLoadFileRange(url, fromBytes, toBytes, length, (success, e) => {
-                    console.log({e, success});
-                });
-            } else {
-                console.log("获取文件失败！");
-            }
-        })
-    }
-
-
-    static downLoadFileRange(url, fromBytes, toBytes, length, callBack) {
-        if (FILE_SIZE > length) {
-            if (length <= 0) {
-                return;
-            }
-            toBytes = fromBytes + length - 1;
-        } else {
-            toBytes = fromBytes + FILE_SIZE - 1;
-        }
-
-        let range = "Bytes=" + fromBytes + "-" + toBytes;
-        console.log({range});
-        let instance = new Axios({
-            timeout: TIMEOUT,
-            responseType: "arraybuffer",
-            headers: {'Range': range}
-        });
-
-        instance.request({
-            url: url,
-            method: "GET",
-            onUploadProgress: (e) => {
-                console.log({e});
-            },
-            onDownloadProgress: (e) => {
-                if (callBack) {
-                    callBack(true, {loaded: e.loaded, total: e.total});
-                }
-            },
-        }).then(function (response) {
-            if (response.status == 200) {
-                //计算from
-                length -= FILE_SIZE;
-                fromBytes += FILE_SIZE;
-
-                HttpUtil.downLoadFileRange(url, fromBytes, toBytes, length, callBack);
-                if (callBack) {
-                    callBack(true);
-                }
-            } else {
-                if (callBack) {
-                    callBack(false);
-                }
-            }
-        }).catch(function (error) {
-            if (callBack) {
-                callBack(false);
-            }
-        });
-    }
-
-    /**
-     * @Author: JACK-GU
-     * @Date: ${DATE}
-     * @E-Mail: 528489389@qq.com
-     * @Describe:  获取文件的长度
-     */
-    static getFileLength(url, callBack) {
-        //第一步，获取文件的长度
-        let instance = new Axios({
-            timeout: TIMEOUT,
-            headers: {'X-Custom-Header': 'foobar'}
-        });
-
-        instance.request({
-            url: url,
-            method: "HEAD",
-            onUploadProgress: (e) => {
-                console.log({e});
-            },
-            onDownloadProgress: (e) => {
-                console.log({e});
-            },
-        }).then(function (response) {
-            if (response.status === 200) {
-                let str = JSON.stringify(response);
-                str = str.replace("content-length", "contentLength");
-                let json = JSON.parse(str);
-                if (callBack) {
-                    callBack(json.headers.contentLength);
-                }
-            } else {
-                if (callBack) {
-                    callBack(-1);
-                }
-            }
-        }).catch(function (error) {
-            if (callBack) {
-                callBack(-1);
-            }
-        });
-    }
 
     /**
      *

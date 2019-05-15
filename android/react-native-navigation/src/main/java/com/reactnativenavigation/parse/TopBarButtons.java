@@ -1,10 +1,8 @@
 package com.reactnativenavigation.parse;
 
 import android.support.annotation.Nullable;
-import android.view.MenuItem;
 
 import com.reactnativenavigation.parse.params.Button;
-import com.reactnativenavigation.parse.params.Number;
 import com.reactnativenavigation.utils.CollectionUtils;
 import com.reactnativenavigation.utils.TypefaceLoader;
 
@@ -22,17 +20,6 @@ public class TopBarButtons {
         result.left = parseButtons(typefaceLoader, json, "leftButtons");
         result.back = BackButton.parse(json.optJSONObject("backButton"));
 
-        //保证标题是居中的
-        if (result.right == null || result.right.size() == 0) {
-            //没有按钮，加一个
-            result.right = new ArrayList<>();
-            Button button = new Button();
-            button.id = "";
-            button.showAsAction = new Number(MenuItem.SHOW_AS_ACTION_ALWAYS);
-
-            result.right.add(button);
-        }
-
         return result;
     }
 
@@ -42,10 +29,8 @@ public class TopBarButtons {
     }
 
     public BackButton back = new BackButton();
-    @Nullable
-    public ArrayList<Button> left;
-    @Nullable
-    public ArrayList<Button> right;
+    @Nullable public ArrayList<Button> left;
+    @Nullable public ArrayList<Button> right;
 
     void mergeWith(TopBarButtons other) {
         if (other.left != null) left = mergeLeftButton(other.left);
@@ -67,7 +52,7 @@ public class TopBarButtons {
     void mergeWithDefault(TopBarButtons defaultOptions) {
         if (left == null) {
             left = defaultOptions.left;
-        } else if (!CollectionUtils.isNullOrEmpty(defaultOptions.left)) {
+        } else if (!CollectionUtils.isNullOrEmpty(defaultOptions.left)){
             for (Button button : left) {
                 button.mergeWithDefault(defaultOptions.left.get(0));
             }
