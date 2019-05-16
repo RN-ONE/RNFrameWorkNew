@@ -64,39 +64,6 @@
     }
 </code>
 </pre>
-3. ModalPresenter设置modal背景透明,如果不设置，Android弹出的modal会不透明,在showModal方法中，设置modalsLayout为透明背景
-<pre>
-<code>
-void showModal(ViewController toAdd, ViewController toRemove, CommandListener listener) {
-        if (modalsLayout == null) {
-            listener.onError("Can not show modal before activity is created");
-            return;
-        }
-        Options options = toAdd.resolveCurrentOptions(defaultOptions);
-        toAdd.setWaitForRender(options.animations.showModal.waitForRender);
-        //增加下面代码，设置背景透明
-        modalsLayout.setBackgroundColor(Color.parseColor("#00000000"));
-        modalsLayout.addView(toAdd.getView());
-        if (options.animations.showModal.enabled.isTrueOrUndefined()) {
-            if (options.animations.showModal.waitForRender.isTrue()) {
-                toAdd.addOnAppearedListener(() -> animateShow(toAdd, toRemove, listener, options));
-            } else {
-                animateShow(toAdd, toRemove, listener, options);
-            }
-        } else {
-            if (options.animations.showModal.waitForRender.isTrue()) {
-                toAdd.addOnAppearedListener(() -> onShowModalEnd(toAdd, toRemove, listener));
-            } else {
-                onShowModalEnd(toAdd, toRemove, listener);
-            }
-        }
-    }
-
-</code>
-</pre>
-
-
-
 #### ********************************************************************************************************************************************************
 # 苹果在xcode10上需要做以下修改
 #### 1. Check "Copy only when installing"
