@@ -23,6 +23,10 @@ import React, {Component} from 'react';
 import * as AppConfig from '../config/AppConfig';
 
 class EditText extends Component {
+    static propTypes = {
+        ...TextInput.propTypes
+    };
+
     render() {
         return (
             <TextInput
@@ -32,7 +36,6 @@ class EditText extends Component {
                 placeholder={this.props.placeholder}
                 placeholderTextColor={this.props.placeholderTextColor ? this.props.placeholderTextColor : AppConfig.TEXT_COLOR_GRAY}
                 secureTextEntry={this.props.secureTextEntry}
-                password={this.props.password}
                 keyboardType={this.props.keyboardType}
                 defaultValue={this.props.defaultValue}
                 editable={this.props.editable}

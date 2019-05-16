@@ -19,7 +19,7 @@ import com.reactnativenavigation.NavigationActivity;
 
 public class MainActivity extends NavigationActivity implements OnImagePickerPermissionsCallback {
     public static SystemBarTintManager tintManager;
-    public static int height = 0;
+    private int height = 0;
     private PermissionListener permissionListener; //这个是图片选择做了权限的监听
 
     @Override
@@ -42,20 +42,35 @@ public class MainActivity extends NavigationActivity implements OnImagePickerPer
     public void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         //下面是设置沉浸式状态栏的
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            ViewGroup viewGroup = findViewById(android.R.id.content);
-            viewGroup.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-
-            FrameLayout frameLayout = navigator.getRootLayout();
-            ViewGroup.LayoutParams layoutParams = frameLayout.getLayoutParams();
-
-            if (layoutParams instanceof FrameLayout.LayoutParams) {
-                FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) layoutParams;
-                params.topMargin = height;
-                frameLayout.setLayoutParams(params);
-            }
-        }
     }
+
+    /**
+     * 设置是否需要设置顶部在状态栏以下
+     *
+     * @param isNeed 是否需要
+     * @return
+     * @Author: JACK-GU
+     * @Date: 2019-05-16 15:28
+     * @E-Mail: 528489389@qq.com
+     */
+    public void setNeedFitsSysWindows(boolean isNeed) {
+        runOnUiThread(() -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                ViewGroup viewGroup = findViewById(android.R.id.content);
+                viewGroup.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+
+                FrameLayout frameLayout = navigator.getRootLayout();
+                ViewGroup.LayoutParams layoutParams = frameLayout.getLayoutParams();
+
+                if (layoutParams instanceof FrameLayout.LayoutParams) {
+                    FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) layoutParams;
+                    params.topMargin = isNeed ? height : 0;
+                    frameLayout.setLayoutParams(params);
+                }
+            }
+        });
+    }
+
 
     @TargetApi(19)
     private void setTranslucentStatus(boolean on) {

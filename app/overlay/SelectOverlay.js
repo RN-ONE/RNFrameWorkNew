@@ -66,7 +66,7 @@ class SelectOverlay extends React.Component {
         this.state = {visible: true};
         this.backHandler = BackHandler.addEventListener('SelectModalHardwareBackPress',
             () => {
-                NavigationUtil.dismissSelectOverLay();
+                NavigationUtil.dismissSelectOverLayOrModal();
                 //表示消费了这个事件
                 return true;
             });
@@ -79,7 +79,7 @@ class SelectOverlay extends React.Component {
     render() {
         return (
             <TouchableWithoutFeedback onPress={() => {
-                NavigationUtil.dismissSelectOverLay();
+                NavigationUtil.dismissSelectOverLayOrModal();
             }}>
                 <View style={[
                     styles.container,

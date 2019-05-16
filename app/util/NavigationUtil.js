@@ -1,4 +1,7 @@
 /**
+ *
+ *
+ *
  * @Author:JACK-GU
  * @Date:2018-11-08
  * @E-Mail:528489389@qq.com
@@ -105,7 +108,7 @@ export default class NavigationUtil {
      * @Date: 2018-11-22 15:29
      * @E-Mail: 528489389@qq.com
      */
-    static getRNNOverlay(name, param) {
+    static getRNNOverlayOrModal(name, param) {
         return {
             component: {
                 id: name,
@@ -119,16 +122,65 @@ export default class NavigationUtil {
                         visible: false,
                     },
                     layout: {
-                        backgroundColor: "transparent"
+                        backgroundColor: 'transparent',
                     },
                 },
             }
         }
     }
 
+    /**
+     *显示覆盖物,Android使用OverLay，苹果使用modal，在Android上modal有个背景不是全透明，在ios上modal过于顶层，无法使用
+     *@param componentName 组件的名字
+     * @param 参数
+     * @Author: JACK-GU
+     * @Date: 2019-05-16 10:15
+     * @E-Mail: 528489389@qq.com
+     */
+    static showOverLayOrModal(componentName, param) {
+        if (CommonUtil.isAndroid()) {
+            Navigation.showOverlay(NavigationUtil.getRNNOverlayOrModal(componentName, param))
+                .then((result) => {
+                    console.log({result});
+                }).catch((error) => {
+                console.log({error});
+            });
+        } else {
+            Navigation.showModal(NavigationUtil.getRNNOverlayOrModal(componentName, param))
+                .then((result) => {
+                    console.log({result});
+                }).catch((error) => {
+                console.log({error});
+            });
+        }
+    }
 
     /**
-     *显示loading
+     *隐藏覆盖物,Android使用OverLay，苹果使用modal，在Android上modal有个背景不是全透明，在ios上modal过于顶层，无法使用
+     *@param componentName 组件的名字
+     * @Author: JACK-GU
+     * @Date: 2019-05-16 10:15
+     * @E-Mail: 528489389@qq.com
+     */
+    static disMissOverLayOrModal(componentName) {
+        if (CommonUtil.isAndroid()) {
+            Navigation.dismissOverlay(componentName)
+                .then((result) => {
+                    console.log({result});
+                }).catch((error) => {
+                console.log({error});
+            });
+        } else {
+            Navigation.dismissModal(componentName)
+                .then((result) => {
+                    console.log({result});
+                }).catch((error) => {
+                console.log({error});
+            });
+        }
+    }
+
+    /**
      *
      * @param message 消息
      *
@@ -136,13 +188,8 @@ export default class NavigationUtil {
      * @Date: 2018-11-23 08:44
      * @E-Mail: 528489389@qq.com
      */
-    static showLoadingOverLay(message) {
-        Navigation.showOverlay(NavigationUtil.getRNNOverlay(Const.RNN_LOADING_OVER_LAY, {message}))
-            .then((result) => {
-                console.log({result});
-            }).catch((error) => {
-            console.log({error});
-        });
+    static showLoadingOverLayOrModal(message) {
+        NavigationUtil.showOverLayOrModal(Const.RNN_LOADING_OVER_LAY, {message});
     }
 
     /**
@@ -152,13 +199,9 @@ export default class NavigationUtil {
      * @Date: 2018-11-23 08:45
      * @E-Mail: 528489389@qq.com
      */
-    static dismissLoadingOverLay() {
-        Navigation.dismissOverlay(Const.RNN_LOADING_OVER_LAY)
-            .then((result) => {
-                console.log({result});
-            }).catch((error) => {
-            console.log({error});
-        });
+    static dismissLoadingOverLayOrModal() {
+        NavigationUtil.disMissOverLayOrModal(Const.RNN_LOADING_OVER_LAY);
+
     }
 
     /**
@@ -171,13 +214,8 @@ export default class NavigationUtil {
      * @Date: 2018-11-23 08:52
      * @E-Mail: 528489389@qq.com
      */
-    static showSelectOverLay(param) {
-        Navigation.showOverlay(NavigationUtil.getRNNOverlay(Const.RNN_SELECT_OVER_LAY, param))
-            .then((result) => {
-                console.log({result});
-            }).catch((error) => {
-            console.log({error});
-        });
+    static showSelectOverLayOrModal(param) {
+        NavigationUtil.showOverLayOrModal(Const.RNN_SELECT_OVER_LAY, param);
     }
 
     /**
@@ -187,13 +225,8 @@ export default class NavigationUtil {
      * @Date: 2018-11-23 08:54
      * @E-Mail: 528489389@qq.com
      */
-    static dismissSelectOverLay() {
-        Navigation.dismissOverlay(Const.RNN_SELECT_OVER_LAY)
-            .then((result) => {
-                console.log({result});
-            }).catch((error) => {
-            console.log({error});
-        });
+    static dismissSelectOverLayOrModal() {
+        NavigationUtil.disMissOverLayOrModal(Const.RNN_SELECT_OVER_LAY);
     }
 
 
@@ -207,13 +240,8 @@ export default class NavigationUtil {
      * @Date: 2018-11-23 08:52
      * @E-Mail: 528489389@qq.com
      */
-    static showImageShowOverLay(param) {
-        Navigation.showOverlay(NavigationUtil.getRNNOverlay(Const.RNN_IMAGE_SHOW_OVER_LAY, param))
-            .then((result) => {
-                console.log({result});
-            }).catch((error) => {
-            console.log({error});
-        });
+    static showImageShowOverLayOrModal(param) {
+        NavigationUtil.showOverLayOrModal(Const.RNN_IMAGE_SHOW_OVER_LAY, param);
     }
 
     /**
@@ -223,13 +251,8 @@ export default class NavigationUtil {
      * @Date: 2018-11-23 08:54
      * @E-Mail: 528489389@qq.com
      */
-    static dismissImageShowOverLay() {
-        Navigation.dismissOverlay(Const.RNN_IMAGE_SHOW_OVER_LAY)
-            .then((result) => {
-                console.log({result});
-            }).catch((error) => {
-            console.log({error});
-        });
+    static dismissImageShowOverLayOrModal() {
+        NavigationUtil.disMissOverLayOrModal(Const.RNN_IMAGE_SHOW_OVER_LAY);
     }
 
 
@@ -244,14 +267,10 @@ export default class NavigationUtil {
      * @Date: 2018-11-23 08:52
      * @E-Mail: 528489389@qq.com
      */
-    static showMessageDialogOverLay(confirm, canCancel) {
-        Navigation.showOverlay(NavigationUtil.getRNNOverlay(Const.RNN_MESSAGE_DIALOG_OVER_LAY, {
+    static showMessageDialogOverLayOrModal(confirm, canCancel) {
+        NavigationUtil.showOverLayOrModal(Const.RNN_MESSAGE_DIALOG_OVER_LAY, {
             confirm,
             canCancel: canCancel === undefined ? true : canCancel
-        })).then((result) => {
-            console.log({result});
-        }).catch((error) => {
-            console.log({error});
         });
     }
 
@@ -262,13 +281,8 @@ export default class NavigationUtil {
      * @Date: 2018-11-23 08:54
      * @E-Mail: 528489389@qq.com
      */
-    static dismissMessageDialogOverLay() {
-        Navigation.dismissOverlay(Const.RNN_MESSAGE_DIALOG_OVER_LAY)
-            .then((result) => {
-                console.log({result});
-            }).catch((error) => {
-            console.log({error});
-        });
+    static dismissMessageDialogOverLayOrModal() {
+        NavigationUtil.disMissOverLayOrModal(Const.RNN_MESSAGE_DIALOG_OVER_LAY);
     }
 
     /**
@@ -340,8 +354,8 @@ export default class NavigationUtil {
                 options: {
                     topTabs: {
                         selectedTabColor: 'white',
-                        unselectedTabColor: AppConfig.TEXT_COLOR_GRAY,
-                        fontSize: AppConfig.TEXT_SIZE_SMALL,
+                        unselectedTabColor: "#CDCDCD",
+                        fontSize: AppConfig.TEXT_SIZE_BIG,
                         height: AppConfig.TEXT_SIZE_SMALL + AppConfig.DISTANCE_SAFE * 2
                     },
                     topBar: {
@@ -394,6 +408,4 @@ export default class NavigationUtil {
 
         return component;
     }
-
-
 }

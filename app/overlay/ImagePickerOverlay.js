@@ -92,12 +92,7 @@ export default class ImagePickerOverlay extends React.Component {
      * @E-Mail: 528489389@qq.com
      */
     dismissImagePickerOverLay() {
-        Navigation.dismissOverlay(Const.RNN_IMAGE_PICKER_OVER_LAY)
-            .then((result) => {
-                console.log({result});
-            }).catch((error) => {
-            console.log({error});
-        });
+        NavigationUtil.disMissOverLayOrModal(Const.RNN_IMAGE_PICKER_OVER_LAY);
     }
 
     componentWillUnmount() {
@@ -164,12 +159,7 @@ export default class ImagePickerOverlay extends React.Component {
                                         }}/>
 
                                         <Item text={'相机'} onPress={() => {
-                                            //Android才行，ios的overlay会覆盖在选择的相册上面，所以直接消失
-                                            if (CommonUtil.isAndroid()) {
-                                                this.setState({show: true});
-                                            } else {
-                                                this.dismissImagePickerOverLay();
-                                            }
+                                            this.setState({show: true});
 
                                             CommonUtil.checkAndRequestPermissions([PermissionsAndroid.PERMISSIONS.CAMERA,
                                                     PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE],
@@ -177,10 +167,7 @@ export default class ImagePickerOverlay extends React.Component {
                                                     //启动相机拍照
                                                     ImagePicker.launchCamera(AppConfig.IMAGE_PICKER_OPTIONS, (response) => {
                                                         console.log({response});
-                                                        //Android才行，ios的overlay会覆盖在选择的相册上面，所以直接消失
-                                                        if (CommonUtil.isAndroid()) {
-                                                            this.dismissImagePickerOverLay();
-                                                        }
+                                                        this.dismissImagePickerOverLay();
                                                         if (!response.error && response.uri && this.props.callback) {
                                                             this.props.callback({
                                                                 uri: response.uri,
@@ -195,10 +182,7 @@ export default class ImagePickerOverlay extends React.Component {
                                                         }
                                                     });
                                                 }, () => {
-                                                    //Android才行，ios的overlay会覆盖在选择的相册上面，所以直接消失
-                                                    if (CommonUtil.isAndroid()) {
-                                                        this.dismissImagePickerOverLay();
-                                                    }
+                                                    this.dismissImagePickerOverLay();
                                                 });
                                         }}/>
 
@@ -209,21 +193,13 @@ export default class ImagePickerOverlay extends React.Component {
                                         }}/>
 
                                         <Item text={'图库'} onPress={() => {
-                                            //Android才行，ios的overlay会覆盖在选择的相册上面，所以直接消失
-                                            if (CommonUtil.isAndroid()) {
-                                                this.setState({show: true});
-                                            } else {
-                                                this.dismissImagePickerOverLay();
-                                            }
+                                            this.setState({show: true});
 
                                             CommonUtil.checkAndRequestPermissions([PermissionsAndroid.PERMISSIONS.CAMERA,
                                                 PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE], () => {
                                                 //打开系统相册
                                                 ImagePicker.launchImageLibrary(AppConfig.IMAGE_PICKER_OPTIONS, (response) => {
-                                                    //Android才行，ios的overlay会覆盖在选择的相册上面，所以直接消失
-                                                    if (CommonUtil.isAndroid()) {
-                                                        this.dismissImagePickerOverLay();
-                                                    }
+                                                    this.dismissImagePickerOverLay();
                                                     //响应结果处理参考上面样例
                                                     console.log(response);
                                                     if (!response.error && response.uri && this.props.callback) {
@@ -240,10 +216,7 @@ export default class ImagePickerOverlay extends React.Component {
                                                     }
                                                 });
                                             }, () => {
-                                                //Android才行，ios的overlay会覆盖在选择的相册上面，所以直接消失
-                                                if (CommonUtil.isAndroid()) {
-                                                    this.dismissImagePickerOverLay();
-                                                }
+                                                this.dismissImagePickerOverLay();
                                             });
                                         }}/>
                                     </View>

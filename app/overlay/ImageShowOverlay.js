@@ -25,6 +25,7 @@ import ToastAI from "../component/ToastAI";
 import IphoneXUtil from "../util/IphoneXUtil";
 import Gallery from '../component/swipe/Gallery';
 import NavigationUtil from "../util/NavigationUtil";
+import CommonUtil from "../util/CommonUtil";
 
 let {width, height} = Dimensions.get('window');
 
@@ -58,7 +59,7 @@ class ImageShowOverlay extends React.Component {
         this.backHandler = BackHandler.addEventListener('ImageShowModalHardwareBackPress',
             () => {
                 //表示消费了这个事件
-                NavigationUtil.dismissImageShowOverLay();
+                NavigationUtil.dismissImageShowOverLayOrModal();
                 return true;
             });
     }
@@ -117,7 +118,7 @@ class ImageShowOverlay extends React.Component {
         return (
             <View style={{
                 top: 10,
-                paddingTop: Platform.OS === 'android' ? global.BARANDROIDHEIGHT / PixelRatio.get() :
+                paddingTop: Platform.OS === 'android' ? CommonUtil.statusBarHeight / PixelRatio.get() :
                     IphoneXUtil.isIphoneX() ? 44 : 20,
                 width: '100%',
                 position: 'absolute',
@@ -125,7 +126,7 @@ class ImageShowOverlay extends React.Component {
                 alignItems: 'center'
             }}>
                 <TouchableButton onPress={() => {
-                   NavigationUtil.dismissImageShowOverLay();
+                   NavigationUtil.dismissImageShowOverLayOrModal();
                 }}>
                     <Image
                         style={{

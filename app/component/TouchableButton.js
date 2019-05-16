@@ -15,13 +15,13 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import React, {Component} from 'react';
-import * as Appconfig from '../config/AppConfig';
+import * as AppConfig from '../config/AppConfig';
 
 class TouchableButton extends Component {
 
     render() {
         return (
-            <TouchableOpacity activeOpacity={Appconfig.OPACITY}
+            <TouchableOpacity activeOpacity={AppConfig.OPACITY}
                               onPress={() => this.props.onPress()}>
                 {this.props.children}
             </TouchableOpacity>

@@ -13,7 +13,7 @@ const userState = {
 
 export default handleActions({
     [ActionTypes.ACTION_TEST]: (state, action) => {
-       NavigationUtil.dismissLoadingOverLay();
+       NavigationUtil.dismissLoadingOverLayOrModal();
         let response = action.payload.data;
         if (response.success) {
             var movie = response.response.data.movies[0];

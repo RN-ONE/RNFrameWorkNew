@@ -2,6 +2,7 @@ package com.reactnativenavigation.viewcontrollers.modal;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.view.ViewGroup;
 

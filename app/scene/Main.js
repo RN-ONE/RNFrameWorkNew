@@ -23,6 +23,8 @@ import {Navigation} from "react-native-navigation";
 import NavigationUtil from "../util/NavigationUtil";
 import * as Const from "../config/Const";
 import BaseComponent from "../component/BaseComponent";
+import InputPlateComponent from "../component/InputPlateComponent";
+import IphoneXView from "../component/IphoneXView";
 
 let {height, width} = Dimensions.get('window');
 
@@ -73,11 +75,13 @@ class Main extends BaseComponent {
         return (
             <View style={{backgroundColor: AppConfig.COLOR_BG, flex: 1}}>
 
+                <InputPlateComponent style={{margin: AppConfig.DISTANCE_SAFE, backgroundColor: AppConfig.COLOR_WHITE}}/>
+
                 <ThemeButton
                     backgroundColor={AppConfig.COLOR_THEME}
                     radius={5}
                     text={this.props.text} onPress={() => {
-                    NavigationUtil.showLoadingOverLay();
+                    NavigationUtil.showLoadingOverLayOrModal();
                     this.props.getMoveList({});
                 }}/>
 
@@ -97,7 +101,7 @@ class Main extends BaseComponent {
                     style={{paddingVertical: 10}}
                     text="测试按钮"
                     onPress={() => {
-                        NavigationUtil.showSelectOverLay({
+                        NavigationUtil.showSelectOverLayOrModal({
                             items: [
                                 {
                                     text: '按钮1',
@@ -126,7 +130,7 @@ class Main extends BaseComponent {
                             title: "测试标题",
                             onPress: (index) => {
                                 ToastAI.showShortBottom("点击了" + index);
-                                NavigationUtil.dismissSelectOverLay();
+                                NavigationUtil.dismissSelectOverLayOrModal();
                             }
                         });
                     }}/>
@@ -164,7 +168,7 @@ class Main extends BaseComponent {
     }
 
     show() {
-        NavigationUtil.showMessageDialogOverLay({
+        NavigationUtil.showMessageDialogOverLayOrModal({
             title: '测试',//标题
             titleColor: AppConfig.COLOR_THEME,
             contentColor: AppConfig.TEXT_COLOR_GRAY,//内容颜色

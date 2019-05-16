@@ -47,7 +47,7 @@ class MessageDialogOverlay extends React.Component {
             () => {
                 //表示消费了这个事件
                 if (props.canCancel) {
-                    NavigationUtil.dismissMessageDialogOverLay();
+                    NavigationUtil.dismissMessageDialogOverLayOrModal();
                 }
                 return true;
             });
@@ -65,7 +65,7 @@ class MessageDialogOverlay extends React.Component {
         return (
             <TouchableWithoutFeedback onPress={() => {
                 if (this.props.canCancel) {
-                    NavigationUtil.dismissMessageDialogOverLay();
+                    NavigationUtil.dismissMessageDialogOverLayOrModal();
                 }
             }}>
                 <View style={[
@@ -76,7 +76,7 @@ class MessageDialogOverlay extends React.Component {
 
                     <DialogMessage
                         dismissCallBack={() => {
-                            NavigationUtil.dismissMessageDialogOverLay();
+                            NavigationUtil.dismissMessageDialogOverLayOrModal();
                         }}
                         ref={(dialogBox) => {
                             this.dialogBox = dialogBox;

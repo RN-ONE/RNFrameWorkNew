@@ -17,6 +17,7 @@ import Table2 from "../scene/Table2";
 import Table3 from "../scene/Table3";
 import {Platform} from "react-native";
 import CommonUtil from "./CommonUtil";
+import InputPlateOverlay from "../overlay/InputPlateOverlay";
 
 /**
  *
@@ -80,6 +81,7 @@ class RegisterComponent {
         NavigationUtil.registerComponentWithRedux(Const.RNN_IMAGE_PICKER_OVER_LAY, ImagePickerOverlay);
         NavigationUtil.registerComponentWithRedux(Const.RNN_IMAGE_SHOW_OVER_LAY, ImageShowModal);
         NavigationUtil.registerComponentWithRedux(Const.RNN_MESSAGE_DIALOG_OVER_LAY, MessageDialogModal);
+        NavigationUtil.registerComponentWithRedux(Const.RNN_INPUT_PLATE_OVER_LAY, InputPlateOverlay);
         NavigationUtil.registerComponentWithRedux(Const.RNN_TABLE1, Table1);
         NavigationUtil.registerComponentWithRedux(Const.RNN_TABLE2, Table2);
         NavigationUtil.registerComponentWithRedux(Const.RNN_TABLE3, Table3);

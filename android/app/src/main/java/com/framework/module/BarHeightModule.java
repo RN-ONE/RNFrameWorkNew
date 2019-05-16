@@ -7,6 +7,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.framework.MainActivity;
+import com.reactnativenavigation.NavigationActivity;
 
 /**
  * @Author: JACK-GU
@@ -15,6 +16,7 @@ import com.framework.MainActivity;
  */
 public class BarHeightModule extends ReactContextBaseJavaModule {
     private final static String NAME = "BarHeightModule";
+
     public BarHeightModule(ReactApplicationContext reactContext) {
         super(reactContext);
     }
@@ -24,11 +26,12 @@ public class BarHeightModule extends ReactContextBaseJavaModule {
         return NAME;
     }
 
+
     @ReactMethod
-    public void getHeight(Callback callback) {
-        int height = MainActivity.height;
-        callback.invoke(height);
+    public void setNeedFitsSysWindows(boolean isNeed) {
+        ((MainActivity) getCurrentActivity()).setNeedFitsSysWindows(isNeed);
     }
+
     @ReactMethod
     public void exit() {
         System.exit(0);

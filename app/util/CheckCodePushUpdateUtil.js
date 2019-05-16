@@ -29,7 +29,7 @@ export default class CheckCodePushUpdateUtil {
             .then((update) => {
                 if (update) {
                     //有更新，提示用户
-                    NavigationUtil.showMessageDialogOverLay({
+                    NavigationUtil.showMessageDialogOverLayOrModal({
                         title: '检查到新版本',//标题
                         titleColor: AppConfig.COLOR_THEME,
                         contentColor: AppConfig.TEXT_COLOR_GRAY,//内容颜色
@@ -37,7 +37,7 @@ export default class CheckCodePushUpdateUtil {
                         ok: {
                             text: '立即更新',
                             callback: () => {
-                                NavigationUtil.dismissMessageDialogOverLay();
+                                NavigationUtil.dismissMessageDialogOverLayOrModal();
                                 //立即更新
                                 CheckCodePushUpdateUtil.deal(update);
                             },
@@ -45,7 +45,7 @@ export default class CheckCodePushUpdateUtil {
                         cancel: {
                             text: '在看看',
                             callback: () => {
-                                NavigationUtil.dismissMessageDialogOverLay();
+                                NavigationUtil.dismissMessageDialogOverLayOrModal();
                             },
                             color: AppConfig.TEXT_COLOR_GRAY,
                         }
@@ -59,7 +59,7 @@ export default class CheckCodePushUpdateUtil {
 
 
     static error() {
-        NavigationUtil.showMessageDialogOverLay({
+        NavigationUtil.showMessageDialogOverLayOrModal({
             title: '温馨提示',//标题
             titleColor: AppConfig.COLOR_THEME,
             contentColor: AppConfig.TEXT_COLOR_GRAY,//内容颜色
@@ -67,7 +67,7 @@ export default class CheckCodePushUpdateUtil {
             ok: {
                 text: '我知道了',
                 callback: () => {
-                    NavigationUtil.dismissMessageDialogOverLay();
+                    NavigationUtil.dismissMessageDialogOverLayOrModal();
                 },
             }
         }, true);
@@ -75,7 +75,7 @@ export default class CheckCodePushUpdateUtil {
 
 
     static deal(update) {
-        NavigationUtil.showLoadingOverLay("0%");
+        NavigationUtil.showLoadingOverLayOrModal("0%");
         codePush.disallowRestart();
         //确定之后，开始下载
         update.download(CheckCodePushUpdateUtil.down).then(instance => {

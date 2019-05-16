@@ -48,7 +48,7 @@ class ThemeButton extends Component {
                             alignItems: 'center',
                             justifyContent: 'center',
                             backgroundColor: this.props.backgroundColor ? this.props.backgroundColor : AppConfig.COLOR_THEME,
-                            paddingVertical: AppConfig.DISTANCE_SAFE / 2,
+                            paddingVertical: AppConfig.DISTANCE_SAFE,
                             paddingHorizontal: AppConfig.DISTANCE_SAFE,
                             flex: 1,
                             margin: AppConfig.DISTANCE_SAFE,

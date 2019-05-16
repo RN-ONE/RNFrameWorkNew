@@ -196,7 +196,7 @@ class BasePhotoGallery extends Component {
                                                     }
                                                 }
 
-                                                NavigationUtil.showImageShowOverLay({
+                                                NavigationUtil.showImageShowOverLayOrModal({
                                                     items: items,
                                                     index: index,
                                                 });
@@ -224,12 +224,7 @@ class BasePhotoGallery extends Component {
      * @E-Mail: 528489389@qq.com
      */
     showImagePickerOverLay(callback) {
-        Navigation.showOverlay(NavigationUtil.getRNNOverlay(Const.RNN_IMAGE_PICKER_OVER_LAY, {callback}))
-            .then((result) => {
-                console.log({result});
-            }).catch((error) => {
-            console.log({error});
-        });
+        NavigationUtil.showOverLayOrModal(Const.RNN_IMAGE_PICKER_OVER_LAY, {callback});
     }
 
 

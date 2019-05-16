@@ -4,6 +4,7 @@
 <label style="color:red">注意：以下说明适用于升级react-native-navigation，需要将代码集成到项目才可以
 #特别注意的是，没有返回按钮的时候，标题不可以太长，否则GG
 </label>
+
 # Navigator的修改
 1 增加下面的方法
 <pre>
@@ -63,7 +64,49 @@
     }
 </code>
 </pre>
-#一下说明被废弃，老版本才需要
+3. ModalPresenter设置modal背景透明,如果不设置，Android弹出的modal会不透明,在showModal方法中，设置modalsLayout为透明背景
+<pre>
+<code>
+void showModal(ViewController toAdd, ViewController toRemove, CommandListener listener) {
+        if (modalsLayout == null) {
+            listener.onError("Can not show modal before activity is created");
+            return;
+        }
+        Options options = toAdd.resolveCurrentOptions(defaultOptions);
+        toAdd.setWaitForRender(options.animations.showModal.waitForRender);
+        //增加下面代码，设置背景透明
+        modalsLayout.setBackgroundColor(Color.parseColor("#00000000"));
+        modalsLayout.addView(toAdd.getView());
+        if (options.animations.showModal.enabled.isTrueOrUndefined()) {
+            if (options.animations.showModal.waitForRender.isTrue()) {
+                toAdd.addOnAppearedListener(() -> animateShow(toAdd, toRemove, listener, options));
+            } else {
+                animateShow(toAdd, toRemove, listener, options);
+            }
+        } else {
+            if (options.animations.showModal.waitForRender.isTrue()) {
+                toAdd.addOnAppearedListener(() -> onShowModalEnd(toAdd, toRemove, listener));
+            } else {
+                onShowModalEnd(toAdd, toRemove, listener);
+            }
+        }
+    }
+
+</code>
+</pre>
+
+
+
+#### ********************************************************************************************************************************************************
+# 苹果在xcode10上需要做以下修改
+#### 1. Check "Copy only when installing"
+![Image text](https://user-images.githubusercontent.com/180773/43156813-23ab6266-8f49-11e8-811a-2642003b68bc.png)
+#### 2. Go to Product > Scheme > Edit Scheme and modified it to look like this, move ReactNativeNavigation above React.
+![Image text](https://user-images.githubusercontent.com/180773/43156762-ffa6f61e-8f48-11e8-83f9-2022f805653f.png)
+
+
+#### ********************************************************************************************************************************************************
+#以下说明被废弃，老版本才需要
 # TopBar
 1 在TopBar重写方法如下：
 <pre>
@@ -163,11 +206,3 @@ private void createLayout() {
 
 # TitleBar
 这个类涉及的修改很多：新加textView作为标题，然后把以前设置的方法全部替换成自己的textView就可以了，可以参考修改的文件[TitleBar.txt]
-
-
-#### ********************************************************
-# 苹果在xcode10上需要做以下修改
-#### 1. Check "Copy only when installing"
-![Image text](https://user-images.githubusercontent.com/180773/43156813-23ab6266-8f49-11e8-811a-2642003b68bc.png)
-#### 2. Go to Product > Scheme > Edit Scheme and modified it to look like this, move ReactNativeNavigation above React.
-![Image text](https://user-images.githubusercontent.com/180773/43156762-ffa6f61e-8f48-11e8-83f9-2022f805653f.png)

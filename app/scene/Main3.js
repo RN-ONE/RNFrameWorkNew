@@ -7,6 +7,7 @@
 
 import React, {Component} from 'react';
 import {
+    NativeModules,
     Text,
     View
 } from 'react-native';
@@ -20,6 +21,7 @@ import {Navigation} from "react-native-navigation";
 import NavigationUtil from "../util/NavigationUtil";
 import {AppIndex, LoginComponent} from "../RNNConfig";
 import BaseComponent from "../component/BaseComponent";
+import CommonUtil from "../util/CommonUtil";
 
 class Main3 extends BaseComponent {
     constructor(props, context) {
@@ -85,7 +87,7 @@ class Main3 extends BaseComponent {
 
 
     show() {
-        NavigationUtil.showMessageDialogOverLay({
+        NavigationUtil.showMessageDialogOverLayOrModal({
             title: '测试',//标题
             titleColor: AppConfig.COLOR_THEME,
             contentColor: AppConfig.TEXT_COLOR_GRAY,//内容颜色

@@ -11,9 +11,10 @@ import * as AppConfig from './config/AppConfig';
 import * as Const from "./config/Const";
 import {Dimensions, PixelRatio, StatusBar, Platform} from "react-native";
 import NavigationUtil from "./util/NavigationUtil";
-import {Navigation} from "react-native-navigation";
+import {OptionsModalTransitionStyle, OptionsModalPresentationStyle} from "react-native-navigation";
+import CommonUtil from "./util/CommonUtil";
 
-let {width} = Dimensions.get("window");
+let {width, height} = Dimensions.get("window");
 
 //定义APP的样式的样式，动画效果只对android有效果，firstSetRoot是整对android是不是启动动画而言的
 export const AppDefaultOptions = {
@@ -64,11 +65,29 @@ export const AppDefaultOptions = {
         unselectedTabColor: AppConfig.TEXT_COLOR_GRAY,
         height: 70,
     },
+    modalPresentationStyle: CommonUtil.isAndroid() ? OptionsModalPresentationStyle.overCurrentContext : OptionsModalPresentationStyle.overFullScreen,
+    modalTransitionStyle: OptionsModalTransitionStyle.crossDissolve,
     animations: {
         setRoot: {
             x: {
                 from: width * PixelRatio.get(),
                 to: 0,
+                duration: 300,
+                interpolation: 'default'
+            }
+        },
+        showModal: {
+            y: {
+                from: height * PixelRatio.get(),
+                to: 0,
+                duration: 300,
+                interpolation: 'default'
+            }
+        },
+        dismissModal: {
+            y: {
+                from: 0,
+                to: height * PixelRatio.get(),
                 duration: 300,
                 interpolation: 'default'
             }
@@ -84,7 +103,12 @@ export const AppDefaultOptions = {
  * @E-Mail: 528489389@qq.com
  */
 export const LoginComponent = () => {
-    return NavigationUtil.getStackScene(Const.RNN_INDEX, "登录");
+    let component = NavigationUtil.getStackScene(Const.RNN_INDEX, "登录");
+    let topBar = component.stack.children[0].component.options.topBar;
+    topBar.visible = false;
+    topBar.drawBehind = true;
+
+    return component;
 };
 
 

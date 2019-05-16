@@ -45,44 +45,6 @@ const errorHandler = (e, isFatal) => {
 class Index extends Component {
     constructor(props) {
         super(props);
-
-        //保证性能
-        if (Platform.OS === 'android') {
-            NativeModules.NativeUtilsModule.isDebug((isDebug) => {
-                if (!isDebug) {
-                    global.console = {
-                        info: () => {
-                        },
-                        log: () => {
-                        },
-                        warn: () => {
-                        },
-                        debug: () => {
-                        },
-                        error: () => {
-                        },
-                    };
-                }
-            });
-        } else {
-            var Utils = NativeModules.Utils;
-            Utils.addEventIsDebug((isDebug) => {
-                if (!isDebug) {
-                    global.console = {
-                        info: () => {
-                        },
-                        log: () => {
-                        },
-                        warn: () => {
-                        },
-                        debug: () => {
-                        },
-                        error: () => {
-                        },
-                    };
-                }
-            });
-        }
     }
 
     componentDidMount() {

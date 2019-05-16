@@ -25,13 +25,41 @@ export default class CommonUtil {
         if (Platform.OS === 'android') {
             NativeModules.NativeUtilsModule.isDebug((isDebug) => {
                 CommonUtil.isDebug = isDebug;
+                CommonUtil.setReleaseNoLog();
             });
         } else {
             var Utils = NativeModules.Utils;
             Utils.addEventIsDebug((isDebug) => {
                 CommonUtil.isDebug = isDebug;
+                CommonUtil.setReleaseNoLog();
             });
         }
+    }
+
+    /**
+     *设置发布后没有日志
+     *
+     * @Author: JACK-GU
+     * @Date: 2019-05-16 10:46
+     * @E-Mail: 528489389@qq.com
+     */
+    static setReleaseNoLog() {
+        if (CommonUtil.isDebug){
+            return;
+        }
+
+        global.console = {
+            info: () => {
+            },
+            log: () => {
+            },
+            warn: () => {
+            },
+            debug: () => {
+            },
+            error: () => {
+            },
+        };
     }
 
     /**
