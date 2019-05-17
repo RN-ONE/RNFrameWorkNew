@@ -24,7 +24,6 @@ import PropTypes from 'prop-types';
 import EditText from "../component/EditText";
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Feather from 'react-native-vector-icons/Feather';
 import HttpUtil from "../util/HttpUtil";
 import * as UserAction from '../actions/UserAction'
 import NavigationUtil from "../util/NavigationUtil";
@@ -115,7 +114,7 @@ class Login extends BaseComponent {
                                          }}>
 
                             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                <Feather name={this.state.checkRememberMe ? "check-square" : 'square'} size={20} color={AppConfig.COLOR_THEME}/>
+                                <MaterialCommunityIcons name={this.state.checkRememberMe ? "checkbox-marked-outline" : 'checkbox-blank-outline'} size={20} color={AppConfig.COLOR_THEME}/>
 
                                 <Text style={{
                                     fontSize: AppConfig.TEXT_SIZE_NORMAL,
@@ -268,7 +267,7 @@ class LoginItem extends Component {
                                 this.setState({password: !this.state.password});
                             }}>
 
-                                <Feather name={this.state.password ? "eye" : "eye-off"} size={20} color={AppConfig.COLOR_THEME}/>
+                                <MaterialCommunityIcons name={this.state.password ? "eye" : "eye-off"} size={20} color={AppConfig.COLOR_THEME}/>
 
                             </TouchableButton>
                             : null
