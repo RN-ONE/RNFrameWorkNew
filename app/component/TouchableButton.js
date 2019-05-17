@@ -22,6 +22,7 @@ class TouchableButton extends Component {
     render() {
         return (
             <TouchableOpacity activeOpacity={AppConfig.OPACITY}
+                              style={[this.props.style]}
                               onPress={() => this.props.onPress()}>
                 {this.props.children}
             </TouchableOpacity>

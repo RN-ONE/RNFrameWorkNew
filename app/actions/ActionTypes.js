@@ -7,5 +7,6 @@
  * @Describe:
  */
 
-export const ACTION_TEST = "app_action_login";
-export const ACTION_CHANGE_COLOR = "app_action_change_color";
+export const ACTION_TEST = "ACTION_TEST";
+//用户登陆
+export const ACTION_USER_LOGIN = "ACTION_USER_LOGIN";

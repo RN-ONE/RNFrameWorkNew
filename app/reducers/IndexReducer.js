@@ -7,7 +7,9 @@
 
 import {combineReducers} from 'redux';
 import TestReducer from './TestReducer';
+import UserLoginReducer from './UserLoginReducer';
 
 export default combineReducers({
     TestReducer,
+    UserLoginReducer
 });

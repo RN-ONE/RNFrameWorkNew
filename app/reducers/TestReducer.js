@@ -1,6 +1,4 @@
-/**
- * Created by naiyu_wang on 16/10/14.
- */
+
 import {handleActions} from 'redux-actions';
 import * as ActionTypes from '../actions/ActionTypes';
 import {Navigation} from "react-native-navigation";

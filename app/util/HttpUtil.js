@@ -8,6 +8,7 @@ import {Axios, CancelToken} from 'axios';
 import SHA1 from 'jssha';
 import ToastAI from "../component/ToastAI";
 import * as Const from "../config/Const";
+import UserUtil from "./UserUtil";
 
 const TIMEOUT = 60 * 1000;
 const responseType = "json";
@@ -28,7 +29,7 @@ const CodeMessages = [
 var cancel;
 
 export default class HttpUtil {
-    static BASE = "http://10.17.31.106:8080";
+    static BASE = "http://117.187.64.6:8090/scdp";
     static BASE_URL = HttpUtil.BASE + "/controller/";
     static instance = new Axios({
         baseURL: HttpUtil.BASE_URL,
@@ -71,14 +72,13 @@ export default class HttpUtil {
         params.timestamp = Date.parse(new Date());
         params.timeZone = "Asia/Shanghai";
         params.userLocaleId = "zh_CN";
-        if (global.userInfo) {
-            params.userId = global.userInfo.userId;
-            params.userName = global.userInfo.userName;
+        if (UserUtil.getUser()) {
+            params.userId = UserUtil.getUser().userId;
+            params.userName = UserUtil.getUser().userName;
         }
 
         let postData = JSON.stringify(params);
-        let map = {};
-        map = {
+        let map = {
             "actionName": params.actionName,
             "postData": postData,
             "limit": params.limit ? params.limit : 15,
@@ -101,21 +101,20 @@ export default class HttpUtil {
             //请求的结果
             if (callBack) {
                 if (response.status === 200) {
-                    if (response.data.errorcode) {
+                    if (!response.data) {
+                        ToastAI.showShortBottom("未知错误");
+                        callBack({success: false, response: {}});
+                    } else if (response.data.errorcode) {
                         //框架的错误，直接提示
                         ToastAI.showShortBottom(response.data.error);
                         callBack({success: false, response: response.data});
                     } else {
-                        //框架判断,登录的特殊处理
-                        if (map.actionName === 'sys-user-login') {
+                        if (response.data.resultCode === Const.CODE.success) {
                             callBack({success: true, response: response.data});
                         } else {
-                            if (response.data.code === Const.CODE.success) {
-                                callBack({success: true, response: response.data});
-                            } else {
-                                HttpUtil.showMessage(response.data.codeDesc);
-                                callBack({success: false, response: response.data});
-                            }
+                            console.log("-------" + response.data.resultInfo);
+                            ToastAI.showShortBottom(response.data.resultInfo);
+                            callBack({success: false, response: response.data});
                         }
                     }
                 } else {
@@ -202,9 +201,9 @@ export default class HttpUtil {
         params.timestamp = Date.parse(new Date());
         params.timeZone = "Asia/Shanghai";
         params.userLocaleId = "zh_CN";
-        if (global.userInfo) {
-            params.userId = global.userInfo.userId;
-            params.userName = global.userInfo.userName;
+        if (UserUtil.getUser()) {
+            params.userId = UserUtil.getUser().userId;
+            params.userName = UserUtil.getUser().userName;
         }
 
         let postData = JSON.stringify(params);
@@ -255,15 +254,18 @@ export default class HttpUtil {
                 console.log({response});
                 //请求的结果
                 if (callBack) {
-                    if (response.status == 200) {
-                        if (response.data.errorcode) {
+                    if (response.status === 200) {
+                        if (!response.data) {
+                            ToastAI.showShortBottom("未知错误");
+                            callBack({success: false, response: {}});
+                        } else if (response.data.errorcode) {
                             //框架的错误，直接提示
                             ToastAI.showShortBottom(response.data.error);
                         } else {
-                            if (response.data.code === Const.CODE.success) {
+                            if (response.data.resultCode === Const.CODE.success) {
                                 callBack({success: true, response: response.data});
                             } else {
-                                HttpUtil.showMessage(response.data.codeDesc);
+                                ToastAI.showShortBottom(response.data.resultInfo);
                                 callBack({success: false, response: response.data});
                             }
                         }

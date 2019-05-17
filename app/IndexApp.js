@@ -42,7 +42,7 @@ const errorHandler = (e, isFatal) => {
     }
 };
 
-class Index extends Component {
+class IndexApp extends Component {
     constructor(props) {
         super(props);
     }
@@ -60,4 +60,4 @@ class Index extends Component {
 
 setJSExceptionHandler(errorHandler);
 
-export default Index;
+export default IndexApp;

@@ -1,4 +1,9 @@
 /**
+ *
+ * 注意，如果需要跳转回退页面也显示，可以所以用setTimeout来延迟一下
+ *  setTimeout(() => {
+                        ToastAI.showShortBottom("登录成功");
+                    }, 100);
  * @Author:JACK-GU
  * @Date:2017-08-14
  * @E-Mail:528489389@qq.com

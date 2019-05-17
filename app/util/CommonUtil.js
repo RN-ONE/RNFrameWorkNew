@@ -17,6 +17,9 @@ export default class CommonUtil {
     static statusBarHeight = 0;
     static isDebug = false;
 
+
+
+
     static init() {
         CommonUtil.getConstFromNavigation().then();
 

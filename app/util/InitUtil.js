@@ -1,7 +1,7 @@
 import {Navigation} from "react-native-navigation";
 import NavigationUtil from "./NavigationUtil";
 import * as Const from "../config/Const";
-import Index from "../Index";
+import IndexApp from "../IndexApp";
 import Main from "../scene/Main";
 import Main2 from "../scene/Main2";
 import Main3 from "../scene/Main3";
@@ -70,7 +70,7 @@ class RegisterComponent {
      * @E-Mail: 528489389@qq.com
      */
     registerComponentWithRedux() {
-        NavigationUtil.registerComponentWithRedux(Const.RNN_INDEX, Index);
+        NavigationUtil.registerComponentWithRedux(Const.RNN_INDEX, IndexApp);
         NavigationUtil.registerComponentWithRedux(Const.RNN_MAIN, Main);
         NavigationUtil.registerComponentWithRedux(Const.RNN_MAIN2, Main2);
         NavigationUtil.registerComponentWithRedux(Const.RNN_MAIN3, Main3);

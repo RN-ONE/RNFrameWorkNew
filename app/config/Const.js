@@ -5,9 +5,11 @@
  * @Describe: 常量
  */
 
-export const CODE = {success: 200};
+export const CODE = {success: 0};
 
 export const COLOR_LOCAL = "colorLocal";
+
+export const SAVE_LOCAL_LOGIN_DATA ="saveLocalLoginData";
 
 
 export const RNN_INDEX = "RNN_INDEX";

@@ -5,11 +5,12 @@
  */
 
 import React, {Component} from 'react';
-import {Navigation} from "react-native-navigation";
+import {Constants, Navigation} from "react-native-navigation";
 import {
     Text, View, Image, BackHandler, Dimensions, NativeModules
 } from 'react-native';
 import * as AppConfig from "../config/AppConfig";
+import * as Const from "../config/Const";
 import {connect} from "react-redux";
 import ThemeButton from "../component/ThemeButton";
 import IphoneXUtil from "../util/IphoneXUtil";
@@ -23,6 +24,13 @@ import PropTypes from 'prop-types';
 import EditText from "../component/EditText";
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Feather from 'react-native-vector-icons/Feather';
+import HttpUtil from "../util/HttpUtil";
+import * as UserAction from '../actions/UserAction'
+import NavigationUtil from "../util/NavigationUtil";
+import Toast from "react-native-root-toast";
+import TouchableButton from "../component/TouchableButton";
+import SaveLocalUtil from "../util/SaveLoaclUtil";
 
 let {width, height} = Dimensions.get("window");
 
@@ -33,11 +41,15 @@ class Login extends BaseComponent {
     constructor(props) {
         super(props);
         // 初始状态
-        this.state = {};
+        this.state = {checkRememberMe: false, defaultUser: '', defaultPassword: ''};
         //Android设置一下沉浸式状态栏
         if (CommonUtil.isAndroid()) {
             NativeModules.BarHeightModule.setNeedFitsSysWindows(false);
         }
+
+        SaveLocalUtil.load(Const.SAVE_LOCAL_LOGIN_DATA, (data) => {
+            this.setState({checkRememberMe: data.checkRememberMe, defaultPassword: data.password, defaultUser: data.user});
+        });
     }
 
 
@@ -77,22 +89,46 @@ class Login extends BaseComponent {
                 <Image style={{width: width, height: height * 0.3}} source={require('../img/login_background.jpg')}/>
                 <KeyboardAwareScrollView>
                     <View>
-                        <LoginItem style={{marginHorizontal: AppConfig.DISTANCE_SAFE, marginTop: 30}}
-                                   placeholder={"请输入用户名"}
-                                   icon={'shield-account'}/>
+                        <LoginItem
+                            defaultValue={this.state.defaultUser}
+                            ref={(ref) => {
+                                this.loginUser = ref;
+                            }}
+                            style={{marginHorizontal: AppConfig.DISTANCE_SAFE, marginTop: 30}}
+                            placeholder={"请输入用户名"}
+                            icon={'shield-account'}/>
 
-                        <LoginItem style={{marginHorizontal: AppConfig.DISTANCE_SAFE, marginTop: AppConfig.DISTANCE_SAFE / 2}}
-                                   placeholder={"请输入密码"}
-                                   password={true}
-                                   icon={'shield-lock'}/>
+                        <LoginItem
+                            defaultValue={this.state.defaultPassword}
+                            ref={(ref) => {
+                                this.loginPassword = ref;
+                            }}
+                            style={{marginHorizontal: AppConfig.DISTANCE_SAFE, marginTop: AppConfig.DISTANCE_SAFE / 2}}
+                            placeholder={"请输入密码"}
+                            password={true}
+                            icon={'shield-lock'}/>
+
+
+                        <TouchableButton style={{marginTop: AppConfig.DISTANCE_SAFE, marginLeft: AppConfig.DISTANCE_SAFE, paddingVertical: 5}}
+                                         onPress={() => {
+                                             this.setState({checkRememberMe: !this.state.checkRememberMe});
+                                         }}>
+
+                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                <Feather name={this.state.checkRememberMe ? "check-square" : 'square'} size={20} color={AppConfig.COLOR_THEME}/>
+
+                                <Text style={{
+                                    fontSize: AppConfig.TEXT_SIZE_NORMAL,
+                                    color: AppConfig.COLOR_THEME,
+                                    marginLeft: AppConfig.DISTANCE_SAFE / 2
+                                }}>记住密码</Text>
+                            </View>
+
+                        </TouchableButton>
 
                         <ThemeButton
                             onPress={() => {
-                                Navigation.setRoot({root: AppTableHome()}).then();
-                                //Android设置一下
-                                if (CommonUtil.isAndroid()) {
-                                    NativeModules.BarHeightModule.setNeedFitsSysWindows(true);
-                                }
+                                this.login();
                             }}
                             text={'登录'}/>
                     </View>
@@ -100,6 +136,69 @@ class Login extends BaseComponent {
 
             </IphoneXView>
         );
+    }
+
+    /**
+     *登陆
+     *
+     * @Author: JACK-GU
+     * @Date: 2019-05-17 13:40
+     * @E-Mail: 528489389@qq.com
+     */
+    login() {
+        let user = this.loginUser.getTextValue();
+        let password = this.loginPassword.getTextValue();
+
+        if (user.length === 0) {
+            ToastAI.showShortBottom("请输入用户名");
+            return;
+        }
+
+        if (password.length === 0) {
+            ToastAI.showShortBottom("请输入密码");
+            return;
+        }
+
+        let pswHash = HttpUtil.getEncryptedPassword(password);
+
+        let map = {
+            actionName: "sys-user-login",
+            userId: user,
+            password: pswHash,
+        };
+
+
+        NavigationUtil.showLoadingOverLayOrModal('登录中...');
+        let {userLogin} = this.props;
+        if (userLogin) {
+            userLogin(map, (success) => {
+                NavigationUtil.dismissLoadingOverLayOrModal();
+                if (success) {
+                    let saveData = {user, checkRememberMe: this.state.checkRememberMe, password: this.state.checkRememberMe ? password : ""};
+                    SaveLocalUtil.save(Const.SAVE_LOCAL_LOGIN_DATA, saveData);
+
+                    setTimeout(() => {
+                        ToastAI.showShortBottom("登录成功");
+                    }, 500);
+                    this.goToHome();
+                }
+            });
+        }
+    }
+
+    /**
+     *登陆到主页
+     *
+     * @Author: JACK-GU
+     * @Date: 2019-05-17 13:40
+     * @E-Mail: 528489389@qq.com
+     */
+    goToHome() {
+        Navigation.setRoot({root: AppTableHome()}).then();
+        //Android设置一下
+        if (CommonUtil.isAndroid()) {
+            NativeModules.BarHeightModule.setNeedFitsSysWindows(true);
+        }
     }
 }
 
@@ -115,7 +214,7 @@ class LoginItem extends Component {
     constructor(props) {
         super(props);
         // 初始状态
-        this.state = {textValue: ''};
+        this.state = {textValue: props.defaultValue ? props.defaultValue : '', password: props.password};
     }
 
     /**
@@ -127,6 +226,10 @@ class LoginItem extends Component {
      */
     getTextValue() {
         return this.state.textValue ? this.state.textValue : '';
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({textValue: nextProps.defaultValue ? nextProps.defaultValue : ''});
     }
 
     render() {
@@ -150,18 +253,33 @@ class LoginItem extends Component {
                         onChangeText={(textValue) => {
                             this.setState({textValue});
                         }}
+                        defaultValue={this.props.defaultValue}
                         placeholder={this.props.placeholder}
                         style={{
                             fontSize: AppConfig.TEXT_SIZE_SMALL,
                             flex: 1,
                             marginLeft: AppConfig.DISTANCE_SAFE - 3,
-                            padding: 0
+                            padding: 0,
                         }}
-                        secureTextEntry={this.props.password}/>
+                        secureTextEntry={this.state.password}/>
+                    {
+                        this.props.password ?
+                            <TouchableButton style={{marginLeft: AppConfig.DISTANCE_SAFE}} onPress={() => {
+                                this.setState({password: !this.state.password});
+                            }}>
+
+                                <Feather name={this.state.password ? "eye" : "eye-off"} size={20} color={AppConfig.COLOR_THEME}/>
+
+                            </TouchableButton>
+                            : null
+                    }
+
                 </View>
             </View>
         );
     }
 }
 
-export default connect(state => ({}), dispatch => ({}))(Login);
+export default connect(state => ({}), dispatch => ({
+    userLogin: (data, loginCallBack) => dispatch(UserAction.userLogin(data, loginCallBack))
+}))(Login);

@@ -4,6 +4,8 @@
  * @E-Mail: 528489389@qq.com
  * @Describe: 定义一些基本的参数，如颜色啊，字体啊神马的
  */
+import User from "../entity/User";
+
 //主题色定义
 export const COLOR_THEME = "#1AA7F2";
 
@@ -42,4 +44,3 @@ export const IMAGE_PICKER_OPTIONS = {
         path: 'images', //存放图片的路径
     },
 };
-
