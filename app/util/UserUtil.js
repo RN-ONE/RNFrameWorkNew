@@ -6,6 +6,8 @@
  * @E-Mail:528489389@qq.com
  */
 import User from "../entity/User";
+import SaveLocalUtil from "./SaveLoaclUtil";
+import * as Const from '../config/Const';
 
 export default class UserUtil {
     static user: User;
@@ -30,6 +32,9 @@ export default class UserUtil {
      */
     static loginSuccess(user: User) {
         UserUtil.user = user;
+
+        //保存到本地
+        SaveLocalUtil.save(Const.SAVE_LOCAL_LOGINED_USER_DATA, user);
     }
 
     /**
@@ -41,5 +46,8 @@ export default class UserUtil {
      */
     static loginOut() {
         UserUtil.user = null;
+
+        //保存到本地
+        SaveLocalUtil.save(Const.SAVE_LOCAL_LOGINED_USER_DATA, {});
     }
 }

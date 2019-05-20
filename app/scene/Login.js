@@ -195,10 +195,6 @@ class Login extends BaseComponent {
      */
     goToHome() {
         Navigation.setRoot({root: AppTableHome()}).then();
-        //Android设置一下
-        if (CommonUtil.isAndroid()) {
-            NativeModules.BarHeightModule.setNeedFitsSysWindows(true);
-        }
     }
 }
 

@@ -25,6 +25,7 @@ import * as Const from "../config/Const";
 import BaseComponent from "../component/BaseComponent";
 import InputPlateComponent from "../component/InputPlateComponent";
 import IphoneXView from "../component/IphoneXView";
+import CommonUtil from "../util/CommonUtil";
 
 let {height, width} = Dimensions.get('window');
 
@@ -34,6 +35,10 @@ class Main extends BaseComponent {
 
     constructor(props, context) {
         super(props, context);
+        //Android设置一下
+        if (CommonUtil.isAndroid()) {
+            NativeModules.BarHeightModule.setNeedFitsSysWindows(true);
+        }
 
         Navigation.mergeOptions(this.props.componentId, {
             topBar: {
