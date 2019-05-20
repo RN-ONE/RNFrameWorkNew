@@ -114,7 +114,8 @@ class Login extends BaseComponent {
                                          }}>
 
                             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                <MaterialCommunityIcons name={this.state.checkRememberMe ? "checkbox-marked-outline" : 'checkbox-blank-outline'} size={20} color={AppConfig.COLOR_THEME}/>
+                                <MaterialCommunityIcons name={this.state.checkRememberMe ? "checkbox-marked-outline" : 'checkbox-blank-outline'}
+                                                        size={20} color={AppConfig.COLOR_THEME}/>
 
                                 <Text style={{
                                     fontSize: AppConfig.TEXT_SIZE_NORMAL,
@@ -213,7 +214,7 @@ class LoginItem extends Component {
     constructor(props) {
         super(props);
         // 初始状态
-        this.state = {textValue: props.defaultValue ? props.defaultValue : '', password: props.password};
+        this.state = {textValue: props.defaultValue && props.defaultValue.length > 0 ? props.defaultValue : '', password: props.password};
     }
 
     /**
@@ -228,7 +229,7 @@ class LoginItem extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState({textValue: nextProps.defaultValue ? nextProps.defaultValue : ''});
+        this.setState({textValue: nextProps.defaultValue && nextProps.defaultValue.length > 0 ? nextProps.defaultValue : this.state.textValue});
     }
 
     render() {
