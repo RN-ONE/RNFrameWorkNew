@@ -26,6 +26,7 @@ import IphoneXUtil from "../util/IphoneXUtil";
 import Gallery from '../component/swipe/Gallery';
 import NavigationUtil from "../util/NavigationUtil";
 import CommonUtil from "../util/CommonUtil";
+import BaseOverlay from "./BaseOverlay";
 
 let {width, height} = Dimensions.get('window');
 
@@ -42,7 +43,7 @@ var styles = StyleSheet.create({
     },
 });
 
-class ImageShowOverlay extends React.Component {
+class ImageShowOverlay extends BaseOverlay {
     constructor(props) {
         super(props);
 
@@ -56,25 +57,16 @@ class ImageShowOverlay extends React.Component {
             index: 0,
             images: uris.length,
         };
-        this.backHandler = BackHandler.addEventListener('ImageShowModalHardwareBackPress',
-            () => {
-                //表示消费了这个事件
-                NavigationUtil.dismissImageShowOverLayOrModal();
-                return true;
-            });
     }
 
     componentDidMount() {
+        super.componentDidMount();
         this.setState({index: this.props.index});
     }
 
     componentWillReceiveProps(next) {
     }
 
-
-    componentWillUnmount() {
-        this.backHandler.remove();
-    }
 
     render() {
         return (
@@ -126,7 +118,7 @@ class ImageShowOverlay extends React.Component {
                 alignItems: 'center'
             }}>
                 <TouchableButton onPress={() => {
-                   NavigationUtil.dismissImageShowOverLayOrModal();
+                    this.dismissOverlay();
                 }}>
                     <Image
                         style={{

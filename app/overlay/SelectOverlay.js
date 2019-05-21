@@ -26,6 +26,7 @@ import * as AppConfig from '../config/AppConfig';
 import TouchableButton from "../component/TouchableButton";
 import ToastAI from "../component/ToastAI";
 import NavigationUtil from "../util/NavigationUtil";
+import BaseOverlay from "./BaseOverlay";
 
 let {width, height} = Dimensions.get('window');
 let DISTANCE = 20;
@@ -52,7 +53,7 @@ var styles = StyleSheet.create({
   res: require('../img/dog1.jpg'),//按钮的图标
  }
  * */
-class SelectOverlay extends React.Component {
+class SelectOverlay extends BaseOverlay {
     static propTypes = {
         items: PropTypes.array,
         tipsColor: PropTypes.color,
@@ -64,22 +65,12 @@ class SelectOverlay extends React.Component {
     constructor(props) {
         super(props);
         this.state = {visible: true};
-        this.backHandler = BackHandler.addEventListener('SelectModalHardwareBackPress',
-            () => {
-                NavigationUtil.dismissSelectOverLayOrModal();
-                //表示消费了这个事件
-                return true;
-            });
-    }
-
-    componentWillUnmount() {
-        this.backHandler.remove();
     }
 
     render() {
         return (
             <TouchableWithoutFeedback onPress={() => {
-                NavigationUtil.dismissSelectOverLayOrModal();
+                this.dismissOverlay();
             }}>
                 <View style={[
                     styles.container,

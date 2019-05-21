@@ -17,13 +17,9 @@ import {
     ProgressViewIOS,
     ActivityIndicator, BackHandler, TouchableWithoutFeedback
 } from "react-native";
-import ProgressView from '../native/ProgressView';
-import * as AppConfig from '../config/AppConfig';
-import * as AppStyles from '../config/AppStyles';
 import DialogMessage from "../component/DialogMessage";
 import {connect} from "react-redux";
-import NavigationUtil from "../util/NavigationUtil";
-import ToastAI from "../component/ToastAI";
+import BaseOverlay from "./BaseOverlay";
 
 let {height, width} = Dimensions.get('window');
 var styles = StyleSheet.create({
@@ -39,25 +35,17 @@ var styles = StyleSheet.create({
     },
 });
 
-class MessageDialogOverlay extends React.Component {
+class MessageDialogOverlay extends BaseOverlay {
     constructor(props) {
         super(props);
-
-        this.backHandler = BackHandler.addEventListener('TipMessageModalHardwareBackPress',
-            () => {
-                //表示消费了这个事件
-                if (props.canCancel) {
-                    NavigationUtil.dismissMessageDialogOverLayOrModal();
-                }
-                return true;
-            });
     }
 
-    componentWillUnmount() {
-        this.backHandler.remove();
+    canCancel(): boolean {
+        return this.props.canCancel;
     }
 
     componentDidMount() {
+        super.componentDidMount();
         this.dialogBox.confirm(this.props.confirm);
     }
 
@@ -65,7 +53,7 @@ class MessageDialogOverlay extends React.Component {
         return (
             <TouchableWithoutFeedback onPress={() => {
                 if (this.props.canCancel) {
-                    NavigationUtil.dismissMessageDialogOverLayOrModal();
+                    this.dismissOverlay();
                 }
             }}>
                 <View style={[
@@ -76,7 +64,7 @@ class MessageDialogOverlay extends React.Component {
 
                     <DialogMessage
                         dismissCallBack={() => {
-                            NavigationUtil.dismissMessageDialogOverLayOrModal();
+                            this.dismissOverlay();
                         }}
                         ref={(dialogBox) => {
                             this.dialogBox = dialogBox;
@@ -88,6 +76,4 @@ class MessageDialogOverlay extends React.Component {
     }
 }
 
-export default connect(state => ({
-    text: state.TestReducer.text,
-}), dispatch => ({}))(MessageDialogOverlay);
+export default connect(state => ({}), dispatch => ({}))(MessageDialogOverlay);

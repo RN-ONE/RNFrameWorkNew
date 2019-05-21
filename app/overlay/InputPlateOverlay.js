@@ -16,6 +16,7 @@ import ToastAI from "../component/ToastAI";
 import NavigationUtil from "../util/NavigationUtil";
 import IphoneXView from "../component/IphoneXView";
 import IphoneXUtil from "../util/IphoneXUtil";
+import BaseOverlay from "./BaseOverlay";
 
 let {width} = Dimensions.get("window");
 
@@ -31,24 +32,13 @@ const dataList = [
     ["V", "W", "X", "Y", "Z", "清除"]];
 const distance = 3;
 
-export default class InputPlateOverlay extends Component {
-    componentDidMount(): void {
-        this.backHandler = BackHandler.addEventListener('InputPlateOverlayHardwareBackPress', () => {
-            //表示消费了这个事件
-            this.dismissInputPlateOverlay();
-            return true;
-        });
-    }
-
-    componentWillUnmount(): void {
-        this.backHandler.remove();
-    }
+export default class InputPlateOverlay extends BaseOverlay {
 
     render() {
         return (
             <View style={{flex: 1, backgroundColor: 'rgba(0,0,0,0.5)'}}>
                 <TouchableWithoutFeedback onPress={() => {
-                    this.dismissInputPlateOverlay();
+                    this.dismissOverlay();
                 }}>
                     <View style={{flex: 1, justifyContent: 'flex-end'}}>
                         <TouchableWithoutFeedback onPress={() => {
@@ -58,7 +48,7 @@ export default class InputPlateOverlay extends Component {
                                 <HeadView
                                     defaultPlateText={this.props.plateText}
                                     callBack={(plate) => {
-                                        this.dismissInputPlateOverlay();
+                                        this.dismissOverlay();
                                         if (this.props.callBackPlate) {
                                             this.props.callBackPlate(plate);
                                         }
@@ -118,10 +108,6 @@ export default class InputPlateOverlay extends Component {
                 </TouchableWithoutFeedback>
             </View>
         );
-    }
-
-    dismissInputPlateOverlay() {
-        NavigationUtil.disMissOverLayOrModal(this.props.componentId);
     }
 }
 

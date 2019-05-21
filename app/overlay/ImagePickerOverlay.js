@@ -30,6 +30,7 @@ import * as Const from "../config/Const";
 
 import {PermissionsAndroid} from 'react-native';
 import CommonUtil from "../util/CommonUtil";
+import BaseOverlay from "./BaseOverlay";
 
 let {width, height} = Dimensions.get('window');
 
@@ -60,9 +61,9 @@ var styles = StyleSheet.create({
         }
  * */
 
-export default class ImagePickerOverlay extends React.Component {
+export default class ImagePickerOverlay extends BaseOverlay {
     static propTypes = {
-        callback: PropTypes.function,
+        callback: PropTypes.func,
         titleColor: PropTypes.color
     };
 
@@ -74,30 +75,9 @@ export default class ImagePickerOverlay extends React.Component {
             visible: false,
             show: false,
         };
-
-
-        this.backHandler = BackHandler.addEventListener('ImagePickerModalHardwareBackPress',
-            () => {
-                //表示消费了这个事件
-                this.dismissImagePickerOverLay();
-                return true;
-            });
     }
 
-    /**
-     *隐藏选择获取图片方式对话框
-     *
-     * @Author: JACK-GU
-     * @Date: 2018-11-23 08:54
-     * @E-Mail: 528489389@qq.com
-     */
-    dismissImagePickerOverLay() {
-        NavigationUtil.disMissOverLayOrModal(Const.RNN_IMAGE_PICKER_OVER_LAY);
-    }
 
-    componentWillUnmount() {
-        this.backHandler.remove();
-    }
 
     componentWillReceiveProps(next) {
         console.log({next});
@@ -114,7 +94,7 @@ export default class ImagePickerOverlay extends React.Component {
         return (
             <View style={[styles.container, {backgroundColor: 'rgba(0,0,0,0.8)'}]}>
                 <TouchableWithoutFeedback onPress={() => {
-                    this.dismissImagePickerOverLay();
+                    this.dismissOverlay();
                 }}>
                     <View style={{
                         flex: 1,
@@ -167,7 +147,7 @@ export default class ImagePickerOverlay extends React.Component {
                                                     //启动相机拍照
                                                     ImagePicker.launchCamera(AppConfig.IMAGE_PICKER_OPTIONS, (response) => {
                                                         console.log({response});
-                                                        this.dismissImagePickerOverLay();
+                                                        this.dismissOverlay();
                                                         if (!response.error && response.uri && this.props.callback) {
                                                             this.props.callback({
                                                                 uri: response.uri,
@@ -182,7 +162,7 @@ export default class ImagePickerOverlay extends React.Component {
                                                         }
                                                     });
                                                 }, () => {
-                                                    this.dismissImagePickerOverLay();
+                                                    this.dismissOverlay();
                                                 });
                                         }}/>
 
@@ -199,7 +179,7 @@ export default class ImagePickerOverlay extends React.Component {
                                                 PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE], () => {
                                                 //打开系统相册
                                                 ImagePicker.launchImageLibrary(AppConfig.IMAGE_PICKER_OPTIONS, (response) => {
-                                                    this.dismissImagePickerOverLay();
+                                                    this.dismissOverlay();
                                                     //响应结果处理参考上面样例
                                                     console.log(response);
                                                     if (!response.error && response.uri && this.props.callback) {
@@ -216,7 +196,7 @@ export default class ImagePickerOverlay extends React.Component {
                                                     }
                                                 });
                                             }, () => {
-                                                this.dismissImagePickerOverLay();
+                                                this.dismissOverlay();
                                             });
                                         }}/>
                                     </View>

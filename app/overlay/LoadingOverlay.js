@@ -15,6 +15,7 @@ import ProgressView from '../native/ProgressView';
 import * as AppConfig from '../config/AppConfig';
 import * as AppStyles from '../config/AppStyles';
 import NavigationUtil from "../util/NavigationUtil";
+import BaseOverlay from "./BaseOverlay";
 
 var styles = StyleSheet.create({
     container: {
@@ -29,7 +30,7 @@ var styles = StyleSheet.create({
     },
 });
 
-export default class LoadingOverlay extends React.Component {
+export default class LoadingOverlay extends BaseOverlay {
     static LOADING_REFRESH = "LOADING_REFRESH";
 
     constructor(props) {
@@ -39,21 +40,18 @@ export default class LoadingOverlay extends React.Component {
             message: props.message,
         };
 
-        this.backHandler = BackHandler.addEventListener('LoadingModalHardwareBackPress',
-            () => {
-                //表示消费了这个事件
-                return true;
-            });
-
-
         this.deviceEventEmitter = DeviceEventEmitter.addListener(LoadingOverlay.LOADING_REFRESH,
             (message) => {
                 this.setState({message})
             });
     }
 
+    canCancel(): boolean {
+        return false;
+    }
+
     componentWillUnmount() {
-        this.backHandler.remove();
+        super.componentWillUnmount();
         this.deviceEventEmitter.remove();
     }
 
