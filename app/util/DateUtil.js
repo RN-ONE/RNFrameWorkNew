@@ -97,7 +97,7 @@ export default class DateUtil {
      * @E-Mail: 528489389@qq.com
      */
     static getNowTimeStamp() {
-        return Number(new Date);
+        return new Date().getTime();
     }
 
     /**
@@ -105,9 +105,9 @@ export default class DateUtil {
      * @Author: JACK-GU
      * @Date: 2018/2/28 15:53
      * @E-Mail: 528489389@qq.com
-     *  @param date 1999-10-24 04:12:35/1999-10-24/04:12:35
+     *  @param date 1999-10-24 04:12:35
      */
     static getTimeStamp(date) {
-        return Date.parse(new Date(date));
+        return new Date(date.replace(" ", "T")).getTime() - 8 * 3600 * 1000; //必须减去8小时，不然不对
     }
 }
