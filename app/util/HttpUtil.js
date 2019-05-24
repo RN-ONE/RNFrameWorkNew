@@ -330,15 +330,15 @@ export default class HttpUtil {
      * @E-Mail: 528489389@qq.com
      */
     static appendArrayToFromData(formData, files, key) {
-        for (const file of files) {
+        for (const fileItem of files) {
             let name;
-            if (file.fileName && file.fileName.length > 0) {
-                name = file.fileName;
+            if (fileItem.fileName && fileItem.fileName.length > 0) {
+                name = fileItem.fileName;
             } else {
-                let strS = file.path.split("/");
+                let strS = fileItem.path.split("/");
                 name = strS[strS.length - 1];
             }
-            const file = {uri: file.path, type: 'multipart/form-data', name: file.fileName};   // 这里的key(uri和type和name)不能改变,
+            const file = {uri: fileItem.path, type: 'multipart/form-data', name};   // 这里的key(uri和type和name)不能改变,
 
             //数组：key如果是files，那么可以就应该是files[]
             formData.append(key, file);
