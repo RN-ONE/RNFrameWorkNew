@@ -35,7 +35,9 @@ export default class HttpUtil {
         baseURL: HttpUtil.BASE_URL,
         timeout: TIMEOUT,
         responseType: responseType,
-        headers: {'Accept': 'application/json'}
+        headers: {
+            'Accept': 'application/json;charset=utf-8',
+            'Content-Type': 'application/json;charset=utf-8',}
     });
 
 
@@ -223,8 +225,8 @@ export default class HttpUtil {
 
         // 请求头文件
         const config = {
-            Accept: 'Application/json',
-            'Content-Type': 'multipart/form-data',
+            Accept: 'Application/json;charset=utf-8',
+            'Content-Type': 'multipart/form-data;charset=utf-8',
             params: mapParams ? mapParams : {},
             onUploadProgress: (progressEvent) => {
                 console.log(progressEvent);
