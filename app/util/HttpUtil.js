@@ -4,8 +4,8 @@
  * @E-Mail:528489389@qq.com
  * @Describe: 网络请求的工具类
  */
-import {Axios, CancelToken} from 'axios';
-import SHA1 from 'jssha';
+import {Axios} from 'axios';
+import JSSHA from 'jssha';
 import ToastAI from "../component/ToastAI";
 import * as Const from "../config/Const";
 import UserUtil from "./UserUtil";
@@ -26,8 +26,6 @@ const CodeMessages = [
     {code: 0, message: "网络错误"}
 ];
 
-var cancel;
-
 export default class HttpUtil {
     static BASE = "http://117.187.64.6:8090/scdp";
     static BASE_URL = HttpUtil.BASE + "/controller/";
@@ -35,9 +33,7 @@ export default class HttpUtil {
         baseURL: HttpUtil.BASE_URL,
         timeout: TIMEOUT,
         responseType: responseType,
-        headers: {
-            'Accept': 'application/json;charset=utf-8',
-            'Content-Type': 'application/json;charset=utf-8',}
+        headers: {'Accept': 'application/json;charset=utf-8', 'Content-Type': 'application/json;charset=utf-8',}
     });
 
 
@@ -91,59 +87,15 @@ export default class HttpUtil {
         console.log({map});
         HttpUtil.instance.request({
             url: url,
-            cancelToken: new CancelToken(function executor(c) {
-                cancel = c;
-            }),
             method: method,
             params: map,
             onUploadProgress: onUploadProgress,
             onDownloadProgress: onDownloadProgress,
         }).then(function (response) {
-            console.log({response});
-            //请求的结果
-            if (callBack) {
-                if (response.status === 200) {
-                    if (!response.data) {
-                        ToastAI.showShortBottom("未知错误");
-                        callBack({success: false, response: {}});
-                    } else if (response.data.errorcode) {
-                        //框架的错误，直接提示
-                        ToastAI.showShortBottom(response.data.error);
-                        callBack({success: false, response: response.data});
-                    } else {
-                        if (response.data.resultCode === Const.CODE.success) {
-                            callBack({success: true, response: response.data});
-                        } else {
-                            console.log("-------" + response.data.resultInfo);
-                            ToastAI.showShortBottom(response.data.resultInfo);
-                            callBack({success: false, response: response.data});
-                        }
-                    }
-                } else {
-                    callBack({success: false, response: response});
-                    HttpUtil.showMessage(response.status);
-                }
-            }
+            HttpUtil.doResponse(response, callBack);
         }).catch(function (error) {
-            console.log({error});
-            if (callBack) {
-                callBack({success: false, response: error});
-            }
-            if (error.response) {
-                // 请求已发出，但服务器响应的状态码不在 2xx 范围内
-                HttpUtil.showMessage(error.response.status);
-            } else {
-                //显示错误消息
-                HttpUtil.showMessage(0);
-            }
+            HttpUtil.doError(error, callBack);
         });
-    }
-
-    /**
-     * 取消当前请求的方法方法
-     * */
-    cancel() {
-        cancel();
     }
 
     static showMessage(code) {
@@ -166,7 +118,7 @@ export default class HttpUtil {
      */
     static uploadFilePost(url, map, params, callBack) {
         // 创建一个formData（虚拟表单）
-        var formData = new FormData();
+        let formData = new FormData();
         map.forEach((item) => {
             formData = HttpUtil.appendToFormData(formData, item.path, item.fileName, item.key);
         });
@@ -183,7 +135,6 @@ export default class HttpUtil {
 
         HttpUtil.uploadFile(url, formData, config, callBack);
     }
-
 
     /**
      *
@@ -218,7 +169,7 @@ export default class HttpUtil {
 
 
         // 创建一个formData（虚拟表单）
-        var formData = new FormData();
+        let formData = new FormData();
         map.forEach((item) => {
             formData = HttpUtil.appendArrayToFromData(formData, item.files, item.key);
         });
@@ -253,41 +204,9 @@ export default class HttpUtil {
         //然后开始上传
         HttpUtil.instance.post(url, formData, config)
             .then(function (response) {
-                console.log({response});
-                //请求的结果
-                if (callBack) {
-                    if (response.status === 200) {
-                        if (!response.data) {
-                            ToastAI.showShortBottom("未知错误");
-                            callBack({success: false, response: {}});
-                        } else if (response.data.errorcode) {
-                            //框架的错误，直接提示
-                            ToastAI.showShortBottom(response.data.error);
-                        } else {
-                            if (response.data.resultCode === Const.CODE.success) {
-                                callBack({success: true, response: response.data});
-                            } else {
-                                ToastAI.showShortBottom(response.data.resultInfo);
-                                callBack({success: false, response: response.data});
-                            }
-                        }
-                    } else {
-                        callBack({success: false, response: response});
-                        HttpUtil.showMessage(response.status);
-                    }
-                }
+                HttpUtil.doResponse(response, callBack);
             }).catch(function (error) {
-            console.log({error});
-            if (callBack) {
-                callBack({success: false, response: error});
-            }
-            if (error.response) {
-                // 请求已发出，但服务器响应的状态码不在 2xx 范围内
-                HttpUtil.showMessage(error.response.status);
-            } else {
-                //显示错误消息
-                HttpUtil.showMessage(0);
-            }
+            HttpUtil.doError(error, callBack);
         });
     }
 
@@ -359,16 +278,68 @@ export default class HttpUtil {
      * @E-Mail: 528489389@qq.com
      */
     static getEncryptedPassword(userPwd) {
-        var psw1 = HttpUtil.SHA1(userPwd);
-        var pswHash = HttpUtil.SHA1(psw1 + "sMarT cLOud dEveLoPmEnT plAtForM");
-        return pswHash;
+        let psw1 = HttpUtil.SHA1(userPwd);
+        return HttpUtil.SHA1(psw1 + "sMarT cLOud dEveLoPmEnT plAtForM");
     }
 
 
     static SHA1(input) {
-        var hash = new SHA1('SHA-1', 'TEXT');
+        let hash = new JSSHA('SHA-1', 'TEXT');
         hash.update(input);
         return hash.getHash('HEX');
+    }
+
+    /**
+     *处理结果，请求成功的
+     *
+     * @Author: JACK-GU
+     * @Date: 2019-06-12 17:11
+     * @E-Mail: 528489389@qq.com
+     */
+    static doResponse(response, callBack) {
+        if (callBack) {
+            if (response.status === 200) {
+                if (!response.data) {
+                    ToastAI.showShortBottom("未知错误");
+                    callBack({success: false, response: {}});
+                } else if (response.data.errorcode) {
+                    //框架的错误，直接提示
+                    ToastAI.showShortBottom(response.data.error);
+                    callBack({success: false, response: response.data});
+                } else {
+                    if (response.data.resultCode === Const.CODE.success) {
+                        callBack({success: true, response: response.data});
+                    } else {
+                        ToastAI.showShortBottom(response.data.resultInfo);
+                        callBack({success: false, response: response.data});
+                    }
+                }
+            } else {
+                callBack({success: false, response: response});
+                HttpUtil.showMessage(response.status);
+            }
+        }
+    }
+
+    /**
+     *请求出错的时候
+     *
+     * @Author: JACK-GU
+     * @Date: 2019-06-12 17:14
+     * @E-Mail: 528489389@qq.com
+     */
+    static doError(error, callBack) {
+        console.log({error});
+        if (callBack) {
+            callBack({success: false, response: error});
+        }
+        if (error.response) {
+            // 请求已发出，但服务器响应的状态码不在 2xx 范围内
+            HttpUtil.showMessage(error.response.status);
+        } else {
+            //显示错误消息
+            HttpUtil.showMessage(0);
+        }
     }
 
 }
