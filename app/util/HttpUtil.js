@@ -38,34 +38,12 @@ export default class HttpUtil {
 
 
     /**
-     * get请求
-     * @param params 请求的参数
-     * @param url 请求地址
-     * @param callBack 回调，{success: true, response: response}
-     * */
-    static connectGet(params, url, callBack) {
-        HttpUtil.connectHttp(params, url, "get", callBack, null, null);
-    }
-
-    /**
      * post
      * @param params 请求的参数
      * @param url 请求地址
      * param callBack 回调,{success: true, response: response}
      * */
     static connectPost(params, url, callBack) {
-        HttpUtil.connectHttp(params, url, "post", callBack, null, null);
-    }
-
-    /**
-     * @param params 请求的参数
-     * @param url 请求地址
-     * @param method 请求的方式，post，get
-     * @param onUploadProgress 上传进度，一般不用传null
-     * @param onDownloadProgress 下载进度，一般不用传null
-     * param callBack 回调,{success: true, response: response}
-     * */
-    static connectHttp(params, url, method, callBack, onUploadProgress, onDownloadProgress) {
         params.network = 0;
         params.timestamp = Date.parse(new Date());
         params.timeZone = "Asia/Shanghai";
@@ -76,36 +54,18 @@ export default class HttpUtil {
         }
 
         let postData = JSON.stringify(params);
-        let map = {
-            "actionName": params.actionName,
-            "postData": postData,
-            "limit": params.limit ? params.limit : 15,
-            "start": params.start ? params.start : 1
-        };
 
+        let formData = new FormData();
+        formData.append("actionName", params.actionName);
+        formData.append("postData", postData);
+        formData.append("limit", params.limit ? params.limit : 15);
+        formData.append("start", params.start ? params.start : 1);
 
-        console.log({map});
-        HttpUtil.instance.request({
-            url: url,
-            method: method,
-            params: map,
-            onUploadProgress: onUploadProgress,
-            onDownloadProgress: onDownloadProgress,
-        }).then(function (response) {
-            HttpUtil.doResponse(response, callBack);
-        }).catch(function (error) {
-            HttpUtil.doError(error, callBack);
-        });
+        console.log(postData);
+
+        HttpUtil.connectHttp(url, formData, {}, callBack);
     }
 
-    static showMessage(code) {
-        for (let i = 0; i < CodeMessages.length; i++) {
-            if (CodeMessages[i].code === code) {
-                ToastAI.showShortBottom(CodeMessages[i].message);
-                break;
-            }
-        }
-    }
 
     /**
      * @Author: JACK-GU
@@ -117,23 +77,40 @@ export default class HttpUtil {
      * @param url 请求的地址
      */
     static uploadFilePost(url, map, params, callBack) {
+        params.network = 0;
+        params.timestamp = Date.parse(new Date());
+        params.timeZone = "Asia/Shanghai";
+        params.userLocaleId = "zh_CN";
+        if (UserUtil.getUser()) {
+            params.userId = UserUtil.getUser().userId;
+            params.userName = UserUtil.getUser().userName;
+        }
+
+        let postData = JSON.stringify(params);
+
+
         // 创建一个formData（虚拟表单）
         let formData = new FormData();
         map.forEach((item) => {
             formData = HttpUtil.appendToFormData(formData, item.path, item.fileName, item.key);
         });
 
+
+        formData.append("actionName", params.actionName);
+        formData.append("postData", postData);
+        formData.append("limit", params.limit ? params.limit : 15);
+        formData.append("start", params.start ? params.start : 1);
+
+        console.log(postData);
+
+
         // 请求头文件
         const config = {
             Accept: 'Application/json',
             'Content-Type': 'multipart/form-data',
-            params: params ? params : {},
-            onUploadProgress: (progressEvent) => {
-                console.log(progressEvent);
-            },
         };
 
-        HttpUtil.uploadFile(url, formData, config, callBack);
+        HttpUtil.connectHttp(url, formData, config, callBack);
     }
 
     /**
@@ -160,16 +137,17 @@ export default class HttpUtil {
         }
 
         let postData = JSON.stringify(params);
-        let mapParams = {
-            "actionName": params.actionName,
-            "postData": postData,
-            "limit": params.limit ? params.limit : 15,
-            "start": params.start ? params.start : 1
-        };
 
-
-        // 创建一个formData（虚拟表单）
         let formData = new FormData();
+
+        formData.append("actionName", params.actionName);
+        formData.append("postData", postData);
+        formData.append("limit", params.limit ? params.limit : 15);
+        formData.append("start", params.start ? params.start : 1);
+
+        console.log(postData);
+
+
         map.forEach((item) => {
             formData = HttpUtil.appendArrayToFromData(formData, item.files, item.key);
         });
@@ -178,19 +156,15 @@ export default class HttpUtil {
         const config = {
             Accept: 'Application/json;charset=utf-8',
             'Content-Type': 'multipart/form-data;charset=utf-8',
-            params: mapParams ? mapParams : {},
-            onUploadProgress: (progressEvent) => {
-                console.log(progressEvent);
-            },
         };
 
-        HttpUtil.uploadFile(url, formData, config, callBack);
+        HttpUtil.connectHttp(url, formData, config, callBack);
     }
 
 
     /**
      *
-     * 上传文件
+     * 请求数据
      * @param url 地址
      * @param formData 传文件的虚拟表单
      * @param config 配置
@@ -200,7 +174,7 @@ export default class HttpUtil {
      * @Date: 2018/3/21 10:55
      * @E-Mail: 528489389@qq.com
      */
-    static uploadFile(url, formData, config, callBack) {
+    static connectHttp(url, formData, config, callBack) {
         //然后开始上传
         HttpUtil.instance.post(url, formData, config)
             .then(function (response) {
@@ -338,7 +312,17 @@ export default class HttpUtil {
             HttpUtil.showMessage(error.response.status);
         } else {
             //显示错误消息
-            HttpUtil.showMessage(0);
+            //  HttpUtil.showMessage(0);
+            ToastAI.showShortBottom(error.message);
+        }
+    }
+
+    static showMessage(code) {
+        for (let i = 0; i < CodeMessages.length; i++) {
+            if (CodeMessages[i].code === code) {
+                ToastAI.showShortBottom(CodeMessages[i].message);
+                break;
+            }
         }
     }
 
